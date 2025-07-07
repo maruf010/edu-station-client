@@ -23,7 +23,7 @@ const Partners = () => {
         <section className="py-10 lg:py-20 bg-gray-50">
             <div className="max-w-6xl mx-auto px-4 text-center">
                 <h2 className="text-2xl md:text-3xl font-bold text-blue-600 mb-10">
-                    Trusted by Global Learning Partners
+                    Trusted by <span className="text-pink-500">Global Learning Partners</span> 
                 </h2>
 
                 <Marquee

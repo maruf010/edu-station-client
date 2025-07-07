@@ -11,7 +11,7 @@ import Button from '../../components/Shared/Button';
 
 const Banner = () => {
     return (
-        <div className=" bg-gray-300 py-8 md:py-0 px-4 md:px-8 lg:px-0">
+        <div className=" bg-gray-300 py-8 md:py-0 px-4 md:px-8 ">
             <div className="lg:min-h-screen md:flex items-center justify-around gap-10 max-w-7xl mx-auto rounded-2xl">
                 {/* Carousel Section */}
                 <div className="md:w-[500px] w-full md:hidden">

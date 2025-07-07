@@ -5,13 +5,14 @@ import logo from '../../assets/logo.jpg';
 import useAuth from '../../hooks/useAuth';
 import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
 import Button from '../Shared/Button';
+import { FiLogIn, FiLogOut, FiUserPlus } from 'react-icons/fi';
 
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
     const navigate = useNavigate()
     const links = (
-        <div className='flex flex-col lg:flex-row gap-3  lg:gap-5 pl-2 text-[16px]'>
+        <div className='flex flex-col lg:flex-row gap-3 text-[16px] lg:gap-5 pl-2 '>
             <li>
                 <NavLink to='/'
                     onClick={() => {
@@ -21,23 +22,23 @@ const Navbar = () => {
                     className={({ isActive }) =>
                         `group relative flex items-center gap-1 px-2 py-1
                             ${isActive
-                            ? 'text-orange-500'
-                            : 'text-blue-500 hover:text-orange-500 transition-colors duration-200'}`}>
+                            ? 'text-blue-500'
+                            : 'text-gray-500 hover:text-blue-500 transition-colors duration-200'}`}>
                     <FaHome />
                     Home
-                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-orange-400 transition-all duration-400 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-400 transition-all duration-400 group-hover:w-full"></span>
                 </NavLink>
             </li>
             <li>
                 <NavLink to='/allClasses' className={({ isActive }) =>
                     `group relative flex items-center gap-1 px-2 py-1
                             ${isActive
-                        ? 'text-orange-500'
-                        : 'text-blue-500 hover:text-orange-500 transition-colors duration-200'}`
+                        ? 'text-blue-500'
+                        : 'text-gray-500 hover:text-blue-500 transition-colors duration-200'}`
                 }>
                     <FaBookOpen />
                     All Classes
-                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-orange-500 transition-all duration-400 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-400 transition-all duration-400 group-hover:w-full"></span>
                 </NavLink>
             </li>
             {
@@ -48,13 +49,13 @@ const Navbar = () => {
                         className={({ isActive }) =>
                             `group relative flex items-center gap-1 px-2 py-1
                             ${isActive
-                                ? 'text-orange-500'
-                                : 'text-blue-500 hover:text-orange-500 transition-colors duration-200'}`
+                                ? 'text-blue-500'
+                                : 'text-gray-500 hover:text-blue-500 transition-colors duration-200'}`
                         }
                     >
                         <FaChalkboardTeacher />
                         Teach on EduStation
-                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-orange-400 transition-all duration-400 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-400 transition-all duration-400 group-hover:w-full"></span>
                     </NavLink>
                 </li>
 
@@ -108,35 +109,41 @@ const Navbar = () => {
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52 p-2 shadow bg-white">
+                        className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow bg-white">
                         {links}
-                        {user ? (
-                            <button
-                                onClick={handleLogout}
-                                className='text-blue-500 ml-2 pb-2 text-[16px] text-start cursor-pointer mt-2 hover:text-green-500'
-                            >
-                                Logout
-                            </button>
-                        ) : (
-                            <div className='space-y-2 mt-2'>
-                                <div>
-                                    <Link
-                                        to='/login'
-                                        className='ml-2 pb-2 text-start cursor-pointer text-[16px] text-blue-500 hover:text-green-500'
-                                    >
-                                        Login
-                                    </Link>
+
+                        {
+                            user ? (
+                                <button
+                                    onClick={handleLogout}
+                                    className='flex items-center gap-2 text-gray-500 ml-2 pb-2 text-[16px] text-start cursor-pointer mt-2 hover:text-green-500'
+                                >
+                                    <FiLogOut />
+                                    Logout
+                                </button>
+                            ) : (
+                                <div className='space-y-2 mt-2 '>
+                                    <div>
+                                        <Link
+                                            to='/login'
+                                            className='flex items-center gap-2 ml-2 pb-2 text-start cursor-pointer text-[16px] text-gray-500 hover:text-green-500'
+                                        >
+                                            <FiLogIn />
+                                            Login
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            to='/register'
+                                            className='flex items-center gap-2 ml-2 pb-2 text-start cursor-pointer text-[16px] text-gray-500 hover:text-green-500'
+                                        >
+                                            <FiUserPlus />
+                                            Register
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div>
-                                    <Link
-                                        to='/register'
-                                        className='ml-2 pb-2 text-start cursor-pointer text-[16px] text-blue-500 hover:text-green-500'
-                                    >
-                                        Register
-                                    </Link>
-                                </div>
-                            </div>
-                        )}
+                            )
+                        }
                     </ul>
                 </div>
                 <Link to='/'>
@@ -145,7 +152,7 @@ const Navbar = () => {
                         {/* <span className='text-blue-500 font-medium ml-1 text-lg lg:text-2xl font-des' onClick={() => {
                             ; (prev) => !prev
                             window.scrollTo({ top: 0, behavior: 'smooth' })
-                        }}>Edu<span className='text-orange-500'>Station</span></span> */}
+                        }}>Edu<span className='text-gray-500'>Station</span></span> */}
                     </div>
                 </Link>
             </div>
@@ -186,7 +193,7 @@ const Navbar = () => {
                 {/* user rounded animated*/}
                 <span className="relative flex">
                     <span
-                        className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-orange-400 opacity-100 ml-1 mt-1">
+                        className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-gray-400 opacity-100 ml-1 mt-1">
                     </span>
                     {/* user profile */}
                     <div className='dropdown dropdown-end duration-600 relative'>
@@ -196,45 +203,45 @@ const Navbar = () => {
                             role='button'
                             className='btn btn-ghost btn-circle avatar relative group'
                         >
-                            <div className='w-10 rounded-full border border-orange-500'>
+                            <div className='w-10 rounded-full border border-gray-500'>
 
                                 <img alt='coming' src={user ? user.photoURL : "https://i.ibb.co.com/84TKBCHZ/user-icon-1024x1024-dtzturco.png"} />
 
                                 {/* hover profile name */}
-                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-orange-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-15'>
+                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-gray-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-15'>
                                     {user ? user.displayName : 'Please Login'}
                                 </div>
                             </div>
                         </div>
                         <ul
                             tabIndex={0}
-                            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border border-orange-500'
+                            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border border-gray-500'
                         >
                             <div>
                                 {user ? (
                                     <div>
                                         <Link to='/profile' className='text-lg'>
-                                            <div className=' px-2 font-bold py-2 rounded-lg text-orange-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                            <div className=' px-2 font-bold py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
                                                 Profile
                                             </div>
                                         </Link>
                                         <div>
                                             <Link to='/myAddRooms' className='text-lg'>
-                                                <div className=' px-2 font-bold py-2 rounded-lg text-orange-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                                <div className=' px-2 font-bold py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
                                                     My Added Rooms
                                                 </div>
                                             </Link>
                                         </div>
                                         <button
                                             onClick={handleLogout}
-                                            className='text-lg  px-2 font-bold py-2 rounded-lg text-orange-500   hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'
+                                            className='text-lg  px-2 font-bold py-2 rounded-lg text-gray-500   hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'
                                         >
                                             Logout
                                         </button>
                                     </div>
 
                                 ) : (
-                                    <Link to='/login' className='text-orange-500 px-4 py-2 text-lg'>
+                                    <Link to='/login' className='text-gray-500 px-4 py-2 text-lg'>
                                         Login
                                     </Link>
                                 )}
@@ -273,9 +280,12 @@ const Navbar = () => {
                 </div> */}
                 {/* user rounded animated*/}
                 <span className="relative flex">
-                    <span
-                        className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-orange-300 opacity-100 ml-1 mt-1">
-                    </span>
+                    {
+                        user &&
+                        <span
+                            className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-gray-300 opacity-100 ml-1 mt-1">
+                        </span>
+                    }
                     {/* user profile */}
                     <div className='dropdown dropdown-end duration-600 relative'>
 
@@ -284,38 +294,38 @@ const Navbar = () => {
                             role='button'
                             className='btn btn-ghost btn-circle avatar relative group'
                         >
-                            <div className='w-10 rounded-full border border-orange-400'>
+                            <div className='w-10 rounded-full border border-gray-400'>
 
                                 <img alt='coming' src={user ? user.photoURL : "https://i.ibb.co.com/84TKBCHZ/user-icon-1024x1024-dtzturco.png"} />
 
                                 {/* hover profile name */}
-                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-orange-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-15 font-des'>
+                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-gray-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-15 font-des'>
                                     {user ? user.displayName : 'Please Login'}
                                 </div>
                             </div>
                         </div>
                         <ul
                             tabIndex={0}
-                            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border border-orange-500'
+                            className='menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow border border-gray-500'
                         >
-                            <div>
+                            <div className='text-gray-500'>
                                 {user ? (
                                     <div className=''>
                                         <Link to='/profile' className='text-lg'>
-                                            <div className=' px-2 font-medium py-2 rounded-lg text-orange-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                            <div className=' px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
                                                 Profile
                                             </div>
                                         </Link>
                                         <div>
-                                            <Link to='/myAddRooms' className='text-lg'>
-                                                <div className=' px-2 font-medium py-2 rounded-lg text-orange-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
-                                                    My Added Rooms
+                                            <Link to='/' className='text-lg'>
+                                                <div className=' px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                                    Add
                                                 </div>
                                             </Link>
                                         </div>
                                         <button
                                             onClick={handleLogout}
-                                            className='text-lg  px-2 font-medium py-2 rounded-lg text-orange-500   hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'
+                                            className='text-lg  px-2 font-medium py-2 rounded-lg text-gray-500   hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'
                                         >
                                             Logout
                                         </button>

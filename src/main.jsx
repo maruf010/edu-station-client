@@ -5,6 +5,8 @@ import {
   RouterProvider,
 } from "react-router";
 import { router } from './Routes/Routes';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 
 createRoot(document.getElementById('root')).render(

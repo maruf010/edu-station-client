@@ -4,9 +4,9 @@ import { useInView } from 'react-intersection-observer';
 import reactLogo from '../../assets/react.svg'
 
 const stats = [
-    { label: 'Performance', value: 95 },
-    { label: 'Best Practices', value: 100 },
-    { label: 'Accessibility', value: 100 },
+    { label: 'Users', value: 450 },
+    { label: 'Classes', value: 120 },
+    { label: 'Enrollments', value: 250 },
     { label: 'SEO', value: 97 },
 ];
 
@@ -38,10 +38,10 @@ const PerformanceStats = () => {
                                 className="h-8"
                             />
                         </div>
-                        <h2 className="text-gray-400">
-                            PageSpeed Insights 
-                        <h3 className="text-red-500 font-semibold">Powered by{' '} React</h3>
-                        </h2>
+                        <div className="text-gray-400">
+                            PageSpeed Insights
+                            <h3 className="text-red-500 font-semibold">Powered by{' '} React</h3>
+                        </div>
                     </div>
                 </div>
 
@@ -53,7 +53,7 @@ const PerformanceStats = () => {
                             className="bg-[#1e293b] p-6 rounded-xl text-center shadow-md"
                         >
                             <h3 className="text-3xl font-bold text-green-400">
-                                {inView ? <CountUp end={stat.value} duration={3} /> : '0'}%
+                                {inView ? <CountUp end={stat.value} duration={3} /> : '0'}+
                             </h3>
                             <p className="mt-2 text-white">{stat.label}</p>
                         </div>
