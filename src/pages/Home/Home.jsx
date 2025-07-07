@@ -2,6 +2,7 @@ import React from 'react';
 import Partners from './Partners';
 import Banner from './Banner';
 import PerformanceStats from './PerformanceStats';
+import Banner1 from './Banner1';
 
 const Home = () => {
     return (

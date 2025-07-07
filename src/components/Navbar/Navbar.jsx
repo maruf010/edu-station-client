@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import logo from '../../assets/logo.jpg';
 import useAuth from '../../hooks/useAuth';
 import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
+import Button from '../Shared/Button';
 
 
 const Navbar = () => {
@@ -40,7 +41,7 @@ const Navbar = () => {
                 </NavLink>
             </li>
             {
-                
+
                 <li>
                     <NavLink
                         to="/teach"
@@ -84,22 +85,22 @@ const Navbar = () => {
 
 
     //theme
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem('theme') || 'light';
-    });
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-    }, [theme]);
+    // const [theme, setTheme] = useState(() => {
+    //     return localStorage.getItem('theme') || 'light';
+    // });
+    // useEffect(() => {
+    //     document.documentElement.setAttribute('data-theme', theme);
+    //     localStorage.setItem('theme', theme);
+    // }, [theme]);
     // Toggle between light and dark
-    const toggleTheme = () => {
-        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-    };
+    // const toggleTheme = () => {
+    //     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    // };
 
 
 
     return (
-        <div className="font-web navbar shadow px-5 md:px-7 lg:py-3 lg:px-20 p-0  bg-white/30 backdrop-blur-sm">
+        <div className="sticky top-0 z-50 navbar shadow px-5 md:px-7 lg:py-3 lg:px-20 p-0  bg-white/30 backdrop-blur-sm">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="mr-2 lg:hidden cursor-pointer">
@@ -107,7 +108,7 @@ const Navbar = () => {
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52 p-2 shadow ">
+                        className="menu menu-sm dropdown-content  rounded-box z-1 mt-3 w-52 p-2 shadow bg-white">
                         {links}
                         {user ? (
                             <button
@@ -157,9 +158,8 @@ const Navbar = () => {
             {/* md size */}
             <div className='flex items-center navbar-end lg:hidden'>
                 {/* theme changer */}
-                <div className='mr-4'>
+                {/* <div className='mr-4'>
                     <label className="swap swap-rotate " >
-                        {/* this hidden checkbox controls the state */}
                         <button type="checkbox m-0"
                             onClick={toggleTheme}
                             className="theme-controller text-green-500"
@@ -182,7 +182,7 @@ const Navbar = () => {
                             </svg>
                         }
                     </label>
-                </div>
+                </div> */}
                 {/* user rounded animated*/}
                 <span className="relative flex">
                     <span
@@ -246,9 +246,8 @@ const Navbar = () => {
             {/* lg size */}
             <div className=' items-center hidden lg:flex'>
                 {/* theme changer */}
-                <div className='mr-4'>
+                {/* <div className='mr-4'>
                     <label className="swap swap-rotate " >
-                        {/* this hidden checkbox controls the state */}
                         <button type="checkbox m-0"
                             onClick={toggleTheme}
                             className="theme-controller text-green-500"
@@ -271,7 +270,7 @@ const Navbar = () => {
                             </svg>
                         }
                     </label>
-                </div>
+                </div> */}
                 {/* user rounded animated*/}
                 <span className="relative flex">
                     <span
@@ -339,23 +338,19 @@ const Navbar = () => {
                     {user ? (
                         ''
                     ) : (
-                        <div className='flex'>
-                            <div>
+                        <div className='flex gap-4'>
+                            <div className='ml-4'>
                                 <Link
                                     to='/login'
-                                    className='bg-orange-600 px-4 py-2 rounded-lg hover:text-orange-500 ml-4 
-                                    border-2 border-orange-500 transition-colors delay-100 duration-200 hover:border-2 hover:bg-white cursor-pointer text-white font-medium '
                                 >
-                                    Login
+                                    <Button label='Login'></Button>
                                 </Link>
                             </div>
                             <div>
                                 <Link
                                     to='/register'
-                                    className='font-medium bg-white px-4 py-2 rounded-lg text-orange-500 ml-4 border-2 hover:bg-orange-600  cursor-pointer   transition-colors delay-100 duration-200 hover:text-white
-                                    '
                                 >
-                                    Register
+                                    <Button label='Register' ></Button>
                                 </Link>
                             </div>
                         </div>

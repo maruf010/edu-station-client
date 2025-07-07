@@ -46,7 +46,7 @@ const PerformanceStats = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 gap-6 lg:w-1/2">
+                <div className="grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-6 lg:w-1/2">
                     {stats.map((stat, idx) => (
                         <div
                             key={idx}
