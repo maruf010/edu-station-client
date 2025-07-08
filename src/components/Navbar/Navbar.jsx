@@ -6,11 +6,17 @@ import useAuth from '../../hooks/useAuth';
 import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
 import Button from '../Shared/Button';
 import { FiLogIn, FiLogOut, FiUserPlus } from 'react-icons/fi';
+import Loading from '../Shared/Loading';
 
 
 const Navbar = () => {
-    const { user, logOut } = useAuth();
+    const { user, logOut, loading } = useAuth();
     const navigate = useNavigate()
+    
+    if(loading){
+        return <Loading></Loading>
+    }
+
     const links = (
         <div className='flex flex-col lg:flex-row gap-3 text-[16px] lg:gap-5 pl-2 '>
             <li>
@@ -220,15 +226,11 @@ const Navbar = () => {
                             <div>
                                 {user ? (
                                     <div>
-                                        <Link to='/profile' className='text-lg'>
-                                            <div className=' px-2 font-bold py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
-                                                Profile
-                                            </div>
-                                        </Link>
+                                        <h2>{user?.displayName}</h2>
                                         <div>
-                                            <Link to='/myAddRooms' className='text-lg'>
+                                            <Link to='/dashboard' className='text-lg'>
                                                 <div className=' px-2 font-bold py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
-                                                    My Added Rooms
+                                                    Dashboard
                                                 </div>
                                             </Link>
                                         </div>
@@ -311,15 +313,13 @@ const Navbar = () => {
                             <div className='text-gray-500'>
                                 {user ? (
                                     <div className=''>
-                                        <Link to='/profile' className='text-lg'>
-                                            <div className=' px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
-                                                Profile
-                                            </div>
-                                        </Link>
+                                        <h2 className='text-lg px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                            {user?.displayName}
+                                        </h2>
                                         <div>
-                                            <Link to='/' className='text-lg'>
+                                            <Link to='/dashboard' className='text-lg'>
                                                 <div className=' px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
-                                                    Add
+                                                    Dashboard
                                                 </div>
                                             </Link>
                                         </div>

@@ -8,7 +8,7 @@ const AuthLayout = () => {
             <Link to='/'>
                 <img src={logo} alt="Logo" className="w-20 md:w-24 lg:w-30 " />
             </Link>
-            <div className="hero-content flex-col lg:flex-row-reverse">
+            {/* <div className="hero-content flex-col lg:flex-row-reverse">
                 <div className='flex-1 flex justify-center bg-green-200'>
                     <img
                         src=''
@@ -18,6 +18,9 @@ const AuthLayout = () => {
                 <div className='flex-1'>
                     <Outlet></Outlet>
                 </div>
+            </div> */}
+            <div className=''>
+                <Outlet></Outlet>
             </div>
         </div>
     );

@@ -4,9 +4,19 @@ import Home from "../pages/Home/Home";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Authentication/Login";
 import Register from "../pages/Authentication/Register";
-import DashBoardLayout from "../layouts/DashBoardLayout";
 import AllClasses from "../pages/AllClasses/AllClasses";
 import ApplyTeacher from "../pages/ApplyTeacher/ApplyTeacher";
+import Profile from "../pages/Profile/Profile";
+import UpdateProfile from "../pages/Profile/UpdateProfile";
+import PrivateRoute from "./PrivateRoute";
+import DashBoardLayout from "../layouts/DashBoardLayout";
+import DashBoardHome from "../pages/Dashboard/DashBoardHome";
+import MyEnrollClass from "../pages/Dashboard/Student/MyEnrollClass";
+import MyClass from "../pages/Dashboard/Teacher/MyClass";
+import AddClass from "../pages/Dashboard/Teacher/AddClass";
+import TeacherRequests from "../pages/Dashboard/Admin/TeacherRequests";
+import AllUsers from "../pages/Dashboard/Admin/AllUsers";
+import ForgetPassword from "../pages/Authentication/ForgetPassword";
 
 
 export const router = createBrowserRouter([
@@ -25,7 +35,8 @@ export const router = createBrowserRouter([
             {
                 path: '/teach',
                 Component: ApplyTeacher
-            }
+            },
+
         ]
     },
     {
@@ -39,11 +50,58 @@ export const router = createBrowserRouter([
             {
                 path: '/register',
                 Component: Register
+            },
+            {
+                path: '/forget-password',
+                Component: ForgetPassword
             }
         ]
     },
     {
         path: '/dashboard',
-        element: DashBoardLayout,
+        element: <PrivateRoute>
+            <DashBoardLayout></DashBoardLayout>
+        </PrivateRoute>,
+        children: [
+            {
+                index: true,
+                Component: DashBoardHome
+            },
+            {
+                path: 'profile',
+                Component: Profile
+            },
+            {
+                path: 'updateProfile',
+                Component: UpdateProfile
+            },
+            //student routes
+            {
+                path: 'my-enroll-class',
+                element: <MyEnrollClass></MyEnrollClass>
+            },
+            //teacher routes
+            {
+                path: 'add-class',
+                element: <AddClass></AddClass>
+            },
+            {
+                path: 'my-class',
+                element: <MyClass></MyClass>
+            },
+            //Admin routes
+            {
+                path: 'teacher-requests',
+                element: <TeacherRequests></TeacherRequests>
+            },
+            {
+                path: 'all-users',
+                element: <AllUsers></AllUsers>   
+            },
+            {
+                path: 'all-classes',
+                element: <AllClasses></AllClasses>
+            }
+        ]
     }
 ]);
