@@ -14,9 +14,12 @@ import DashBoardHome from "../pages/Dashboard/DashBoardHome";
 import MyEnrollClass from "../pages/Dashboard/Student/MyEnrollClass";
 import MyClass from "../pages/Dashboard/Teacher/MyClass";
 import AddClass from "../pages/Dashboard/Teacher/AddClass";
-import TeacherRequests from "../pages/Dashboard/Admin/TeacherRequests";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers";
 import ForgetPassword from "../pages/Authentication/ForgetPassword";
+import TeacherRequests from "../pages/Dashboard/Admin/TeacherRequests";
+import ActiveTeacher from "../pages/Dashboard/Admin/ActiveTeacher";
+import MakeAdmin from "../pages/Dashboard/Admin/MakeAdmin";
+
 
 
 export const router = createBrowserRouter([
@@ -95,8 +98,16 @@ export const router = createBrowserRouter([
                 element: <TeacherRequests></TeacherRequests>
             },
             {
+                path: 'active-teachers',
+                element: <ActiveTeacher></ActiveTeacher>
+            },
+            {
+                path: 'make-admin',
+                element: <MakeAdmin></MakeAdmin>
+            },
+            {
                 path: 'all-users',
-                element: <AllUsers></AllUsers>   
+                element: <AllUsers></AllUsers>
             },
             {
                 path: 'all-classes',

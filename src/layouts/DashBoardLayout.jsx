@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router";
-import { FaHome, FaUserEdit, FaUser, FaChalkboardTeacher, FaBookOpen, FaClipboardList, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaUserEdit, FaUser, FaChalkboardTeacher, FaBookOpen, FaClipboardList, FaSignOutAlt, FaUserTie, FaUserShield } from "react-icons/fa";
 import { IoMdPersonAdd } from "react-icons/io";
 import { HiOutlineUsers } from "react-icons/hi";
 import { GiNotebook } from "react-icons/gi";
@@ -99,6 +99,15 @@ const DashBoardLayout = () => {
                         <FaChalkboardTeacher /> Teacher Requests
                     </NavLink>
                     <NavLink
+                        to="/dashboard/active-teachers"
+                        className={({ isActive }) =>
+                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                            }`
+                        }
+                    >
+                        <FaUserTie /> Active Teachers
+                    </NavLink>
+                    <NavLink
                         to="/dashboard/all-users"
                         className={({ isActive }) =>
                             `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
@@ -106,6 +115,15 @@ const DashBoardLayout = () => {
                         }
                     >
                         <HiOutlineUsers /> All Users
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard/make-admin"
+                        className={({ isActive }) =>
+                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                            }`
+                        }
+                    >
+                        <FaUserShield /> Make Admin
                     </NavLink>
                     <NavLink
                         to="/dashboard/all-classes"

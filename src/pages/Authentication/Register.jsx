@@ -6,6 +6,7 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 import useAuth from '../../hooks/useAuth';
 import SocialLogin from './SocialLogin';
+import useAxios from '../../hooks/useAxios';
 
 const Register = () => {
 
@@ -13,7 +14,7 @@ const Register = () => {
     const { createUser, updateUserProfile } = useAuth();
     const [profilePic, setProfilePic] = useState();
     const [showPassword, setShowPassword] = useState(false); // Password toggle
-    // const axiosInstance = useAxios();
+    const axiosInstance = useAxios();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from || '/';
@@ -25,14 +26,17 @@ const Register = () => {
                 console.log(result.user);
                 toast.success("Registration successful!");
 
-                // const userInfo = {
-                //     email: data.email,
-                //     role: 'student',
-                //     created_at: new Date().toISOString(),
-                //     last_log_in: new Date().toISOString()
-                // };
-                // const userRes = await axiosInstance.post('/users', userInfo);
-                // console.log(userRes.data);
+                const userInfo = {
+                    email: data.email,
+                    role: 'student',
+                    displayName: data.displayName || data.name,
+                    photoURL: data.photoURL || profilePic,
+                    created_at: new Date().toISOString(),
+                    last_log_in: new Date().toISOString()
+                };
+                const userRes = await axiosInstance.post('/users', userInfo);
+                console.log(userRes.data);
+
 
                 const userProfile = {
                     displayName: data.name,
@@ -41,7 +45,7 @@ const Register = () => {
                 updateUserProfile(userProfile)
                     .then(() => {
                         navigate(from);
-                        toast.success('Profile Updated!');
+                        // toast.success('Profile Updated!');
                     }).catch(error => {
                         toast.error(error.message);
                     });
