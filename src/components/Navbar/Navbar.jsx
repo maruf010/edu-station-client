@@ -214,7 +214,7 @@ const Navbar = () => {
                                 <img alt='coming' src={user ? user.photoURL : "https://i.ibb.co.com/84TKBCHZ/user-icon-1024x1024-dtzturco.png"} />
 
                                 {/* hover profile name */}
-                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-gray-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-15'>
+                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-gray-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-8'>
                                     {user ? user.displayName : 'Please Login'}
                                 </div>
                             </div>
@@ -301,7 +301,7 @@ const Navbar = () => {
                                 <img alt='coming' src={user ? user.photoURL : "https://i.ibb.co.com/84TKBCHZ/user-icon-1024x1024-dtzturco.png"} />
 
                                 {/* hover profile name */}
-                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-gray-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-15 font-des'>
+                                <div className='absolute top-full  transform -translate-x-1/2 mt-5 px-3 bg-gray-500 text-white py-1 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap  right-0  -mr-10 font-des'>
                                     {user ? user.displayName : 'Please Login'}
                                 </div>
                             </div>

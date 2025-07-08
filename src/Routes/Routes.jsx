@@ -12,13 +12,18 @@ import PrivateRoute from "./PrivateRoute";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import DashBoardHome from "../pages/Dashboard/DashBoardHome";
 import MyEnrollClass from "../pages/Dashboard/Student/MyEnrollClass";
-import MyClass from "../pages/Dashboard/Teacher/MyClass";
 import AddClass from "../pages/Dashboard/Teacher/AddClass";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers";
 import ForgetPassword from "../pages/Authentication/ForgetPassword";
 import TeacherRequests from "../pages/Dashboard/Admin/TeacherRequests";
 import ActiveTeacher from "../pages/Dashboard/Admin/ActiveTeacher";
 import MakeAdmin from "../pages/Dashboard/Admin/MakeAdmin";
+import AdminRoute from "./AdminRoute";
+import Forbidden from "../components/Shared/Forbidden";
+import StudentRoute from "./StudentRoute";
+import MyClasses from "../pages/Dashboard/Teacher/MyClasses";
+import PendingClasses from "../pages/Dashboard/Admin/PendingClasses";
+import ClassDetails from "../pages/ClassDetails/ClassDetails";
 
 
 
@@ -39,7 +44,16 @@ export const router = createBrowserRouter([
                 path: '/teach',
                 Component: ApplyTeacher
             },
-
+            {
+                path: '/forbidden',
+                Component: Forbidden
+            },
+            {
+                path: '/classes/approved/:id',
+                element: <PrivateRoute>
+                    <ClassDetails></ClassDetails>
+                </PrivateRoute>
+            }
         ]
     },
     {
@@ -81,7 +95,9 @@ export const router = createBrowserRouter([
             //student routes
             {
                 path: 'my-enroll-class',
-                element: <MyEnrollClass></MyEnrollClass>
+                element: <StudentRoute>
+                    <MyEnrollClass></MyEnrollClass>
+                </StudentRoute>
             },
             //teacher routes
             {
@@ -89,8 +105,8 @@ export const router = createBrowserRouter([
                 element: <AddClass></AddClass>
             },
             {
-                path: 'my-class',
-                element: <MyClass></MyClass>
+                path: 'my-classes',
+                element: <MyClasses></MyClasses>
             },
             //Admin routes
             {
@@ -103,16 +119,18 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'make-admin',
-                element: <MakeAdmin></MakeAdmin>
+                element: <AdminRoute>
+                    <MakeAdmin></MakeAdmin>
+                </AdminRoute>
+            },
+            {
+                path: 'pending-classes',
+                element: <PendingClasses></PendingClasses>
             },
             {
                 path: 'all-users',
                 element: <AllUsers></AllUsers>
             },
-            {
-                path: 'all-classes',
-                element: <AllClasses></AllClasses>
-            }
         ]
     }
 ]);
