@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -17,6 +17,10 @@ const ApplyTeacher = () => {
         reset,
         formState: { errors }
     } = useForm();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
 
     // Fetch current teacher request
     const { data: existingRequest, refetch } = useQuery({

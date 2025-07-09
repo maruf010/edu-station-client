@@ -12,8 +12,8 @@ import Loading from '../Shared/Loading';
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
     const navigate = useNavigate()
-    
-    if(loading){
+
+    if (loading) {
         return <Loading></Loading>
     }
 
@@ -226,7 +226,9 @@ const Navbar = () => {
                             <div>
                                 {user ? (
                                     <div>
-                                        <h2>{user?.displayName}</h2>
+                                        <h2 className='text-lg px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                            {user?.displayName}
+                                        </h2>
                                         <div>
                                             <Link to='/dashboard' className='text-lg'>
                                                 <div className=' px-2 font-bold py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>

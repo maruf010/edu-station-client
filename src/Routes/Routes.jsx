@@ -26,6 +26,7 @@ import PendingClasses from "../pages/Dashboard/Admin/PendingClasses";
 import ClassDetails from "../pages/ClassDetails/ClassDetails";
 import PaymentsHistory from "../pages/Payment/PaymentsHistory";
 import AllPayments from "../pages/Dashboard/Admin/AllPayments";
+import Wishlist from "../pages/Dashboard/Student/Wishlist";
 
 
 
@@ -105,6 +106,12 @@ export const router = createBrowserRouter([
                 path: 'payments',
                 element: <StudentRoute>
                     <PaymentsHistory></PaymentsHistory>
+                </StudentRoute>
+            },
+            {
+                path: 'wishlist',
+                element: <StudentRoute>
+                    <Wishlist></Wishlist>
                 </StudentRoute>
             },
             //teacher routes

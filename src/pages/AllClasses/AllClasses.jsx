@@ -19,7 +19,7 @@ const AllClasses = () => {
 
 
     const { data: approvedClasses = [], isLoading, error } = useQuery({
-        queryKey: ['approved-classes'],
+        queryKey: ['approvedClasses'],
         queryFn: async () => {
             const res = await axiosInstance.get('/classes/approved');
             return res.data;
@@ -70,7 +70,7 @@ const AllClasses = () => {
                 {/* Search */}
                 <input
                     type="text"
-                    placeholder="Search class by name..."
+                    placeholder="Search class by Course Name..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="input input-bordered w-full max-w-xs"

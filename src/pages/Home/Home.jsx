@@ -17,8 +17,8 @@ const Home = () => {
             <Partners></Partners>
             <PopularClasses></PopularClasses>
             <FeedbackCarousel></FeedbackCarousel>
-            <PerformanceStats></PerformanceStats>
             <InspireTeachers></InspireTeachers>
+            <PerformanceStats></PerformanceStats>
             <WhyChooseUs></WhyChooseUs>
         </div>
     );

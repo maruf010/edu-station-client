@@ -4,7 +4,14 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
 
-const CheckoutForm = ({ classData, closeModal, refetch }) => {
+const CheckoutForm = ({
+    classData,
+    closeModal,
+    refetch,
+    refetchEnrollments,
+    fromWishlist = false,
+    wishlistId
+}) => {
     const stripe = useStripe();
     const elements = useElements();
     const axiosSecure = useAxiosSecure();
@@ -23,14 +30,12 @@ const CheckoutForm = ({ classData, closeModal, refetch }) => {
         if (!card) return;
 
         try {
-            // Step 1: Get client secret
             const { data } = await axiosSecure.post('/create-payment-intent', {
                 price: classData.price
             });
 
             const clientSecret = data.clientSecret;
 
-            // Step 2: Create payment method
             const { paymentMethod, error: methodError } = await stripe.createPaymentMethod({
                 type: 'card',
                 card,
@@ -47,7 +52,6 @@ const CheckoutForm = ({ classData, closeModal, refetch }) => {
 
             setProcessing(true);
 
-            // Step 3: Confirm payment
             const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: paymentMethod.id
             });
@@ -57,14 +61,12 @@ const CheckoutForm = ({ classData, closeModal, refetch }) => {
                 return;
             }
 
-            // Step 4: If payment successful
             if (paymentIntent.status === 'succeeded') {
-                // Save payment data
                 const paymentData = {
                     userEmail: user.email,
-                    classId: classData._id,
-                    className: classData.name,
-                    classImage: classData.image,
+                    classId: classData.classId || classData._id,
+                    className: classData.className || classData.name,
+                    classImage: classData.classImage || classData.image,
                     teacherName: classData.teacherName,
                     teacherEmail: classData.teacherEmail,
                     price: classData.price,
@@ -75,7 +77,6 @@ const CheckoutForm = ({ classData, closeModal, refetch }) => {
 
                 await axiosSecure.post('/payments', paymentData);
 
-                // Save enrollment data separately
                 const enrollmentData = {
                     ...paymentData,
                     status: 'enrolled'
@@ -85,7 +86,13 @@ const CheckoutForm = ({ classData, closeModal, refetch }) => {
 
                 if (res.data.insertedId) {
                     toast.success('Enrollment successful!');
-                    await refetch();
+
+                    if (fromWishlist && wishlistId) {
+                        await axiosSecure.delete(`/wishlist/${wishlistId}`);
+                    }
+
+                    if (refetch) await refetch(); // ✅ refetch class data (seats, enrolled)
+                    if (refetchEnrollments) await refetchEnrollments(); // ✅ update enrollment check
                     closeModal();
                 }
             } else {
