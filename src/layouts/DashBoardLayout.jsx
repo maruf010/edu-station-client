@@ -1,9 +1,9 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router";
-import { FaHome, FaUserEdit, FaUser, FaChalkboardTeacher, FaBookOpen, FaClipboardList, FaSignOutAlt, FaUserTie, FaUserShield } from "react-icons/fa";
+import { FaHome, FaUserEdit, FaUser, FaChalkboardTeacher, FaBookOpen, FaClipboardList, FaSignOutAlt, FaUserTie, FaUserShield, FaCreditCard } from "react-icons/fa";
 import { IoMdPersonAdd } from "react-icons/io";
 import { HiOutlineUsers } from "react-icons/hi";
 import { GiNotebook } from "react-icons/gi";
-import { MdOutlinePendingActions } from "react-icons/md";
+import { MdOutlinePendingActions, MdPayments } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import logo from "../../public/logo.jpg"
 import useAuth from "../hooks/useAuth";
@@ -82,7 +82,7 @@ const DashBoardLayout = () => {
                     <NavLink
                         to="/dashboard"
                         onClick={handleMobileNav}
-                        className='flex items-center gap-2 p-2 rounded transition-colors duration-200'
+                        className='flex items-center text-gray-500 hover:bg-gray-200 gap-2 p-2 mt-2 rounded transition-colors duration-200'
                     >
                         <FaHome /> Dashboard Home
                     </NavLink>
@@ -103,6 +103,12 @@ const DashBoardLayout = () => {
                                     }
                                 >
                                     <FaBookOpen /> My Enrolled Classes
+                                </NavLink>
+                                <NavLink to="/dashboard/payments" className={({ isActive }) =>
+                                    `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                    }`
+                                }>
+                                    <FaCreditCard /> Payment History
                                 </NavLink>
                             </>
                         )
@@ -172,6 +178,16 @@ const DashBoardLayout = () => {
                                     }
                                 >
                                     <FaUserTie /> Active Teachers
+                                </NavLink>
+                                <NavLink
+                                    to="/dashboard/allPayments"
+                                    onClick={handleMobileNav}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        }`
+                                    }
+                                >
+                                    <MdPayments /> All Payments
                                 </NavLink>
                                 <NavLink
                                     to="/dashboard/all-users"

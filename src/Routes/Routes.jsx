@@ -24,6 +24,8 @@ import StudentRoute from "./StudentRoute";
 import MyClasses from "../pages/Dashboard/Teacher/MyClasses";
 import PendingClasses from "../pages/Dashboard/Admin/PendingClasses";
 import ClassDetails from "../pages/ClassDetails/ClassDetails";
+import PaymentsHistory from "../pages/Payment/PaymentsHistory";
+import AllPayments from "../pages/Dashboard/Admin/AllPayments";
 
 
 
@@ -99,6 +101,12 @@ export const router = createBrowserRouter([
                     <MyEnrollClass></MyEnrollClass>
                 </StudentRoute>
             },
+            {
+                path: 'payments',
+                element: <StudentRoute>
+                    <PaymentsHistory></PaymentsHistory>
+                </StudentRoute>
+            },
             //teacher routes
             {
                 path: 'add-class',
@@ -131,6 +139,12 @@ export const router = createBrowserRouter([
                 path: 'all-users',
                 element: <AllUsers></AllUsers>
             },
+            {
+                path: 'allPayments',
+                element: <AdminRoute>
+                    <AllPayments></AllPayments>
+                </AdminRoute>
+            }
         ]
     }
 ]);

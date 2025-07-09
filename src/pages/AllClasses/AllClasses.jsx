@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import useAxios from '../../hooks/useAxios';
+import Loading from '../../components/Shared/Loading';
 
 
 const AllClasses = () => {
@@ -15,7 +16,7 @@ const AllClasses = () => {
         }
     });
 
-    if (isLoading) return <p className="text-center py-6">Loading classes...</p>;
+    if (isLoading) return <Loading></Loading>;
     if (error) return <p className="text-red-500 text-center py-6">Failed to load classes.</p>;
 
     return (
@@ -29,7 +30,6 @@ const AllClasses = () => {
                         </figure>
                         <div className="card-body">
                             <h2 className="text-xl font-semibold">{cls.name}</h2>
-                            <p className="text-gray-600 mb-1"><strong>Category:</strong> {cls.category}</p>
                             <p className="text-gray-600 mb-1"><strong>Instructor:</strong> {cls.teacherName}</p>
                             <p className="text-gray-600 mb-1"><strong>Seats:</strong> {cls.seats}</p>
                             <p className="text-gray-600 mb-1"><strong>Price:</strong> ${cls.price}</p>

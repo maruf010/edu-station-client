@@ -4,10 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
+import useUserRole from '../../hooks/useUserRole';
 
 const ApplyTeacher = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const { role, roleLoading } = useUserRole();
 
     const {
         register,
@@ -16,7 +18,7 @@ const ApplyTeacher = () => {
         formState: { errors }
     } = useForm();
 
-    // Fetch current user's request
+    // Fetch current teacher request
     const { data: existingRequest, refetch } = useQuery({
         queryKey: ['teacherRequest', user?.email],
         enabled: !!user?.email,
@@ -61,52 +63,94 @@ const ApplyTeacher = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="max-w-xl p-6 bg-white shadow-md rounded">
-                <h2 className="text-2xl font-bold text-center mb-4">Apply to Teach</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+            <div className="max-w-xl w-full p-6 bg-white shadow-md rounded">
+                <h2 className="text-2xl font-bold text-center mb-4">Apply to Become a Teacher</h2>
 
-                {status === 'accepted' && (
-                    <p className="text-green-600 font-semibold text-center">✅ You are now a Teacher!</p>
+                {/* Already a teacher */}
+                {!roleLoading && role === 'teacher' && (
+                    <p className="text-green-600 font-semibold text-center mb-4">
+                        ✅ You are already a Teacher!
+                    </p>
                 )}
 
-                {status === 'rejected' && (
-                    <div className="text-center">
-                        <p className="text-red-600 font-semibold mb-2">❌ Your previous request was rejected.</p>
-                        <button className="btn btn-warning" onClick={handleReapply}>Reapply</button>
-                    </div>
-                )}
+                {/* Show application form and status only if not yet a teacher */}
+                {!roleLoading && role !== 'teacher' && (
+                    <>
+                        {status === 'accepted' && (
+                            <p className="text-green-600 font-semibold text-center mb-4">
+                                ✅ You are now a Teacher!
+                            </p>
+                        )}
 
-                {status === 'pending' && (
-                    <p className="text-yellow-600 font-medium text-center">🕓 Your request is under review.</p>
-                )}
+                        {status === 'rejected' && (
+                            <div className="text-center mb-4">
+                                <p className="text-red-600 font-semibold mb-2">
+                                    ❌ Your previous application was rejected.
+                                </p>
+                                <button className="btn btn-warning btn-sm" onClick={handleReapply}>
+                                    Reapply
+                                </button>
+                            </div>
+                        )}
 
-                {!status && (
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        <input type="text" value={user?.displayName || ''} readOnly className="input input-bordered w-full bg-gray-100" />
-                        <input type="email" value={user?.email || ''} readOnly className="input input-bordered w-full bg-gray-100" />
+                        {status === 'pending' && (
+                            <p className="text-yellow-600 font-medium text-center mb-4">
+                                🕓 Your request is under review.
+                            </p>
+                        )}
 
-                        <select {...register('experience', { required: true })} className="select select-bordered w-full">
-                            <option value="">Select Experience</option>
-                            <option value="beginner">Beginner</option>
-                            <option value="mid-level">Mid-level</option>
-                            <option value="experienced">Experienced</option>
-                        </select>
-                        {errors.experience && <p className="text-red-500">Experience is required</p>}
+                        {!status && (
+                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                                <input
+                                    type="text"
+                                    value={user?.displayName || ''}
+                                    readOnly
+                                    className="input input-bordered w-full bg-gray-100"
+                                />
 
-                        <input type="text" {...register('title', { required: true })} className="input input-bordered w-full" placeholder="Your title or specialization" />
-                        {errors.title && <p className="text-red-500">Title is required</p>}
+                                <input
+                                    type="email"
+                                    value={user?.email || ''}
+                                    readOnly
+                                    className="input input-bordered w-full bg-gray-100"
+                                />
 
-                        <select {...register('category', { required: true })} className="select select-bordered w-full">
-                            <option value="">Select Category</option>
-                            <option value="Web Development">Web Development</option>
-                            <option value="UI/UX Design">UI/UX Design</option>
-                            <option value="Data Science">Data Science</option>
-                            <option value="Machine Learning">Machine Learning</option>
-                        </select>
-                        {errors.category && <p className="text-red-500">Category is required</p>}
+                                <select
+                                    {...register('experience', { required: true })}
+                                    className="select select-bordered w-full"
+                                >
+                                    <option value="">Select Experience</option>
+                                    <option value="beginner">Beginner</option>
+                                    <option value="mid-level">Mid-level</option>
+                                    <option value="experienced">Experienced</option>
+                                </select>
+                                {errors.experience && <p className="text-red-500">Experience is required</p>}
 
-                        <button className="btn btn-primary w-full">Submit Application</button>
-                    </form>
+                                <input
+                                    type="text"
+                                    {...register('title', { required: true })}
+                                    className="input input-bordered w-full"
+                                    placeholder="Your title or specialization"
+                                />
+                                {errors.title && <p className="text-red-500">Title is required</p>}
+
+                                <select
+                                    {...register('category', { required: true })}
+                                    className="select select-bordered w-full"
+                                >
+                                    <option value="">Select Category</option>
+                                    <option value="Web Development">Web Development</option>
+                                    <option value="UI/UX Design">UI/UX Design</option>
+                                    <option value="Data Science">Data Science</option>
+                                    <option value="Machine Learning">Machine Learning</option>
+                                </select>
+                                {errors.category && <p className="text-red-500">Category is required</p>}
+
+                                <button className="btn btn-primary w-full">Submit Application</button>
+                            </form>
+                        )}
+                    </>
                 )}
             </div>
         </div>
