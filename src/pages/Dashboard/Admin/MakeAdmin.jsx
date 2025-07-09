@@ -2,10 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { CSVLink } from 'react-csv';
 
 const MakeAdmin = () => {
     const axiosSecure = useAxiosSecure();
     const [search, setSearch] = useState('');
+    const [roleFilter, setRoleFilter] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const { data: users = [], isLoading, error, refetch } = useQuery({
         queryKey: ['users'],
@@ -15,28 +19,30 @@ const MakeAdmin = () => {
         },
     });
 
-    // Filter and prioritize search results
     const filteredUsers = useMemo(() => {
-        if (!search.trim()) return users;
+        let filtered = users;
 
-        const lowerSearch = search.toLowerCase();
+        if (roleFilter !== 'all') {
+            filtered = filtered.filter(user => (user.role || 'student') === roleFilter);
+        }
 
-        const matched = [];
-        const others = [];
+        if (search.trim()) {
+            const term = search.toLowerCase();
+            filtered = filtered.filter(
+                (u) =>
+                    u.displayName?.toLowerCase().includes(term) ||
+                    u.email.toLowerCase().includes(term)
+            );
+        }
 
-        users.forEach((user) => {
-            const name = user.displayName?.toLowerCase() || '';
-            const email = user.email.toLowerCase();
+        return filtered;
+    }, [users, search, roleFilter]);
 
-            if (name.includes(lowerSearch) || email.includes(lowerSearch)) {
-                matched.push(user);
-            } else {
-                others.push(user);
-            }
-        });
-
-        return [...matched, ...others];
-    }, [users, search]);
+    const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
+    const paginatedUsers = filteredUsers.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     const handleMakeAdmin = async (user) => {
         if (user.role === 'admin') {
@@ -48,7 +54,7 @@ const MakeAdmin = () => {
             title: `Make ${user.displayName || user.email} an Admin?`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Yes, make admin',
+            confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
         });
 
@@ -56,78 +62,144 @@ const MakeAdmin = () => {
             try {
                 const res = await axiosSecure.patch(`/users/make-admin/${user._id}`);
                 if (res.data.modifiedCount > 0) {
-                    Swal.fire('Success', 'User is now an admin', 'success');
+                    Swal.fire('Success', 'User promoted to Admin.', 'success');
                     refetch();
                 } else {
-                    Swal.fire('Error', 'Failed to update role', 'error');
+                    Swal.fire('Error', 'Update failed.', 'error');
                 }
             } catch (error) {
                 console.error(error);
-                Swal.fire('Error', 'Something went wrong', 'error');
+                Swal.fire('Error', 'Something went wrong.', 'error');
             }
         }
     };
+    const handleRemoveAdmin = async (user) => {
+        const result = await Swal.fire({
+            title: `Remove Admin Access from ${user.displayName || user.email}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove',
+            cancelButtonText: 'Cancel',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await axiosSecure.patch(`/users/remove-admin/${user._id}`);
+                if (res.data.modifiedCount > 0) {
+                    Swal.fire('Updated!', 'Admin role removed.', 'success');
+                    refetch();
+                } else {
+                    Swal.fire('Error', 'Could not remove admin role.', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Something went wrong.', 'error');
+            }
+        }
+    };
+
+
+    const csvHeaders = [
+        { label: 'Name', key: 'displayName' },
+        { label: 'Email', key: 'email' },
+        { label: 'Role', key: 'role' },
+    ];
 
     if (isLoading) return <p className="text-center py-6">Loading users...</p>;
     if (error) return <p className="text-center py-6 text-red-600">Failed to load users.</p>;
 
     return (
-        <div className="min-h-screen mx-auto p-4 sm:p-6 bg-white rounded shadow py-5">
-            <h2 className="text-2xl font-bold mb-4 text-center">Make Admin</h2>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+            <h2 className="text-3xl font-bold text-center mb-6">👑 Make Admin</h2>
 
-            <input
-                type="text"
-                placeholder="Search users by name or email"
-                className="input input-bordered w-full mb-4 text-sm sm:text-base"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <input
+                    type="text"
+                    placeholder="🔍 Search by name or email"
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1);
+                    }}
+                    className="input input-bordered w-full sm:w-1/2"
+                />
 
-            <div className="overflow-x-auto">
-                <table className="table-auto min-w-full border-collapse border border-gray-300 text-sm sm:text-base">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="border px-2 sm:px-4 py-2 text-left">#</th>
-                            <th className="border px-2 sm:px-4 py-2 text-left">Name</th>
-                            <th className="border px-2 sm:px-4 py-2 text-left">Email</th>
-                            <th className="border px-2 sm:px-4 py-2 text-left">Role</th>
-                            <th className="border px-2 sm:px-4 py-2 text-left">Action</th>
+                <select
+                    className="select select-bordered w-full sm:w-48"
+                    value={roleFilter}
+                    onChange={(e) => {
+                        setRoleFilter(e.target.value);
+                        setCurrentPage(1);
+                    }}
+                >
+                    <option value="all">All Roles</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+                <CSVLink
+                    data={filteredUsers}
+                    headers={csvHeaders}
+                    filename="users.csv"
+                    className="btn btn-sm bg-green-500 hover:bg-green-600 text-white"
+                >
+                    📤 Export CSV
+                </CSVLink>
+            </div>
+
+            <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+                <table className="min-w-full text-sm md:text-base">
+                    <thead className="bg-gray-100">
+                        <tr>
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700">#</th>
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700">Name</th>
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700">Email</th>
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700">Role</th>
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {filteredUsers.map((user, idx) => {
-                            const isMatched =
-                                search &&
-                                (user.displayName?.toLowerCase().includes(search.toLowerCase()) ||
-                                    user.email.toLowerCase().includes(search.toLowerCase()));
-
-                            return (
-                                <tr
-                                    key={user._id}
-                                    className={`text-center ${isMatched ? 'bg-yellow-100 font-semibold' : ''
-                                        }`}
-                                >
-                                    <td className="border px-2 sm:px-4 py-2">{idx + 1}</td>
-                                    <td className="border px-2 sm:px-4 py-2 text-left">{user.displayName || 'N/A'}</td>
-                                    <td className="border px-2 sm:px-4 py-2 text-left">{user.email}</td>
-                                    <td className="border px-2 sm:px-4 py-2 capitalize">{user.role || 'user'}</td>
-                                    <td className="border px-2 sm:px-4 py-2">
-                                        {user.role !== 'admin' ? (
-                                            <button
-                                                onClick={() => handleMakeAdmin(user)}
-                                                className="btn btn-sm btn-primary w-full sm:w-auto"
-                                            >
-                                                Make Admin
-                                            </button>
-                                        ) : (
-                                            <span className="text-green-600 font-semibold">Admin</span>
-                                        )}
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                    <tbody className="divide-y divide-gray-200">
+                        {paginatedUsers.map((user, idx) => (
+                            <tr key={user._id}>
+                                <td className="px-4 py-2">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                                <td className="px-4 py-2">{user.displayName || 'N/A'}</td>
+                                <td className="px-4 py-2">{user.email}</td>
+                                <td className="px-4 py-2 capitalize">{user.role || 'student'}</td>
+                                <td className="px-4 py-2">
+                                    {user.role !== 'admin' ? (
+                                        <button
+                                            onClick={() => handleMakeAdmin(user)}
+                                            className="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white"
+                                        >
+                                            Make Admin
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleRemoveAdmin(user)}
+                                            className="btn btn-sm bg-red-500 hover:bg-red-600 text-white"
+                                        >
+                                            Remove Admin
+                                        </button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center mt-6 gap-2">
+                {Array.from({ length: pageCount }, (_, i) => (
+                    <button
+                        key={i + 1}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`btn btn-sm ${currentPage === i + 1 ? 'btn-primary bg-pink-500' : 'btn-outline'}`}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
             </div>
         </div>
     );

@@ -114,15 +114,15 @@ const Register = () => {
                         {errors.password?.type === 'pattern' && <p className='text-red-500'>Password must contain at least one uppercase letter, one special character, and one number</p>}
 
                         {/* Submit Button */}
-                        <button className="btn text-white bg-pink-500 mt-4 w-full">Register</button>
+                        <button className="btn text-white bg-pink-500 mt-3 w-full">Register</button>
                     </fieldset>
                 </form>
 
-                <p className="mt-3 text-sm text-center">
+                <p className="mt-2 text-sm text-center">
                     Already have an account? <Link to='/login' className='text-blue-500'>Login</Link>
                 </p>
 
-                <div className="divider">or</div>
+                
                 <SocialLogin />
             </div>
         </div>
