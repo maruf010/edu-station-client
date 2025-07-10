@@ -1,28 +1,76 @@
-
-import { FaCamera, FaHeadphones, FaBrain, FaLaptopCode, FaGuitar, FaBook } from "react-icons/fa";
+import {
+    FaCamera,
+    FaHeadphones,
+    FaBrain,
+    FaLaptopCode,
+    FaGuitar,
+    FaBook,
+} from "react-icons/fa";
+import { Link } from "react-router";
 
 const skills = [
-    { name: "Filmmaking", icon: <FaCamera />, color: "bg-cyan-400" },
-    { name: "Graphic & Web Design", icon: <FaHeadphones />, color: "bg-green-500" },
-    { name: "Logical Thinking", icon: <FaBrain />, color: "bg-blue-500" },
-    { name: "Programming Courses", icon: <FaLaptopCode />, color: "bg-yellow-400" },
-    { name: "Social Media Management", icon: <FaGuitar />, color: "bg-pink-400" },
-    { name: "Software Training", icon: <FaBook />, color: "bg-sky-400" },
+    {
+        name: "Graphic & Web Design",
+        icon: <FaHeadphones />,
+        color: "from-green-400 to-emerald-500",
+        description: "Master creative design skills using tools like Photoshop, Illustrator, and Figma to build beautiful websites and visuals.",
+    },
+    {
+        name: "Logical Thinking",
+        icon: <FaBrain />,
+        color: "from-blue-400 to-indigo-500",
+        description: "Enhance your problem-solving ability with structured reasoning, pattern recognition, and critical thinking exercises.",
+    },
+    {
+        name: "Programming Courses",
+        icon: <FaLaptopCode />,
+        color: "from-yellow-400 to-orange-400",
+        description: "Get hands-on coding experience with modern programming languages like JavaScript, Python, and more.",
+    },
+    {
+        name: "Software Training",
+        icon: <FaBook />,
+        color: "from-sky-400 to-blue-400",
+        description: "Become proficient in using professional tools like MS Office, Canva, and others to boost productivity.",
+    },
 ];
+
 
 const YouCanLearn = () => {
     return (
-        <section className="py-16  text-center">
+        <section className="py-16 text-center lg:max-w-11/12 lg:mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-10">YOU CAN LEARN</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-11/12 mx-auto px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8  mx-auto px-4">
                 {skills.map((skill, idx) => (
                     <div
                         key={idx}
-                        className={`rounded-lg p-6 flex flex-col items-center justify-center ${skill.color} 
-  hover:-translate-y-3 hover:shadow-xl transition-all duration-300`}
+                        className={`relative group rounded-xl overflow-hidden p-6 bg-white shadow-md hover:shadow-2xl transform transition-transform duration-300 hover:scale-105`}
                     >
-                        <div className="text-4xl mb-3">{skill.icon}</div>
-                        <p className="font-semibold">{skill.name}</p>
+                        {/* Arc Background */}
+                        <div
+                            className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${skill.color} rounded-bl-full z-0`}
+                        ></div>
+
+                        {/* Icon */}
+                        <div className="relative z-10 text-4xl mb-4 text-gray-800 transition-transform duration-300 group-hover:scale-115">
+                            {skill.icon}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="relative z-10 font-semibold text-lg mb-2">{skill.name}</h3>
+
+                        {/* Placeholder text */}
+                        <p className="relative z-10 text-sm text-gray-600 mb-4">
+                            {skill.description}
+                        </p>
+
+
+                        {/* Read More Button */}
+                        <Link to='/allClasses'>
+                            <button className="relative z-10 mt-auto inline-block text-white text-sm font-medium px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full hover:opacity-90 transition-opacity duration-300 cursor-pointer">
+                                Read More
+                            </button>
+                        </Link>
                     </div>
                 ))}
             </div>

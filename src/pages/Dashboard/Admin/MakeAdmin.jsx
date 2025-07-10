@@ -110,7 +110,7 @@ const MakeAdmin = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <h2 className="text-3xl font-bold text-center mb-6">👑 Make Admin</h2>
+            <h2 className="text-3xl font-bold text-center mb-6">Make Admin</h2>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <input

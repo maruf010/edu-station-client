@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
-import logo from '../../assets/logo.jpg';
+import logo from '../../../public/eduNav.png';
 import useAuth from '../../hooks/useAuth';
 import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
 import Button from '../Shared/Button';
@@ -71,6 +71,7 @@ const Navbar = () => {
 
         </div >
     )
+
     const handleLogout = () => {
         logOut()
             .then(() => {
@@ -154,7 +155,7 @@ const Navbar = () => {
                 </div>
                 <Link to='/'>
                     <div className='flex-1 flex items-center'>
-                        <img src={logo} alt="Coming soon" className="w-20 md:w-24 lg:w-30 " />
+                        <img src={logo} alt="Coming soon" className="w-20 md:w-24  " />
                         {/* <span className='text-blue-500 font-medium ml-1 text-lg lg:text-2xl font-des' onClick={() => {
                             ; (prev) => !prev
                             window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -226,7 +227,7 @@ const Navbar = () => {
                             <div>
                                 {user ? (
                                     <div>
-                                        <h2 className='text-lg px-2 font-medium py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
+                                        <h2 className='text-lg px-2 font-bold py-2 rounded-lg text-gray-500  hover:text-green-500 cursor-pointer transition-colors delay-100 duration-200'>
                                             {user?.displayName}
                                         </h2>
                                         <div>

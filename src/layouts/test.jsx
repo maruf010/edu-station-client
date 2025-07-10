@@ -70,7 +70,7 @@ const DashBoardLayout = () => {
             {/* Sidebar */}
             <aside
                 ref={sidebarRef}
-                className={`bg-white h-screen shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+                className={`bg-white shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
 
                 <Link to='/' className=" ">
                     <div className="flex items-center">
