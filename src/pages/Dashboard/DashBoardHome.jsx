@@ -9,6 +9,8 @@ import {
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useUserRole from "../../hooks/useUserRole";
+import Loading from "../../components/Shared/Loading";
+import { useEffect } from "react";
 
 const SimpleRadialBarChart = ({ role, data }) => {
     let chartData = [];
@@ -57,9 +59,16 @@ const SimpleRadialBarChart = ({ role, data }) => {
 };
 
 const DashboardHome = () => {
+
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const { role } = useUserRole();
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
+
 
     const { data: summary = {}, isLoading } = useQuery({
         queryKey: ["dashboard-summary", user?.email],
@@ -73,7 +82,7 @@ const DashboardHome = () => {
     });
 
     if (isLoading)
-        return <p className="text-center py-10">Loading dashboard...</p>;
+        return <Loading></Loading>;
 
     return (
         <div className="p-6 space-y-6 bg-gray-100 min-h-screen">

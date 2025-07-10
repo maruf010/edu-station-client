@@ -11,7 +11,8 @@ import PopularClasses from './PopularClasses';
 
 const Home = () => {
     return (
-        <div className='overflow-hidden'>
+        <div className='relative overflow-hidden'>
+
             <Banner></Banner>
             <YouCanLearn></YouCanLearn>
             <Partners></Partners>

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import useUserRole from '../../hooks/useUserRole';
+import Loading from '../../components/Shared/Loading';
 
 const ApplyTeacher = () => {
     const { user } = useAuth();
@@ -21,6 +22,7 @@ const ApplyTeacher = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [])
+
 
     // Fetch current teacher request
     const { data: existingRequest, refetch } = useQuery({
@@ -65,6 +67,10 @@ const ApplyTeacher = () => {
             refetch();
         }
     };
+
+    if (roleLoading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

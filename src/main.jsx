@@ -10,6 +10,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import AuthProvider from './contexts/AuthProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
+
+Aos.init();
 
 const queryClient = new QueryClient();
 

@@ -27,7 +27,7 @@ const reasons = [
 
 const WhyChooseUs = () => {
     return (
-        <section className="py-16 bg-white text-gray-800">
+        <section className="py-16 text-gray-800">
             <div className="max-w-6xl mx-auto px-4 text-center">
                 <h2 className="text-3xl md:text-4xl font-bold mb-12 text-blue-700">
                     Why Choose <span className="text-pink-500">EduStation?</span>
@@ -37,6 +37,7 @@ const WhyChooseUs = () => {
                     {reasons.map((item, index) => (
                         <div
                             key={index}
+                            data-aos="fade-up" data-aos-offset="300"
                             className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300"
                         >
                             <div className="flex justify-center mb-4">{item.icon}</div>

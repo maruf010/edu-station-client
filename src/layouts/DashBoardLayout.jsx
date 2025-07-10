@@ -106,16 +106,20 @@ const DashBoardLayout = () => {
                                 >
                                     <FaBookOpen /> My Enrolled Classes
                                 </NavLink>
-                                <NavLink to="/dashboard/wishlist" className={({ isActive }) =>
-                                    `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                    }`
-                                }>
+                                <NavLink to="/dashboard/wishlist"
+                                    onClick={handleMobileNav}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        }`
+                                    }>
                                     <FaCreditCard /> Wishlist
                                 </NavLink>
-                                <NavLink to="/dashboard/payments" className={({ isActive }) =>
-                                    `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                    }`
-                                }>
+                                <NavLink to="/dashboard/payments"
+                                    onClick={handleMobileNav}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        }`
+                                    }>
                                     <FaCreditCard /> Payment History
                                 </NavLink>
                             </>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import useAuth from '../../hooks/useAuth';
 import useAxios from '../../hooks/useAxios';
+import toast from 'react-hot-toast';
 
 
 const SocialLogin = () => {
@@ -28,7 +29,7 @@ const SocialLogin = () => {
                 const userRes = await axiosInstance.post('/users', userInfo);
                 console.log('user update info', userRes.data);
 
-
+toast.success('Login successfully!')
                 navigate(from)
             })
             .catch(error => {

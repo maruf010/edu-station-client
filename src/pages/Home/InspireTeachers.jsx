@@ -9,7 +9,7 @@ const InspireTeachers = () => {
             <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse md:flex-row items-center gap-10">
 
                 {/* Text Content */}
-                <div className="flex-1 text-center md:text-left">
+                <div className="flex-1 text-center md:text-left" data-aos="fade-right" data-aos-offset="100">
                     <h2 className="text-4xl font-bold text-blue-700 mb-4">
                         Inspire, Educate, and Earn on <span className="text-pink-500">EduStation</span>
                     </h2>
@@ -32,7 +32,8 @@ const InspireTeachers = () => {
                 </div>
 
                 {/* Image */}
-                <div className="flex-1">
+                <div className="flex-1"
+                data-aos="fade-left" data-aos-offset="100">
                     <Lottie animationData={teacherLottie} loop style={{ height: '400px' }} />
                 </div>
 

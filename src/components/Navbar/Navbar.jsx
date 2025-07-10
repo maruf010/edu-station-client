@@ -116,19 +116,11 @@ const Navbar = () => {
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow bg-white">
+                        className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow bg-white text-[16px]">
                         {links}
 
                         {
-                            user ? (
-                                <button
-                                    onClick={handleLogout}
-                                    className='flex items-center gap-2 text-gray-500 ml-2 pb-2 text-[16px] text-start cursor-pointer mt-2 hover:text-green-500'
-                                >
-                                    <FiLogOut />
-                                    Logout
-                                </button>
-                            ) : (
+                            !user && (
                                 <div className='space-y-2 mt-2 '>
                                     <div>
                                         <Link
