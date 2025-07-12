@@ -71,8 +71,8 @@ const AllClasses = () => {
     if (error) return <p className="text-red-500 text-center py-6">Failed to load classes.</p>;
 
     return (
-        <div className='bg-gradient-to-b from-[#1c0485] to-[#06c9ff] overflow-hidden'>
-            <div className="relative max-w-7xl min-h-screen mx-auto p-6 ">
+        <div className='bg-gray-300 overflow-hidden'>
+            <div className=" max-w-7xl min-h-screen mx-auto p-6 ">
                 <h2 className="text-3xl font-bold text-center mb-6 text-white">Explore Our Classes</h2>
 
                 {/* Filter Controls */}
@@ -179,11 +179,6 @@ const AllClasses = () => {
                         </button>
                     </div>
                 )}
-
-                <div className="absolute top-[-30px] left-[-40px] w-28 h-28 bg-blue-500 rounded-full opacity-30"></div>
-                <div className="absolute bottom-[150px] left-[-60px] w-28 h-28 bg-blue-100 rounded-full opacity-30"></div>
-                <div className="absolute top-10 right-[-80px] w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
-                <div className="absolute top-60 right-[-200px] w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
 
             </div>
         </div>
