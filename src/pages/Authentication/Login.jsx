@@ -31,7 +31,7 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0072ff] to-[#00c6ff] px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0072ff] to-[#06c9ff] px-4">
             <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
                 {/* Left Side - Welcome */}
                 <div className="relative bg-gradient-to-b from-[#0072ff] to-[#00c6ff] text-white p-10 flex flex-col justify-center">
