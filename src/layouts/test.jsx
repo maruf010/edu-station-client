@@ -1,278 +1,132 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router";
-import { FaHome, FaUserEdit, FaUser, FaChalkboardTeacher, FaBookOpen, FaSignOutAlt, FaUserTie, FaUserShield, FaCreditCard } from "react-icons/fa";
-import { IoMdPersonAdd } from "react-icons/io";
-import { HiOutlineUsers } from "react-icons/hi";
-import { GiNotebook } from "react-icons/gi";
-import { MdOutlinePendingActions, MdPayments } from "react-icons/md";
-import { useEffect, useRef, useState } from "react";
-import logo from "../../public/eduNav.png"
-import useAuth from "../hooks/useAuth";
-import toast from "react-hot-toast";
-import useUserRole from "../hooks/useUserRole";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useLocation, useNavigate } from 'react-router'; // Make sure it's 'react-router-dom'
+import axios from 'axios';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import toast from 'react-hot-toast';
+import useAuth from '../../hooks/useAuth';
+import SocialLogin from './SocialLogin';
+import useAxios from '../../hooks/useAxios';
 
+const Register = () => {
 
-const DashBoardLayout = () => {
-
-    const { logOut } = useAuth();
-    const [isOpen, setIsOpen] = useState(false);
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { createUser, updateUserProfile } = useAuth();
+    const [profilePic, setProfilePic] = useState();
+    const [showPassword, setShowPassword] = useState(false); // Password toggle
+    const axiosInstance = useAxios();
     const navigate = useNavigate();
-    const sidebarRef = useRef();
+    const location = useLocation();
+    const from = location.state?.from || '/';
+
+    const onSubmit = data => {
+        console.log(data);
+        createUser(data.email, data.password)
+            .then(async (result) => {
+                console.log(result.user);
+                toast.success("Registration successful!");
+
+                const userInfo = {
+                    email: data.email,
+                    role: 'student',
+                    displayName: data.displayName || data.name,
+                    photoURL: data.photoURL || profilePic,
+                    created_at: new Date().toISOString(),
+                    last_log_in: new Date().toISOString()
+                };
+                const userRes = await axiosInstance.post('/users', userInfo);
+                console.log(userRes.data);
 
 
-    const { role, roleLoading } = useUserRole();
-    console.log(role);
+                const userProfile = {
+                    displayName: data.name,
+                    photoURL: profilePic
+                };
+                updateUserProfile(userProfile)
+                    .then(() => {
+                        navigate(from);
+                        // toast.success('Profile Updated!');
+                    }).catch(error => {
+                        toast.error(error.message);
+                    });
 
-    const handleLogout = () => {
-        logOut()
-            .then(() => {
-                toast.success('Logout successfully !', {
-                    duration: 3000,
-                    position: 'top-center',
-                    style: {
-                        background: '#fff',
-                        color: '#333',
-                    },
-                    icon: '👏',
-                })
-                navigate('/login')
             })
-            .catch((error) => {
-                console.log(error)
-            })
+            .catch(error => {
+                toast.error(error.message);
+            });
     };
 
-    const handleMobileNav = () => {
-        if (window.innerWidth < 1024) {
-            setIsOpen(false);
-        }
+    const handleImage = async (e) => {
+        const image = e.target.files[0];
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_UPLOAD_KEY}`;
+        const res = await axios.post(imageUploadUrl, formData);
+        setProfilePic(res.data.data.url);
     };
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                sidebarRef.current &&
-                !sidebarRef.current.contains(event.target) &&
-                window.innerWidth < 1024
-            ) {
-                setIsOpen(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
 
     return (
-        <div className="flex  min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <aside
-                ref={sidebarRef}
-                className={`bg-white shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+        <div className="card bg-base-100 w-full md:max-w-sm shrink-0 shadow-2xl">
+            <div className="card-body">
+                <h1 className="text-3xl font-bold text-center mb-4">Create Account</h1>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <fieldset className="fieldset">
 
-                <Link to='/' className=" ">
-                    <div className="flex items-center">
-                        <img src={logo} alt="Logo" className="h-10 md:h-16" />
-                        {/* <h2>Back to Home</h2> */}
-                    </div>
-                </Link>
+                        {/* Name */}
+                        <label className="label">Name</label>
+                        <input type="text" {...register('name', { required: true })} className="input input-bordered w-full" placeholder="Name" />
+                        {errors.name?.type === 'required' && <p className='text-red-500'>Name is required</p>}
 
-                <nav className="space-y-2">
-                    {/* Dashboard Home */}
-                    <NavLink
-                        to="/dashboard"
-                        onClick={handleMobileNav}
-                        className='flex items-center text-gray-500 hover:bg-gray-200 gap-2 p-2 mt-2 rounded transition-colors duration-200'
-                    >
-                        <FaHome /> Dashboard
-                    </NavLink>
+                        {/* Profile Photo */}
+                        <label className="label">Photo</label>
+                        <input type="file" onChange={handleImage} className="file-input file-input-bordered w-full" />
+
+                        {/* Email */}
+                        <label className="label">Email</label>
+                        <input type="email" {...register('email', { required: true })} className="input input-bordered w-full" placeholder="Email" />
+                        {errors.email?.type === 'required' && <p className='text-red-500'>Email is required</p>}
+
+                        {/* Password with Toggle */}
+                        <label className="label">Password</label>
+                        <div className="relative">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                {...register('password', {
+                                    required: true,
+                                    minLength: 6,
+                                    pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/
+                                })}
+                                className="input input-bordered w-full pr-10"
+                                placeholder="Password"
+                            />
+                            <span
+                                className="absolute right-3 top-3 cursor-pointer text-xl text-gray-600"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                            </span>
+                        </div>
+
+                        {/* Password Errors */}
+                        {errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>}
+                        {errors.password?.type === 'minLength' && <p className='text-red-500'>Password must be 6 characters or longer</p>}
+                        {errors.password?.type === 'pattern' && <p className='text-red-500'>Password must contain at least one uppercase letter, one special character, and one number</p>}
+
+                        {/* Submit Button */}
+                        <button className="btn text-white bg-pink-500 mt-3 w-full">Register</button>
+                    </fieldset>
+                </form>
+
+                <p className="mt-2 text-sm text-center">
+                    Already have an account? <Link to='/login' className='text-blue-500'>Login</Link>
+                </p>
 
 
-                    {/* Student Links */}
-                    {
-                        !roleLoading && role === 'student' && (
-                            <>
-                                <hr />
-                                <h3 className="font-semibold text-gray-600">Student</h3>
-                                <NavLink
-                                    to="/dashboard/my-enroll-class"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <FaBookOpen /> My Enrolled Classes
-                                </NavLink>
-                                <NavLink to="/dashboard/wishlist" className={({ isActive }) =>
-                                    `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                    }`
-                                }>
-                                    <FaCreditCard /> Wishlist
-                                </NavLink>
-                                <NavLink to="/dashboard/payments" className={({ isActive }) =>
-                                    `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                    }`
-                                }>
-                                    <FaCreditCard /> Payment History
-                                </NavLink>
-                            </>
-                        )
-                    }
-
-                    {/* Teacher Links */}
-                    {
-                        !roleLoading && role === 'teacher' && (
-                            <>
-                                <hr />
-                                <h3 className="font-semibold text-gray-600">Teacher</h3>
-                                <NavLink
-                                    to="/dashboard/add-class"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <IoMdPersonAdd /> Add Class
-                                </NavLink>
-                                <NavLink
-                                    to="/dashboard/my-classes"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <GiNotebook /> My Classes
-                                </NavLink></>
-                        )
-                    }
-
-                    {/* Admin Links */}
-                    {
-                        !roleLoading && role === 'admin' && (
-                            <>
-                                <hr />
-                                <h3 className="font-semibold text-gray-600">Admin</h3>
-                                <NavLink
-                                    to="/dashboard/teacher-requests"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <FaChalkboardTeacher /> Teacher Requests
-                                </NavLink>
-                                <NavLink
-                                    to="/dashboard/pending-classes"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <MdOutlinePendingActions /> Pending Classes
-                                </NavLink>
-                                <NavLink
-                                    to="/dashboard/active-teachers"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <FaUserTie /> Active Teachers
-                                </NavLink>
-                                <NavLink
-                                    to="/dashboard/allPayments"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <MdPayments /> All Payments
-                                </NavLink>
-                                <NavLink
-                                    to="/dashboard/all-users"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <HiOutlineUsers /> All Users
-                                </NavLink>
-                                <NavLink
-                                    to="/dashboard/make-admin"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <FaUserShield /> Make Admin
-                                </NavLink>
-                            </>
-                        )
-                    }
-
-                    <hr />
-                    <NavLink
-                        to="/dashboard/profile"
-                        onClick={handleMobileNav}
-                        className={({ isActive }) =>
-                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                            }`
-                        }
-                    >
-                        <FaUser /> Profile
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard/updateProfile"
-                        onClick={handleMobileNav}
-                        className={({ isActive }) =>
-                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
-                            }`
-                        }
-                    >
-                        <FaUserEdit /> Update Profile
-                    </NavLink>
-
-                    <button
-                        onClick={() => {
-                            handleLogout();
-                            handleMobileNav();
-                        }}
-                        className="flex items-center gap-2 p-2 rounded text-gray-500 hover:bg-gray-200 transition-colors duration-200"
-                    >
-                        <FaSignOutAlt /> Logout
-                    </button>
-                </nav>
-
-            </aside>
-
-            {/* Main Content */}
-            <div className="flex-1  w-full">
-                {/* Topbar for mobile */}
-                <div className="bg-white p-4 shadow flex items-center justify-between lg:hidden">
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-xl font-bold">☰</button>
-                    <Link to='/'>
-                        <img src={logo} alt="Logo" className="h-8" />
-                    </Link>
-                </div>
-
-                {/* Page Content */}
-                <main className="">
-                    <Outlet />
-                </main>
+                <SocialLogin />
             </div>
         </div>
     );
 };
 
-export default DashBoardLayout;
+export default Register;

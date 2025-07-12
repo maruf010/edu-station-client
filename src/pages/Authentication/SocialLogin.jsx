@@ -39,7 +39,7 @@ toast.success('Login successfully!')
 
     return (
         <div className='text-center'>
-            <p className='my-3'>OR</p>
+            {/* <p className='my-3'>OR</p> */}
             {/* <div className="border border-dashed border-gray-300 my-4"></div> */}
 
             <button onClick={handleGoogleLogin} className="btn bg-white text-black w-full border-[#e5e5e5]">

@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import Loading from '../../../components/Shared/Loading';
 
 
 const ActiveTeacher = () => {
@@ -48,7 +49,7 @@ const ActiveTeacher = () => {
         });
     };
 
-    if (isLoading) return <p className="text-center py-6">Loading teachers...</p>;
+    if (isLoading) return <Loading></Loading>;
     if (error) return <p className="text-center py-6 text-red-600">Failed to load teachers.</p>;
 
     if (teachers.length === 0) return <p className="text-center py-6">No active teachers found.</p>;

@@ -13,7 +13,7 @@ const useAxiosSecure = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // 🔒 Request Interceptor
+        //  Request Interceptor
         const requestInterceptor = axiosSecure.interceptors.request.use(
             async (config) => {
                 if (user) {
@@ -25,7 +25,7 @@ const useAxiosSecure = () => {
             (error) => Promise.reject(error)
         );
 
-        // 🚨 Response Interceptor
+        //  Response Interceptor
         const responseInterceptor = axiosSecure.interceptors.response.use(
             (res) => res,
             (error) => {
@@ -39,7 +39,7 @@ const useAxiosSecure = () => {
             }
         );
 
-        // 🧹 Clean up interceptors when component unmounts or dependencies change
+        //  Clean up interceptors when component unmounts or dependencies change
         return () => {
             axiosSecure.interceptors.request.eject(requestInterceptor);
             axiosSecure.interceptors.response.eject(responseInterceptor);

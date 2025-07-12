@@ -79,7 +79,7 @@ const FeedbackCarousel = () => {
 
                 <Slider {...settings}>
                     {feedbacks.map((fb, index) => (
-                        <div key={index} className="px-4 h-full">
+                        <div key={index} className="px-4 py-5 h-full">
                             <div className="bg-white p-6 rounded-lg shadow-md relative h-full flex flex-col justify-between">
                                 <FaQuoteLeft className="absolute top-4 left-4 text-3xl text-blue-300 opacity-40" />
                                 <p className="text-gray-700 text-base italic mb-6 mt-4">"{fb.feedback}"</p>

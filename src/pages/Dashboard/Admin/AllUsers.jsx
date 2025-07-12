@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Loading from '../../../components/Shared/Loading';
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
@@ -60,7 +61,7 @@ const AllUsers = () => {
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-    if (isLoading) return <p className="text-center mt-10">Loading users...</p>;
+    if (isLoading) return <Loading></Loading>;
     if (error) return <p className="text-center text-red-500 mt-10">Error loading users.</p>;
 
     return (
@@ -68,11 +69,11 @@ const AllUsers = () => {
             <h2 className="text-2xl font-bold mb-6 text-center">All Users</h2>
 
             {/* Search Input */}
-            <div className="flex justify-end mb-4">
+            <div className="flex justify-center md:justify-end mb-4">
                 <input
                     type="text"
                     placeholder="Search by name or email"
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-[50%] md:max-w-xs"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />

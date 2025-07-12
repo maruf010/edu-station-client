@@ -1,87 +1,65 @@
-// import React from 'react';
-// import { Carousel } from 'react-responsive-carousel';
-// import 'react-responsive-carousel/lib/styles/carousel.min.css';
-// import animation1 from '../../assets/Animation1.json';
-// import animation2 from '../../assets/Animation2.json';
-// import animation3 from '../../assets/Animation3.json';
-// import { Link } from 'react-router';
-// import Lottie from 'lottie-react';
-// import Button from '../../components/Shared/Button';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useLocation, useNavigate } from 'react-router';
+import SocialLogin from './SocialLogin';
+import useAuth from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
+
+const Login = () => {
+
+    const { signIn } = useAuth();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from || '/';
 
 
-// const Banner = () => {
-//     return (
-//         <div className=" bg-gray-300 py-8 md:py-0 px-4 md:px-8 ">
-//             <div className="lg:min-h-screen md:flex items-center justify-around gap-10 max-w-7xl mx-auto rounded-2xl">
-//                 {/* Carousel Section */}
-//                 <div className="md:w-[500px] w-full md:hidden">
-//                     <Carousel
-//                         autoPlay
-//                         infiniteLoop
-//                         interval={2500}
-//                         showThumbs={false}
-//                         showArrows={false}     // ✅ hides next/prev arrows
-//                         showStatus={false}     // ✅ hides index like "1/3"
-//                         emulateTouch
-//                         stopOnHover
-//                         showIndicators={true} // ✅ shows the dots
-//                     >
-//                         <div>
-//                             <Lottie animationData={animation1} loop style={{ height: '400px' }} />
-//                         </div>
-//                         <div>
-//                             <Lottie animationData={animation2} loop style={{ height: '400px' }} />
-//                         </div>
-//                         <div>
-//                             <Lottie animationData={animation3} loop style={{ height: '400px' }} />
-//                         </div>
-//                     </Carousel>
-//                 </div>
-//                 {/* Text Section */}
-//                 <div className="md:w-1/2 text-center md:text-left">
-//                     <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-//                         Welcome to Our Learning Platform
-//                     </h1>
-//                     <p className="text-lg mb-8 text-gray-700">
-//                         Empowering your learning journey with innovative tools and resources.
-//                     </p>
-//                     <div className="flex items-center justify-center md:justify-start space-x-4">
-//                         <Link to="/allClasses">
-//                             <Button label="Get Started" />
-//                         </Link>
-//                         <Link to="/allClasses">
-//                             <Button label="Our Courses" />
-//                         </Link>
-//                     </div>
-//                 </div>
+    const onSubmit = data => {
+        signIn(data.email, data.password)
+            .then(res => {
+                console.log(res.data);
+                navigate(from)
+                toast.success("Login successful!");
+            })
+            .catch(error => {
+                console.log(error);
+                toast.error("Login failed!");
+            })
+    };
 
-//                 {/* Carousel Section */}
-//                 <div className="md:w-[400px] w-full hidden md:block">
-//                     <Carousel
-//                         autoPlay
-//                         infiniteLoop
-//                         interval={2500}
-//                         showThumbs={false}
-//                         showArrows={false}     // ✅ hides next/prev arrows
-//                         showStatus={false}     // ✅ hides index like "1/3"
-//                         emulateTouch
-//                         stopOnHover
-//                         showIndicators={true} // ✅ shows the dots
-//                     >
-//                         <div>
-//                             <Lottie animationData={animation1} loop style={{ height: '400px' }} />
-//                         </div>
-//                         <div>
-//                             <Lottie animationData={animation2} loop style={{ height: '400px' }} />
-//                         </div>
-//                         <div>
-//                             <Lottie animationData={animation3} loop style={{ height: '400px' }} />
-//                         </div>
-//                     </Carousel>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
+    return (
+        <div className="card bg-base-100 w-full md:max-w-sm shrink-0 shadow-2xl">
+            <div className="card-body">
+                <h1 className="text-5xl font-bold">Login Account</h1>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <fieldset className="fieldset">
 
-// export default Banner;
+                        <label className="label">Email</label>
+                        <input type="email" {...register("email", { required: true })} className="input" placeholder="Email" />
+                        {
+                            errors.email?.type === 'required' && <p className='text-red-500'>Email is required</p>
+                        }
+
+                        <label className="label">Password</label>
+                        <input type="password" {...register("password", { required: true })} className="input" placeholder="Password" />
+                        {
+                            errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>
+                        }
+                        <div>
+                            <Link to='/forget-password' className='link link-hover'>
+                                Forgot password?
+                            </Link>
+                        </div>
+
+                        <button className="btn text-white bg-pink-500 mt-4">Login</button>
+                    </fieldset>
+                </form>
+                <p><small>New to this website? <Link state={{ from }} to='/register' className='text-blue-500'>Register</Link> </small></p>
+
+                <SocialLogin></SocialLogin>
+            </div>
+        </div>
+    );
+};
+
+export default Login;

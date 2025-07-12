@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 import { CSVLink } from 'react-csv';
+import Loading from '../../../components/Shared/Loading';
 
 const MakeAdmin = () => {
     const axiosSecure = useAxiosSecure();
@@ -105,7 +106,7 @@ const MakeAdmin = () => {
         { label: 'Role', key: 'role' },
     ];
 
-    if (isLoading) return <p className="text-center py-6">Loading users...</p>;
+    if (isLoading) return <Loading></Loading>;
     if (error) return <p className="text-center py-6 text-red-600">Failed to load users.</p>;
 
     return (
@@ -195,7 +196,7 @@ const MakeAdmin = () => {
                     <button
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`btn btn-sm ${currentPage === i + 1 ? 'btn-primary bg-pink-500' : 'btn-outline'}`}
+                        className={`btn btn-sm ${currentPage === i + 1 ? 'btn bg-pink-500' : 'btn-outline'}`}
                     >
                         {i + 1}
                     </button>

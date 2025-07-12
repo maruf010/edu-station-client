@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router'; 
+import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import Loading from '../../components/Shared/Loading';
 import useAuth from '../../hooks/useAuth';
-
 
 const UpdateProfile = () => {
     const { user, updateUserProfile } = useAuth();
@@ -28,6 +26,7 @@ const UpdateProfile = () => {
         formData.append('image', image);
 
         const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_UPLOAD_KEY}`;
+
         try {
             setLoading(true);
             const res = await axios.post(imageUploadUrl, formData);
@@ -35,8 +34,9 @@ const UpdateProfile = () => {
             setPhoto(imageUrl);
             toast.success("Image uploaded!");
         } catch (error) {
-            toast.error("Failed to upload image");
-            console.error(error);
+            console.log(error);
+
+            toast.error("Image upload failed");
         } finally {
             setLoading(false);
         }
@@ -46,48 +46,55 @@ const UpdateProfile = () => {
         e.preventDefault();
         try {
             await updateUserProfile({ displayName: name, photoURL: photo });
-            <Loading></Loading>
-            toast.success('Profile updated!');
-            navigate('/profile');
+            toast.success("Profile updated successfully!");
+            navigate('/dashboard/profile');
         } catch (err) {
-            toast.error('Failed to update profile', err);
+            console.log(err);
+            toast.error("Update failed!");
         }
     };
 
-    
     return (
-        <div className='min-h-screen flex justify-center items-center'>
+        <div className="min-h-screen bg-gradient-to-br from-pink-100 via-pink-200 to-pink-100 flex justify-center items-center px-4 font-des">
             <form
                 onSubmit={handleSubmit}
-                className="shadow-[0px_0px_20px_0px_rgba(156,39,176,0.3),0px_0px_40px_0px_rgba(156,39,176,0.1)] p-6 rounded-xl w-80 space-y-4"
+                className="bg-white w-full max-w-md rounded-3xl p-8 shadow-lg space-y-6"
             >
-                <label className="label">Edit Name:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Display Name"
-                    className="border border-pink-500 p-2 rounded w-full"
-                />
+                <h2 className="text-3xl text-center font-bold text-pink-600">Update Profile</h2>
 
-                {/* Image File Input */}
-                <label className="label mt-1">Edit Profile Photo:</label>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="file-input file-input-bordered w-full"
-                />
+                <div>
+                    <label className="block mb-1 text-sm text-pink-600 font-medium">Name</label>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full border border-pink-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        placeholder="Enter your name"
+                    />
+                </div>
+
+                <div>
+                    <label className="block mb-1 text-sm text-pink-600 font-medium">Change Photo</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="w-full text-sm file:py-2 file:px-4 file:border-0 file:rounded-full file:bg-pink-500 file:text-white hover:file:bg-pink-600"
+                    />
+                </div>
+
                 {photo && (
-                    <img src={photo} alt="Profile" className="w-16 h-16 rounded-full object-cover mt-2" />
+                    <div className="flex justify-center mt-2">
+                        <img src={photo} alt="Profile Preview" className="w-20 h-20 rounded-full border-4 border-pink-300 shadow" />
+                    </div>
                 )}
 
                 <button
                     type="submit"
-                    className="cursor-pointer bg-pink-500 text-white w-full py-2 rounded hover:bg-pink-600 mt-1"
                     disabled={loading}
+                    className="w-full py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-medium transition duration-200"
                 >
-                    {loading ? 'Saving...' : 'Save'}
+                    {loading ? "Saving..." : "Save Changes"}
                 </button>
             </form>
         </div>

@@ -1,48 +1,48 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 import { FaRegEdit } from "react-icons/fa";
-import { AuthContext } from '../../contexts/AuthContext';
-
-// import { Helmet } from 'react-helmet-async';
-
+import useAuth from '../../hooks/useAuth';
 
 const Profile = () => {
-    const { user } = useContext(AuthContext);
-    // console.log(user);
-
+    const { user } = useAuth();
 
     return (
-        <>
-            {/* <Helmet>
-                <title>Profile</title>
-            </Helmet> */}
-            <div className='font-des min-h-screen  bg-pink-100 py-10 px-3 md:px-0'>
-                <h2 className='text-3xl font-bold text-pink-500 text-center mb-5 md:mb-16 mt-10'>User Profile</h2>
-                <div className='flex justify-center'>
-                    <div className='md:flex justify-evenly items-center  '>
-                        <div className='flex justify-center md:mr-5'>
-                            <img className='w-44 md:w-52 rounded-full ' src={user?.photoURL} alt="" />
+        <div className="min-h-screen bg-gradient-to-br from-pink-100 to-pink-200 py-10 px-4 md:px-6 font-des">
+            <h2 className="text-3xl md:text-4xl font-bold text-pink-600 text-center mb-10">User Profile</h2>
+
+            <div className=" mx-auto bg-white rounded-3xl shadow-lg p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
+
+                {/* Profile Picture */}
+                <div className="flex-shrink-0">
+                    <img
+                        className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-pink-400 shadow-md"
+                        src={user?.photoURL}
+                        alt="Profile"
+                    />
+                </div>
+
+                {/* Info & Actions */}
+                <div className="flex-1 text-center md:text-left">
+                    <div className="space-y-4">
+                        <div className="bg-pink-50 border border-pink-300 rounded-xl p-4">
+                            <p className="text-sm text-gray-500">Name</p>
+                            <h3 className="text-xl font-semibold text-pink-600">{user?.displayName}</h3>
                         </div>
-                        <div className='mt-10 md:mt-0 text-pink-400'>
-                            <h2 className='text-lg border border-pink-500 bg-white p-4 rounded-3xl mb-5'>
-                                Profile Name :
-                                <p className='text-xl font-medium text-pink-600 '>{user?.displayName}</p>
-                            </h2>
-                            <h4 className='text-lg border border-pink-500 bg-white p-4 rounded-3xl'>
-                                E-mail :
-                                <p className='text-pink-600 font-medium'>{user?.email}</p>
-                            </h4>
+                        <div className="bg-pink-50 border border-pink-300 rounded-xl p-4">
+                            <p className="text-sm text-gray-500">Email</p>
+                            <p className="text-lg font-medium text-pink-600">{user?.email}</p>
                         </div>
-                        <Link to="/dashboard/updateProfile">
-                            <div className='mt-3 md:mt-0 flex justify-center items-center gap-2 border border-pink-500 px-3 py-2 rounded-xl lg:ml-10 bg-white'>
-                                <span className='text-pink-600 '>Edit Profile</span>
-                                <span className='text-pink-500'><FaRegEdit /></span>
-                            </div>
+                    </div>
+
+                    <div className="mt-6 flex justify-center md:justify-start">
+                        <Link to="/dashboard/updateProfile" className="inline-flex items-center gap-2 bg-pink-500 text-white px-5 py-2 rounded-full hover:bg-pink-600 transition">
+                            <FaRegEdit className="text-lg" />
+                            Edit Profile
                         </Link>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

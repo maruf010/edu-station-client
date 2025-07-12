@@ -73,14 +73,14 @@ const AllClasses = () => {
                     placeholder="Search class by Course Name..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full max-w-xs focus:outline-none focus:border-pink-400"
                 />
 
                 {/* Price Filter */}
                 <select
                     value={priceRange}
                     onChange={(e) => setPriceRange(e.target.value)}
-                    className="select select-bordered w-full max-w-xs"
+                    className="select w-full max-w-xs focus:outline-none focus:border-pink-400"
                 >
                     <option value="all">All Prices</option>
                     <option value="low">Low (≤ $50)</option>
@@ -92,9 +92,9 @@ const AllClasses = () => {
             {/* Classes */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentClasses.map(cls => (
-                    <div key={cls._id} className="card bg-white rounded-xl shadow-md overflow-hidden border hover:shadow-lg transition">
+                    <div key={cls._id} className="card bg-white rounded-xl shadow-md overflow-hidden border border-gray-300 hover:shadow-lg transition">
                         <figure>
-                            <img src={cls.image} alt={cls.name} className="h-56 w-full object-cover" />
+                            <img src={cls.image} alt={cls.name} className="h-52 w-full object-cover" />
                         </figure>
                         <div className="card-body">
                             <h2 className="text-xl font-semibold">{cls.name}</h2>
@@ -106,7 +106,7 @@ const AllClasses = () => {
                             <div className="mt-auto">
                                 <Link
                                     to={`/classes/approved/${cls._id}`}
-                                    className="btn btn-sm bg-blue-500 text-white hover:bg-blue-600"
+                                    className="btn btn-sm bg-pink-500 text-white hover:bg-pink-600"
                                 >
                                     Enroll Now
                                 </Link>

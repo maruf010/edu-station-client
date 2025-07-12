@@ -1,24 +1,46 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import logo from '../../../public/eduNav.png';
 import useAuth from '../../hooks/useAuth';
 import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
 import Button from '../Shared/Button';
-import { FiLogIn, FiLogOut, FiUserPlus } from 'react-icons/fi';
+import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 import Loading from '../Shared/Loading';
 
 
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
     const navigate = useNavigate()
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // Close menu after clicking any link
+    const handleItemClick = () => {
+        setOpen(false);
+    };
+
 
     if (loading) {
         return <Loading></Loading>
     }
 
     const links = (
-        <div className='flex flex-col lg:flex-row gap-3 text-[16px] lg:gap-5 pl-2 '>
+        <div className='flex flex-col lg:flex-row gap-3 text-[14px] lg:gap-5 pl-2 list-none'>
             <li>
                 <NavLink to='/'
                     onClick={() => {
@@ -110,13 +132,13 @@ const Navbar = () => {
     return (
         <div className="sticky top-0 z-50 navbar shadow px-5 md:px-7 lg:py-3 lg:px-20 p-0  bg-white/30 backdrop-blur-sm">
             <div className="navbar-start">
-                <div className="dropdown">
+                {/* <div className="dropdown">
                     <div tabIndex={0} role="button" className="mr-2 lg:hidden cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 20 20" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow bg-white text-[16px]">
+                        className="menu  dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow bg-white">
                         {links}
 
                         {
@@ -144,6 +166,46 @@ const Navbar = () => {
                             )
                         }
                     </ul>
+                </div> */}
+                <div className="relative lg:hidden" ref={dropdownRef}>
+                    {/* Hamburger Icon */}
+                    <button
+                        onClick={() => setOpen(!open)}
+                        className=" focus:outline-none text-gray-600"
+                        aria-label="Toggle menu"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h10m-10 6h16" />
+                        </svg>
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {open && (
+                        <div className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg z-50 py-2">
+                            {/* Dynamic Links */}
+                            <div onClick={handleItemClick}>
+                                {links}
+                            </div>
+
+                            {/* Guest Options */}
+                            {!user && (
+                                <div className="mt-2 space-y-2 px-4" onClick={handleItemClick}>
+                                    <Link
+                                        to="/login"
+                                        className="flex items-center gap-2 text-gray-600 hover:text-green-500 transition-colors"
+                                    >
+                                        <FiLogIn /> Login
+                                    </Link>
+                                    <Link
+                                        to="/register"
+                                        className="flex items-center gap-2 text-gray-600 hover:text-green-500 transition-colors"
+                                    >
+                                        <FiUserPlus /> Register
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <Link to='/'>
                     <div className='flex-1 flex items-center'>

@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useLocation, useNavigate } from 'react-router'; // Make sure it's 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 import useAuth from '../../hooks/useAuth';
 import SocialLogin from './SocialLogin';
 import useAxios from '../../hooks/useAxios';
+import { motion } from 'framer-motion';
+import { IoArrowBackSharp } from "react-icons/io5";
+
+
 
 const Register = () => {
-
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useAuth();
     const [profilePic, setProfilePic] = useState();
-    const [showPassword, setShowPassword] = useState(false); // Password toggle
+    const [showPassword, setShowPassword] = useState(false);
     const axiosInstance = useAxios();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from || '/';
 
     const onSubmit = data => {
-        console.log(data);
         createUser(data.email, data.password)
             .then(async (result) => {
-                console.log(result.user);
+                console.log(result);
                 toast.success("Registration successful!");
-
                 const userInfo = {
                     email: data.email,
                     role: 'student',
@@ -34,96 +35,119 @@ const Register = () => {
                     created_at: new Date().toISOString(),
                     last_log_in: new Date().toISOString()
                 };
-                const userRes = await axiosInstance.post('/users', userInfo);
-                console.log(userRes.data);
-
+                await axiosInstance.post('/users', userInfo);
 
                 const userProfile = {
                     displayName: data.name,
                     photoURL: profilePic
                 };
                 updateUserProfile(userProfile)
-                    .then(() => {
-                        navigate(from);
-                        // toast.success('Profile Updated!');
-                    }).catch(error => {
-                        toast.error(error.message);
-                    });
-
+                    .then(() => navigate(from))
+                    .catch(error => toast.error(error.message));
             })
-            .catch(error => {
-                toast.error(error.message);
-            });
+            .catch(error => toast.error(error.message));
     };
 
     const handleImage = async (e) => {
         const image = e.target.files[0];
         const formData = new FormData();
         formData.append('image', image);
-
         const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_UPLOAD_KEY}`;
         const res = await axios.post(imageUploadUrl, formData);
         setProfilePic(res.data.data.url);
     };
 
     return (
-        <div className="card bg-base-100 w-full md:max-w-sm shrink-0 shadow-2xl">
-            <div className="card-body">
-                <h1 className="text-3xl font-bold text-center mb-4">Create Account</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <fieldset className="fieldset">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0072ff] to-[#00c6ff] px-4">
+            <div className="w-full max-w-5xl max-h-[calc(100vh-100px)] bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+                {/* Left Panel */}
+                <div className="relative bg-gradient-to-b from-[#0072ff] to-[#00c6ff] text-white p-10 flex flex-col justify-center">
+                    <h2 className="text-3xl font-bold mb-2">WELCOME</h2>
+                    <p className="text-sm">JOIN OUR COMMUNITY</p>
+                    <p className="mt-4 text-xs text-white/80">
+                        Create your account to access all features. Connect with others, share knowledge, and grow together.
+                    </p>
+                    <Link to='/'>
+                        <div className='mt-5 gap-3 flex items-center'>
+                            <IoArrowBackSharp />
+                            <h2 className=''>Back to Homepage</h2>
+                        </div>
+                    </Link>
+                    {/* Circles */}
+                    <div className="absolute bottom-[-30px] left-[-30px] w-28 h-28 bg-blue-800 rounded-full opacity-30"></div>
+                    <div className="absolute top-10 right-[-40px] w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
+                    <div className="absolute bottom-20 left-20 w-20 h-20 bg-white rounded-full opacity-10"></div>
+                </div>
 
+                {/* Right Panel - Form */}
+                <div className="p-8">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Create Account</h2>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
                         {/* Name */}
-                        <label className="label">Name</label>
-                        <input type="text" {...register('name', { required: true })} className="input input-bordered w-full" placeholder="Name" />
-                        {errors.name?.type === 'required' && <p className='text-red-500'>Name is required</p>}
-
-                        {/* Profile Photo */}
-                        <label className="label">Photo</label>
-                        <input type="file" onChange={handleImage} className="file-input file-input-bordered w-full" />
-
-                        {/* Email */}
-                        <label className="label">Email</label>
-                        <input type="email" {...register('email', { required: true })} className="input input-bordered w-full" placeholder="Email" />
-                        {errors.email?.type === 'required' && <p className='text-red-500'>Email is required</p>}
-
-                        {/* Password with Toggle */}
-                        <label className="label">Password</label>
-                        <div className="relative">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                {...register('password', {
-                                    required: true,
-                                    minLength: 6,
-                                    pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/
-                                })}
-                                className="input input-bordered w-full pr-10"
-                                placeholder="Password"
-                            />
-                            <span
-                                className="absolute right-3 top-3 cursor-pointer text-xl text-gray-600"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-                            </span>
+                        <div>
+                            <label className="block text-gray-700">Name</label>
+                            <input type="text" {...register('name', { required: true })} className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" placeholder="Your Name" />
+                            {errors.name && <p className="text-sm text-red-500 mt-1">Name is required</p>}
                         </div>
 
-                        {/* Password Errors */}
-                        {errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>}
-                        {errors.password?.type === 'minLength' && <p className='text-red-500'>Password must be 6 characters or longer</p>}
-                        {errors.password?.type === 'pattern' && <p className='text-red-500'>Password must contain at least one uppercase letter, one special character, and one number</p>}
+                        {/* Photo Upload */}
+                        <div>
+                            <label className="block text-gray-700">Photo</label>
+                            <input type="file" onChange={handleImage} className="w-full mt-1 text-sm border border-gray-300 rounded-md p-2" />
+                        </div>
 
-                        {/* Submit Button */}
-                        <button className="btn text-white bg-pink-500 mt-3 w-full">Register</button>
-                    </fieldset>
-                </form>
+                        {/* Email */}
+                        <div>
+                            <label className="block text-gray-700">Email</label>
+                            <input type="email" {...register('email', { required: true })} className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" placeholder="Your Email" />
+                            {errors.email && <p className="text-sm text-red-500 mt-1">Email is required</p>}
+                        </div>
 
-                <p className="mt-2 text-sm text-center">
-                    Already have an account? <Link to='/login' className='text-blue-500'>Login</Link>
-                </p>
+                        {/* Password */}
+                        <div>
+                            <label className="block text-gray-700">Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    {...register('password', {
+                                        required: true,
+                                        minLength: 6,
+                                        pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/
+                                    })}
+                                    className="w-full mt-1 px-4 py-2 pr-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+                                    placeholder="Your Password"
+                                />
+                                <motion.span
+                                    className="absolute right-3 top-3 cursor-pointer text-xl text-gray-600"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    whileTap={{ scale: 1.2, rotate: 20 }}
+                                    transition={{ type: 'spring', stiffness: 300 }}
+                                >
+                                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                </motion.span>
 
-                
-                <SocialLogin />
+                            </div>
+                            {errors.password?.type === 'required' && <p className="text-sm text-red-500 mt-1">Password is required</p>}
+                            {errors.password?.type === 'minLength' && <p className="text-sm text-red-500 mt-1">Password must be 6+ characters</p>}
+                            {errors.password?.type === 'pattern' && (
+                                <p className="text-sm text-red-500 mt-1">Must include 1 uppercase, 1 number & 1 special character</p>
+                            )}
+                        </div>
+
+                        <button className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+                            Register
+                        </button>
+                    </form>
+
+                    <p className="mt-4 text-center text-gray-600 text-sm">
+                        Already have an account?{' '}
+                        <Link to="/login" className="text-blue-500 hover:underline font-medium">Login</Link>
+                    </p>
+
+                    <div className="my-2 text-center text-gray-500">or</div>
+
+                    <SocialLogin />
+                </div>
             </div>
         </div>
     );
