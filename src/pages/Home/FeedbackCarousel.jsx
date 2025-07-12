@@ -34,6 +34,8 @@ const FeedbackCarousel = () => {
             return res.data;
         },
     });
+    console.log(feedbacks);
+    
 
     if (isLoading) {
         return <div className="text-center py-10 text-lg font-semibold">Loading feedback...</div>;

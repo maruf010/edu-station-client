@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -12,11 +12,11 @@ const MyEnrollClass = () => {
 
     const [selectedClass, setSelectedClass] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [feedbackList, setFeedbackList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [rating, setRating] = useState(0);
     const classesPerPage = 6;
 
+    // Fetch Enrolled Classes
     const { data: enrolled = [], isLoading, refetch } = useQuery({
         queryKey: ['enrollments', user?.email],
         enabled: !!user?.email,
@@ -26,13 +26,15 @@ const MyEnrollClass = () => {
         }
     });
 
-    useEffect(() => {
-        if (user?.email) {
-            axiosSecure.get(`/feedbacks?email=${user.email}`).then(res => {
-                setFeedbackList(res.data.map(fb => fb.classId));
-            });
+    // Fetch Feedbacks Given by the User
+    const { data: feedbacks = [] } = useQuery({
+        queryKey: ['myFeedbacks', user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/feedback?email=${user.email}`);
+            return res.data;
         }
-    }, [user, axiosSecure]);
+    });
 
     const openFeedbackModal = (enroll) => {
         setSelectedClass(enroll);
@@ -57,25 +59,29 @@ const MyEnrollClass = () => {
             className: selectedClass.className,
             feedback: feedbackText,
             rating,
-            createdAt: new Date().toISOString()
         };
 
         try {
             const res = await axiosSecure.post('/feedbacks', feedbackData);
             if (res.data.insertedId) {
                 Swal.fire('✅ Success!', 'Your feedback has been submitted.', 'success');
-                setFeedbackList(prev => [...prev, selectedClass.classId]);
+                refetch();
                 form.reset();
                 setIsModalOpen(false);
                 setRating(0);
-                refetch();
             }
         } catch (err) {
-            console.error(err);
-            Swal.fire('Error', 'Something went wrong.', 'error');
+            if (err?.response?.status === 400) {
+                Swal.fire('⚠️ Already Submitted', err.response.data.message, 'info');
+                setIsModalOpen(false);
+            } else {
+                console.error(err);
+                Swal.fire('Error', err?.response?.data?.message || 'Something went wrong.', 'error');
+            }
         }
     };
 
+    // Pagination
     const indexOfLast = currentPage * classesPerPage;
     const currentClasses = enrolled.slice(indexOfLast - classesPerPage, indexOfLast);
     const totalPages = Math.ceil(enrolled.length / classesPerPage);
@@ -92,7 +98,7 @@ const MyEnrollClass = () => {
                 <>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {currentClasses.map((enroll) => {
-                            const hasFeedback = feedbackList.includes(enroll.classId);
+                            const alreadySubmitted = feedbacks.some(f => f.classId === enroll.classId);
                             return (
                                 <div key={enroll._id} className="p-4 border rounded bg-white shadow">
                                     <img src={enroll.classImage} alt={enroll.className} className="w-full h-40 object-cover rounded mb-3" />
@@ -103,13 +109,18 @@ const MyEnrollClass = () => {
                                     <p><strong>Transaction ID:</strong> {enroll.transactionId}</p>
                                     <p className='mt-2'><strong>Date:</strong> {new Date(enroll.date).toLocaleString()}</p>
 
-                                    <button
-                                        className={`btn btn-sm mt-3 ${hasFeedback ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
-                                        onClick={() => openFeedbackModal(enroll)}
-                                        disabled={hasFeedback}
-                                    >
-                                        {hasFeedback ? 'Feedback Submitted' : 'Give Feedback'}
-                                    </button>
+                                    {alreadySubmitted ? (
+                                        <button className="btn btn-sm mt-3 bg-gray-400 text-white cursor-not-allowed" disabled>
+                                            Feedback Submitted
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="btn btn-sm mt-3 bg-indigo-600 text-white hover:bg-indigo-700"
+                                            onClick={() => openFeedbackModal(enroll)}
+                                        >
+                                            Give Feedback
+                                        </button>
+                                    )}
                                 </div>
                             );
                         })}
@@ -140,7 +151,7 @@ const MyEnrollClass = () => {
 
             {/* Feedback Modal */}
             {isModalOpen && selectedClass && (
-                <div className="fixed inset-0 bg-opacity-40 z-50 flex items-center justify-center">
+                <div className="fixed inset-0  bg-opacity-40 z-50 flex items-center justify-center">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
                         <h3 className="text-lg font-bold mb-4">Feedback for: {selectedClass.className}</h3>
 

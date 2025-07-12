@@ -85,7 +85,7 @@ const DashboardHome = () => {
         return <Loading></Loading>;
 
     return (
-        <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
+        <div className="p-6 space-y-6 bg-[#a8dadc] min-h-screen">
             <h2 className="text-3xl font-bold mb-4">Dashboard Overview</h2>
 
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-6">
@@ -93,12 +93,8 @@ const DashboardHome = () => {
                     <>
                         <StatCard title="Users" value={summary?.users} color="bg-blue-100" />
                         <StatCard title="Classes" value={summary?.classes} color="bg-green-100" />
-                        <StatCard title="Enrollments" value={summary?.enrollments} color="bg-yellow-100" />
-                        <StatCard
-                            title="Teachers"
-                            value={summary?.teachers}
-                            color="bg-purple-100"
-                        />
+                        <StatCard title="Enrollments" value={summary?.enrollments} color="bg-[#dad7cd] " />
+                        <StatCard title="Teachers" value={summary?.teachers} color="bg-purple-100" />
                     </>
                 )}
 
@@ -130,7 +126,7 @@ const DashboardHome = () => {
                 )}
             </div>
 
-            <div className="bg-white p-4 rounded-lg shadow mt-10">
+            <div className="bg-linear-65 from-[#669bbc] to-[#03045e] p-4 rounded-lg shadow mt-10">
                 <h3 className="text-xl font-semibold mb-4">Analytics Overview</h3>
                 <SimpleRadialBarChart role={role} data={summary} />
             </div>
@@ -143,8 +139,8 @@ const StatCard = ({ title, value, color }) => {
         <div
             className={`rounded-lg shadow-sm ${color} p-6 text-center flex flex-col items-center justify-center`}
         >
-            <p className="text-sm text-gray-500 mb-1">{title}</p>
-            <h4 className="text-2xl font-bold">{value}</h4>
+            <p className="text-sm text-gray-400 mb-1">{title}</p>
+            <h4 className="text-2xl text-blue-950 font-bold">{value}</h4>
         </div>
     );
 };

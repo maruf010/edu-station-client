@@ -1,65 +1,94 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Link, useLocation, useNavigate } from 'react-router';
-import SocialLogin from './SocialLogin';
-import useAuth from '../../hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-
-const Login = () => {
-
-    const { signIn } = useAuth();
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const navigate = useNavigate()
-    const location = useLocation()
-    const from = location.state?.from || '/';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Loading from '../../../components/Shared/Loading';
 
 
-    const onSubmit = data => {
-        signIn(data.email, data.password)
-            .then(res => {
-                console.log(res.data);
-                navigate(from)
-                toast.success("Login successful!");
-            })
-            .catch(error => {
-                console.log(error);
-                toast.error("Login failed!");
-            })
+const TeacherRequests = () => {
+    const axiosSecure = useAxiosSecure();
+
+    const { data: requests = [], isLoading, refetch } = useQuery({
+        queryKey: ['teacherRequests'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/teacherRequests');
+            return res.data;
+        }
+    });
+
+    const handleApprove = async (request) => {
+        const res = await axiosSecure.patch(`/teacherRequests/approve/${request._id}`);
+        if (res.data.modifiedCount > 0 || res.data.success) {
+            toast.success('Teacher approved');
+        }
+        refetch();
+    };
+
+    const handleReject = async (request) => {
+        const res = await axiosSecure.patch(`/teacherRequests/reject/${request._id}`);
+        if (res.data.modifiedCount > 0) {
+            toast.error('Teacher request rejected');
+            refetch();
+        }
     };
 
     return (
-        <div className="card bg-base-100 w-full md:max-w-sm shrink-0 shadow-2xl">
-            <div className="card-body">
-                <h1 className="text-5xl font-bold">Login Account</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <fieldset className="fieldset">
+        <div className="overflow-x-auto">
+            <h2 className="text-2xl font-bold mb-4 text-center mt-5">Teacher Requests</h2>
 
-                        <label className="label">Email</label>
-                        <input type="email" {...register("email", { required: true })} className="input" placeholder="Email" />
-                        {
-                            errors.email?.type === 'required' && <p className='text-red-500'>Email is required</p>
-                        }
-
-                        <label className="label">Password</label>
-                        <input type="password" {...register("password", { required: true })} className="input" placeholder="Password" />
-                        {
-                            errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>
-                        }
-                        <div>
-                            <Link to='/forget-password' className='link link-hover'>
-                                Forgot password?
-                            </Link>
-                        </div>
-
-                        <button className="btn text-white bg-pink-500 mt-4">Login</button>
-                    </fieldset>
-                </form>
-                <p><small>New to this website? <Link state={{ from }} to='/register' className='text-blue-500'>Register</Link> </small></p>
-
-                <SocialLogin></SocialLogin>
-            </div>
+            {isLoading ? (
+                <Loading></Loading>
+            ) : requests.length === 0 ? (
+                <div className="text-center text-gray-500 mt-10">
+                    No teacher requests found.
+                </div>
+            ) : (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Experience</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {requests.map((req) => (
+                            <tr key={req._id}>
+                                <td><img src={req.image} alt="profile" className="w-10 h-10 rounded-full" /></td>
+                                <td>{req.name}</td>
+                                <td>{req.email}</td>
+                                <td>{req.experience}</td>
+                                <td>{req.title}</td>
+                                <td>{req.category}</td>
+                                <td className="capitalize">{req.status}</td>
+                                <td className="flex gap-2">
+                                    <button
+                                        onClick={() => handleApprove(req)}
+                                        className="btn btn-sm btn-success"
+                                        disabled={req.status === 'accepted' || req.status === 'rejected'}
+                                    >
+                                        Approve
+                                    </button>
+                                    <button
+                                        onClick={() => handleReject(req)}
+                                        className="btn btn-sm btn-error"
+                                        disabled={req.status === 'accepted' || req.status === 'rejected'}
+                                    >
+                                        Reject
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };
 
-export default Login;
+export default TeacherRequests;

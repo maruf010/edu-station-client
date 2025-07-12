@@ -70,7 +70,7 @@ const DashBoardLayout = () => {
             {/* Sidebar */}
             <aside
                 ref={sidebarRef}
-                className={`bg-[#17255a] h-screen shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+                className={`bg-[#17255a] min-h-screen shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
 
                 <Link to='/' className=" ">
                     <div className="flex items-center">
@@ -84,7 +84,7 @@ const DashBoardLayout = () => {
                     <NavLink
                         to="/dashboard"
                         onClick={handleMobileNav}
-                        className='flex items-center text-gray-500 hover:bg-gray-200 gap-2 p-2 mt-2 rounded transition-colors duration-200'
+                        className='flex items-center text-gray-400 hover:bg-gray-200 gap-2 p-2 mt-2 rounded transition-colors duration-200'
                     >
                         <FaHome /> Dashboard
                     </NavLink>
@@ -95,12 +95,12 @@ const DashBoardLayout = () => {
                         !roleLoading && role === 'student' && (
                             <>
                                 <hr />
-                                <h3 className="font-semibold text-gray-600">Student</h3>
+                                <h3 className="font-semibold text-gray-500">Student</h3>
                                 <NavLink
                                     to="/dashboard/my-enroll-class"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -109,7 +109,7 @@ const DashBoardLayout = () => {
                                 <NavLink to="/dashboard/wishlist"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }>
                                     <FaCreditCard /> Wishlist
@@ -117,7 +117,7 @@ const DashBoardLayout = () => {
                                 <NavLink to="/dashboard/payments"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }>
                                     <FaCreditCard /> Payment History
@@ -131,12 +131,12 @@ const DashBoardLayout = () => {
                         !roleLoading && role === 'teacher' && (
                             <>
                                 <hr />
-                                <h3 className="font-semibold text-gray-600">Teacher</h3>
+                                <h3 className="font-semibold text-gray-500">Teacher</h3>
                                 <NavLink
                                     to="/dashboard/add-class"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -146,7 +146,7 @@ const DashBoardLayout = () => {
                                     to="/dashboard/my-classes"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -160,12 +160,12 @@ const DashBoardLayout = () => {
                         !roleLoading && role === 'admin' && (
                             <>
                                 <hr />
-                                <h3 className="font-semibold text-gray-600">Admin</h3>
+                                <h3 className="font-semibold text-gray-500">Admin</h3>
                                 <NavLink
                                     to="/dashboard/teacher-requests"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -175,7 +175,7 @@ const DashBoardLayout = () => {
                                     to="/dashboard/pending-classes"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -185,7 +185,7 @@ const DashBoardLayout = () => {
                                     to="/dashboard/active-teachers"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -195,7 +195,7 @@ const DashBoardLayout = () => {
                                     to="/dashboard/allPayments"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -205,7 +205,7 @@ const DashBoardLayout = () => {
                                     to="/dashboard/all-users"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -215,7 +215,7 @@ const DashBoardLayout = () => {
                                     to="/dashboard/make-admin"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }
                                 >
@@ -230,7 +230,7 @@ const DashBoardLayout = () => {
                         to="/dashboard/profile"
                         onClick={handleMobileNav}
                         className={({ isActive }) =>
-                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                             }`
                         }
                     >
@@ -240,7 +240,7 @@ const DashBoardLayout = () => {
                         to="/dashboard/updateProfile"
                         onClick={handleMobileNav}
                         className={({ isActive }) =>
-                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-gray-200'
+                            `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                             }`
                         }
                     >

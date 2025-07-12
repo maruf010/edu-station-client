@@ -1,6 +1,7 @@
+// ClassDetails.jsx
 import React, { useEffect, useState, useMemo } from 'react';
-import { useParams } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
+import { useNavigate, useParams } from 'react-router';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '../Payment/CheckoutForm';
@@ -10,45 +11,48 @@ import useAuth from '../../hooks/useAuth';
 import Loading from '../../components/Shared/Loading';
 import toast from 'react-hot-toast';
 import StarRatings from 'react-star-ratings';
+import useUserRole from '../../hooks/useUserRole';
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteForever, MdDescription, MdEventAvailable } from "react-icons/md";
+import { IoIosPricetags } from 'react-icons/io';
+import { IoPersonAdd } from 'react-icons/io5';
+import { FaChalkboardTeacher } from 'react-icons/fa';
+
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
+
 const ClassDetails = () => {
     const { user } = useAuth();
+    const { role } = useUserRole();
     const axios = useAxios();
     const axiosSecure = useAxiosSecure();
     const { id: classId } = useParams();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const [showModal, setShowModal] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(3);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingFeedback, setEditingFeedback] = useState(null);
+    const [deleteTarget, setDeleteTarget] = useState(null);
+
+    const [rating, setRating] = useState(0);
+    const [feedbackText, setFeedbackText] = useState("");
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    const {
-        data: classData,
-        isLoading,
-        error,
-        refetch,
-    } = useQuery({
+    const { data: classData, isLoading, error } = useQuery({
         queryKey: ['class-details', classId],
-        queryFn: async () => {
-            const res = await axios.get(`/classes/approved/${classId}`);
-            return res.data;
-        },
+        queryFn: async () => (await axios.get(`/classes/approved/${classId}`)).data
     });
 
-    const {
-        data: enrollments = [],
-        isLoading: enrollmentsLoading,
-        refetch: refetchEnrollments
-    } = useQuery({
+    const { data: enrollments = [], isLoading: enrollmentsLoading, refetch: refetchEnrollments } = useQuery({
         queryKey: ['enrollments', user?.email],
-        queryFn: async () => {
-            const res = await axiosSecure.get(`/enrollments?email=${user.email}`);
-            return res.data;
-        },
+        queryFn: async () => (await axiosSecure.get(`/enrollments?email=${user.email}`)).data,
         enabled: !!user?.email
     });
 
@@ -57,27 +61,46 @@ const ClassDetails = () => {
         [enrollments, classId]
     );
 
-    useEffect(() => {
-        if (user && classId) {
-            axiosSecure
-                .get(`/wishlist?email=${user.email}`)
-                .then((res) => {
-                    const found = res.data.find((item) => item.classId === classId);
-                    if (found) setIsWishlisted(true);
-                });
-        }
-    }, [user, classId, axiosSecure]);
-
-    const { data: feedbacks = [], isLoading: fbLoading } = useQuery({
+    const { data: feedbacks = [], isLoading: fbLoading, refetch: refetchFeedbacks } = useQuery({
         queryKey: ['class-feedbacks', classId],
-        queryFn: async () => {
-            const res = await axios.get(`/feedbacks?classId=${classId}`);
-            return res.data;
+        queryFn: async () => (await axios.get(`/feedbacks?classId=${classId}`)).data
+    });
+
+    const myFeedback = feedbacks.find(fb => fb.studentEmail === user?.email);
+
+    const feedbackMutation = useMutation({
+        mutationFn: (newFeedback) => axiosSecure.post("/feedbacks", newFeedback),
+        onSuccess: () => {
+            toast.success("Feedback submitted");
+            refetchFeedbacks();
+            setFeedbackText("");
+            setRating(0);
         },
+        onError: () => toast.error("You already submitted feedback.")
+    });
+
+    const updateMutation = useMutation({
+        mutationFn: ({ id, updated }) =>
+            axiosSecure.patch(`/feedbacks/${id}`, updated),
+        onSuccess: () => {
+            toast.success("Feedback updated");
+            refetchFeedbacks();
+            setShowEditModal(false);
+        },
+        onError: () => toast.error("Failed to update")
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: (id) => axiosSecure.delete(`/feedbacks/${id}`),
+        onSuccess: () => {
+            toast.success("Feedback deleted");
+            refetchFeedbacks();
+            setDeleteTarget(null);
+        },
+        onError: () => toast.error("Failed to delete feedback")
     });
 
     const handleAddToWishlist = async () => {
-        if (!classData) return;
         const wishlistData = {
             classId: classData._id,
             className: classData.name,
@@ -98,47 +121,86 @@ const ClassDetails = () => {
         }
     };
 
+    const handleSubmitFeedback = (e) => {
+        e.preventDefault();
+        if (!rating || !feedbackText) {
+            toast.error("All fields required");
+            return;
+        }
+        const newFeedback = {
+            classId,
+            studentEmail: user.email,
+            studentName: user.displayName,
+            studentImage: user.photoURL,
+            rating,
+            feedback: feedbackText
+        };
+        feedbackMutation.mutate(newFeedback);
+    };
+
+    const handleEditClick = (fb) => {
+        setEditingFeedback(fb);
+        setRating(fb.rating);
+        setFeedbackText(fb.feedback);
+        setShowEditModal(true);
+    };
+
+    const handleUpdateFeedback = (e) => {
+        e.preventDefault();
+        const updated = {
+            rating,
+            feedback: feedbackText
+        };
+        updateMutation.mutate({ id: editingFeedback._id, updated });
+    };
+
     if (isLoading || enrollmentsLoading) return <Loading />;
     if (error || !classData) return <p className="text-center text-red-500 py-8">Failed to load class details.</p>;
 
     return (
-        <div className="max-w-7xl min-h-screen flex flex-col gap-10 mx-auto p-6">
+        <div className="max-w-6xl mx-auto p-4 space-y-10">
             {/* Class Info */}
             <div className="lg:flex bg-white shadow-xl rounded overflow-hidden">
-                <div className="lg:w-1/2">
-                    <img
-                        src={classData.image}
-                        alt={classData.name}
-                        className="w-full h-[350px] object-cover"
-                    />
-                </div>
-                <div className="lg:w-1/2 lg:ml-8 p-6 space-y-4">
-                    <h2 className="text-3xl font-bold">{classData.name}</h2>
-                    <div className="flex items-center gap-4">
-                        <img
-                            src={classData.teacherImage}
-                            alt="Teacher"
-                            className="w-14 h-14 rounded-full"
-                        />
-                        <div>
-                            <p><strong>{classData.teacherName}</strong></p>
-                            <p className="text-sm text-gray-600">{classData.teacherEmail}</p>
-                        </div>
+                <img src={classData.image} className="lg:w-1/2 object-cover h-96 w-full" />
+                <div className="lg:w-1/2 p-6 space-y-3">
+                    <h2 className="text-2xl font-bold">{classData.name}</h2>
+
+                    <div className="text-gray-600 flex items-center gap-2">
+                        <MdDescription />
+                        <strong>Description:</strong>
+                        <span>{classData.description}</span>
                     </div>
-                    <p className="text-gray-700">{classData.description}</p>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                        <p><strong>Price:</strong> ${classData.price}</p>
-                        <p><strong>Seats:</strong> {classData.seats}</p>
-                        <p><strong>Enrolled:</strong> {classData.enrolled || 0}</p>
+
+                    <div className="text-gray-600 flex items-center gap-2">
+                        <FaChalkboardTeacher />
+                        <strong>Instructor:</strong>
+                        <span>{classData.teacherName}</span>
                     </div>
-                    <div className="flex gap-4 pt-4">
+
+                    <div className="text-gray-600 flex items-center gap-2">
+                        <MdEventAvailable />
+                        <strong>Available Seat:</strong>
+                        <span>${classData.seats}</span>
+                    </div>
+
+                    <div className="text-gray-600 flex items-center gap-2">
+                        <IoPersonAdd />
+                        <strong>Enrolled:</strong>
+                        <span className=''>{classData.enrolled || 0}</span>
+                    </div>
+                    
+                    <div className="text-gray-600 flex items-center gap-2">
+                        <IoIosPricetags />
+                        <strong>Price:</strong>
+                        <span>${classData.price}</span>
+                    </div>
+
+
+                    <div className="flex gap-3 pt-4">
                         <button
                             disabled={isAlreadyEnrolled}
                             onClick={() => setShowModal(true)}
-                            className={`btn ${isAlreadyEnrolled
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-blue-600 text-white hover:bg-blue-700'
-                                }`}
+                            className={`btn ${isAlreadyEnrolled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                         >
                             {isAlreadyEnrolled ? 'Already Enrolled' : 'Pay Now'}
                         </button>
@@ -155,68 +217,138 @@ const ClassDetails = () => {
                 </div>
             </div>
 
-            {/* Feedbacks */}
+            {/* Feedback Form */}
+            {isAlreadyEnrolled && !myFeedback && (
+                <form onSubmit={handleSubmitFeedback} className="bg-white shadow p-6 rounded space-y-4">
+                    <h3 className="text-xl font-semibold">Leave Feedback</h3>
+                    <StarRatings
+                        rating={rating}
+                        starRatedColor="#facc15"
+                        changeRating={(rate) => setRating(rate)}
+                        numberOfStars={5}
+                        name="rating"
+                        starDimension="25px"
+                        starSpacing="3px"
+                    />
+                    <textarea
+                        value={feedbackText}
+                        onChange={(e) => setFeedbackText(e.target.value)}
+                        className="w-full border p-2 rounded"
+                        rows="4"
+                        placeholder="Write your feedback..."
+                    ></textarea>
+                    <button type="submit" className="btn bg-blue-600 text-white">Submit</button>
+                </form>
+            )}
+
+            {/* Feedback List */}
             <div className="bg-white shadow p-6 rounded">
-                <h3 className="text-2xl font-semibold mb-4">Student Feedback</h3>
+                <h3 className="text-xl font-semibold mb-4">Student Feedback</h3>
                 {fbLoading ? (
                     <Loading />
                 ) : feedbacks.length === 0 ? (
-                    <p className="text-center text-gray-500">No feedback available yet.</p>
+                    <p className='text-2xl font-bold'>No feedbacks yet.</p>
                 ) : (
-                    <ul className="space-y-4">
-                        {feedbacks.map((fb) => (
-                            <li key={fb._id} className="border p-4 rounded shadow-sm">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <img
-                                        src={fb.studentImage}
-                                        alt={fb.studentName}
-                                        className="w-10 h-10 rounded-full"
-                                    />
-                                    <div>
-                                        <p className="font-medium">{fb.studentName}</p>
-                                        <p className="text-sm text-gray-400">
-                                            {new Date(fb.createdAt).toLocaleDateString()}
-                                        </p>
+                    <div className="space-y-4">
+                        {feedbacks.slice(0, visibleCount).map(fb => (
+                            <div key={fb._id} className="border border-gray-400 p-4 rounded-lg flex justify-between">
+                                <div>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <img src={fb.studentImage} className="w-10 h-10 rounded-full" />
+                                        <div>
+                                            <p className="font-medium">{fb.studentName}</p>
+                                            <p className="text-xs text-gray-500">{new Date(fb.createdAt).toLocaleDateString()}</p>
+                                        </div>
                                     </div>
+                                    <StarRatings
+                                        rating={fb.rating}
+                                        starRatedColor="#facc15"
+                                        numberOfStars={5}
+                                        starDimension="20px"
+                                        starSpacing="2px"
+                                    />
+                                    <p className="mt-2">{fb.feedback}</p>
                                 </div>
-                                <StarRatings
-                                    rating={fb.rating}
-                                    starRatedColor="#facc15"
-                                    numberOfStars={5}
-                                    name='rating'
-                                    starDimension="20px"
-                                    starSpacing="2px"
-                                />
-                                <p className="mt-2 text-gray-700">{fb.feedback}</p>
-                            </li>
+
+                                <div>
+                                    {(user?.email === fb.studentEmail || role === 'admin') && (
+                                        <div className="flex gap-4 mt-2">
+                                            {user?.email === fb.studentEmail && (
+                                                <button onClick={() => handleEditClick(fb)} className="text-blue-500 text-sm"><CiEdit size={25} /></button>
+                                            )}
+                                            <button onClick={() => setDeleteTarget(fb)} className="text-red-500 text-sm"><MdDeleteForever size={25} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         ))}
-                    </ul>
+                        {visibleCount < feedbacks.length && (
+                            <button onClick={() => setVisibleCount(prev => prev + 3)} className="text-blue-600 mt-4 font-bold">Show More</button>
+                        )}
+                    </div>
                 )}
             </div>
 
             {/* Payment Modal */}
             {showModal && (
-                <div className="fixed inset-0 z-50 bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white rounded shadow-lg w-full max-w-lg p-6 relative">
-                        <button
-                            onClick={() => setShowModal(false)}
-                            className="absolute top-2 right-2 text-red-600 text-xl font-bold"
-                        >
-                            ✕
-                        </button>
-                        <h2 className="text-xl font-semibold mb-4">Complete Your Payment</h2>
+                <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white border p-6 rounded-lg w-full max-w-lg relative">
+                        <button className="absolute top-2 right-2 text-xl" onClick={() => setShowModal(false)}>✕</button>
+                        <h3 className="text-lg font-semibold mb-4">Complete Payment</h3>
                         <Elements stripe={stripePromise}>
                             <CheckoutForm
                                 classData={classData}
                                 closeModal={() => {
                                     setShowModal(false);
-                                    refetch(); // update seats/enrolled
+                                    navigate('/dashboard/my-enroll-class');
+                                    refetchFeedbacks();
                                     refetchEnrollments();
                                 }}
-                                refetch={refetch}
-                                refetchEnrollments={refetchEnrollments}
                             />
                         </Elements>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Feedback Modal */}
+            {showEditModal && (
+                <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white mx-5 p-6 border border-gray-400 rounded-lg w-full max-w-lg relative">
+                        <button className="absolute top-2 right-2 text-xl" onClick={() => setShowEditModal(false)}>✕</button>
+                        <h3 className="text-lg font-semibold mb-4">Edit Feedback</h3>
+                        <form onSubmit={handleUpdateFeedback} className="space-y-4">
+                            <StarRatings
+                                rating={rating}
+                                starRatedColor="#facc15"
+                                changeRating={setRating}
+                                numberOfStars={5}
+                                name="rating"
+                                starDimension="25px"
+                                starSpacing="3px"
+                            />
+                            <textarea
+                                value={feedbackText}
+                                onChange={(e) => setFeedbackText(e.target.value)}
+                                className="w-full border p-2 rounded"
+                                rows="4"
+                            ></textarea>
+                            <button type="submit" className="btn bg-blue-600 text-white">Update</button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {deleteTarget && (
+                <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white border mx-5 border-gray-400 p-6 rounded-lg w-full max-w-md relative text-center">
+                        <h3 className="text-xl font-semibold mb-4">Are you sure you want to delete this feedback?</h3>
+                        <p className="mb-6 text-gray-600">This action cannot be undone.</p>
+                        <div className="flex justify-center gap-4">
+                            <button onClick={() => setDeleteTarget(null)} className="btn bg-gray-300 text-black">Cancel</button>
+                            <button onClick={() => deleteMutation.mutate(deleteTarget._id)} className="btn bg-red-500 text-white">Yes, Delete</button>
+                        </div>
                     </div>
                 </div>
             )}
