@@ -37,7 +37,7 @@ const WhyChooseUs = () => {
                     {reasons.map((item, index) => (
                         <div
                             key={index}
-                            data-aos="fade-up" data-aos-offset="300"
+                            data-aos="fade-up" 
                             className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300"
                         >
                             <div className="flex justify-center mb-4">{item.icon}</div>

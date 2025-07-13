@@ -74,6 +74,7 @@ const MakeAdmin = () => {
             }
         }
     };
+
     const handleRemoveAdmin = async (user) => {
         const result = await Swal.fire({
             title: `Remove Admin Access from ${user.displayName || user.email}?`,
@@ -99,14 +100,60 @@ const MakeAdmin = () => {
         }
     };
 
-
     const csvHeaders = [
         { label: 'Name', key: 'displayName' },
         { label: 'Email', key: 'email' },
         { label: 'Role', key: 'role' },
     ];
 
-    if (isLoading) return <Loading></Loading>;
+    const renderCompactPagination = () => {
+        let startPage = Math.max(currentPage - 1, 1);
+        let endPage = Math.min(startPage + 2, pageCount);
+
+        if (endPage - startPage < 2 && startPage > 1) {
+            startPage = Math.max(endPage - 2, 1);
+        }
+
+        const pages = [];
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+
+        return (
+            <>
+                <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    className="h-9 w-9 text-2xl flex items-center justify-center text-gray-500 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                    disabled={currentPage === 1}
+                >
+                    ‹
+                </button>
+
+                {pages.map(page => (
+                    <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`h-9 w-9 rounded-md flex items-center justify-center text-sm font-medium transition ${currentPage === page
+                            ? 'bg-blue-800 text-white'
+                            : 'bg-white text-gray-700 hover:bg-gray-100'
+                            }`}
+                    >
+                        {page}
+                    </button>
+                ))}
+
+                <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, pageCount))}
+                    className="h-9 w-9 cursor-pointer text-2xl flex items-center justify-center text-gray-500 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                    disabled={currentPage === pageCount}
+                >
+                    ›
+                </button>
+            </>
+        );
+    };
+
+    if (isLoading) return <Loading />;
     if (error) return <p className="text-center py-6 text-red-600">Failed to load users.</p>;
 
     return (
@@ -190,18 +237,12 @@ const MakeAdmin = () => {
                 </table>
             </div>
 
-            {/* Pagination */}
-            <div className="flex justify-center mt-6 gap-2">
-                {Array.from({ length: pageCount }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => setCurrentPage(i + 1)}
-                        className={`btn btn-sm ${currentPage === i + 1 ? 'btn bg-pink-500' : 'btn-outline'}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-            </div>
+            {/* Compact Pagination */}
+            {pageCount > 1 && (
+                <div className="mt-8 flex justify-center items-center gap-2 flex-wrap">
+                    {renderCompactPagination()}
+                </div>
+            )}
         </div>
     );
 };

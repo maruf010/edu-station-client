@@ -1,132 +1,175 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link, useLocation, useNavigate } from 'react-router'; // Make sure it's 'react-router-dom'
-import axios from 'axios';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import toast from 'react-hot-toast';
-import useAuth from '../../hooks/useAuth';
-import SocialLogin from './SocialLogin';
-import useAxios from '../../hooks/useAxios';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import useAuth from '../../../hooks/useAuth';
+import Swal from 'sweetalert2';
 
-const Register = () => {
+const MyClasses = () => {
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const [selectedClass, setSelectedClass] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const { createUser, updateUserProfile } = useAuth();
-    const [profilePic, setProfilePic] = useState();
-    const [showPassword, setShowPassword] = useState(false); // Password toggle
-    const axiosInstance = useAxios();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from || '/';
+    const { data: myClasses = [], isLoading, error, refetch } = useQuery({
+        queryKey: ['my-classes', user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/my-classes?email=${user.email}`);
+            return res.data;
+        }
+    });
 
-    const onSubmit = data => {
-        console.log(data);
-        createUser(data.email, data.password)
-            .then(async (result) => {
-                console.log(result.user);
-                toast.success("Registration successful!");
+    const handleDelete = async (id) => {
+        const confirm = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        });
 
-                const userInfo = {
-                    email: data.email,
-                    role: 'student',
-                    displayName: data.displayName || data.name,
-                    photoURL: data.photoURL || profilePic,
-                    created_at: new Date().toISOString(),
-                    last_log_in: new Date().toISOString()
-                };
-                const userRes = await axiosInstance.post('/users', userInfo);
-                console.log(userRes.data);
-
-
-                const userProfile = {
-                    displayName: data.name,
-                    photoURL: profilePic
-                };
-                updateUserProfile(userProfile)
-                    .then(() => {
-                        navigate(from);
-                        // toast.success('Profile Updated!');
-                    }).catch(error => {
-                        toast.error(error.message);
-                    });
-
-            })
-            .catch(error => {
-                toast.error(error.message);
-            });
+        if (confirm.isConfirmed) {
+            const res = await axiosSecure.delete(`/my-classes/${id}`);
+            if (res.data.deletedCount > 0) {
+                Swal.fire('Deleted!', 'Your class has been deleted.', 'success');
+                refetch();
+            }
+        }
     };
 
-    const handleImage = async (e) => {
-        const image = e.target.files[0];
-        const formData = new FormData();
-        formData.append('image', image);
-
-        const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_UPLOAD_KEY}`;
-        const res = await axios.post(imageUploadUrl, formData);
-        setProfilePic(res.data.data.url);
+    const handleUpdate = (cls) => {
+        setSelectedClass(cls);
+        setIsModalOpen(true);
     };
+
+    const handleUpdateSubmit = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const updatedData = {
+            name: form.name.value,
+            price: parseFloat(form.price.value),
+            seats: parseInt(form.seats.value),
+        };
+
+        const res = await axiosSecure.patch(`/my-classes/${selectedClass._id}`, updatedData);
+        if (res.data.modifiedCount > 0) {
+            Swal.fire('Success', 'Class updated successfully!', 'success');
+            refetch();
+            setIsModalOpen(false);
+        }
+    };
+
+    if (isLoading) return <p className="text-center py-6">Loading your classes...</p>;
+    if (error) return <p className="text-center text-red-500 py-6">Failed to fetch your classes.</p>;
 
     return (
-        <div className="card bg-base-100 w-full md:max-w-sm shrink-0 shadow-2xl">
-            <div className="card-body">
-                <h1 className="text-3xl font-bold text-center mb-4">Create Account</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <fieldset className="fieldset">
+        <div className="max-w-6xl mx-auto px-4 py-6">
+            <h2 className="text-3xl font-bold mb-6 text-center">My Classes</h2>
 
-                        {/* Name */}
-                        <label className="label">Name</label>
-                        <input type="text" {...register('name', { required: true })} className="input input-bordered w-full" placeholder="Name" />
-                        {errors.name?.type === 'required' && <p className='text-red-500'>Name is required</p>}
-
-                        {/* Profile Photo */}
-                        <label className="label">Photo</label>
-                        <input type="file" onChange={handleImage} className="file-input file-input-bordered w-full" />
-
-                        {/* Email */}
-                        <label className="label">Email</label>
-                        <input type="email" {...register('email', { required: true })} className="input input-bordered w-full" placeholder="Email" />
-                        {errors.email?.type === 'required' && <p className='text-red-500'>Email is required</p>}
-
-                        {/* Password with Toggle */}
-                        <label className="label">Password</label>
-                        <div className="relative">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                {...register('password', {
-                                    required: true,
-                                    minLength: 6,
-                                    pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/
-                                })}
-                                className="input input-bordered w-full pr-10"
-                                placeholder="Password"
+            {myClasses.length === 0 ? (
+                <p className="text-center">No classes found.</p>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {myClasses.map((cls) => (
+                        <div
+                            key={cls._id}
+                            className="bg-white rounded-xl shadow-md overflow-hidden transition hover:shadow-lg border"
+                        >
+                            <img
+                                src={cls.image}
+                                alt={cls.name}
+                                className="h-48 w-full object-cover"
                             />
-                            <span
-                                className="absolute right-3 top-3 cursor-pointer text-xl text-gray-600"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-                            </span>
+                            <div className="p-4 space-y-2">
+                                <h3 className="text-xl font-semibold text-gray-800">{cls.name}</h3>
+                                <p><span className="font-medium">Price:</span> ${cls.price}</p>
+                                <p><span className="font-medium">Seats:</span> {cls.seats}</p>
+                                <p><span className="font-medium">Enrolled:</span> {cls.enrolled || 0}</p>
+                                <p>
+                                    <span className="font-medium">Status:</span>{" "}
+                                    <span className="capitalize text-sm bg-gray-100 px-2 py-1 rounded">
+                                        {cls.status}
+                                    </span>
+                                </p>
+                                <div className="pt-2 flex gap-3">
+                                    <button
+                                        onClick={() => handleUpdate(cls)}
+                                        className="btn btn-sm bg-blue-500 text-white hover:bg-blue-600"
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(cls._id)}
+                                        className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    ))}
+                </div>
+            )}
 
-                        {/* Password Errors */}
-                        {errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>}
-                        {errors.password?.type === 'minLength' && <p className='text-red-500'>Password must be 6 characters or longer</p>}
-                        {errors.password?.type === 'pattern' && <p className='text-red-500'>Password must contain at least one uppercase letter, one special character, and one number</p>}
-
-                        {/* Submit Button */}
-                        <button className="btn text-white bg-pink-500 mt-3 w-full">Register</button>
-                    </fieldset>
-                </form>
-
-                <p className="mt-2 text-sm text-center">
-                    Already have an account? <Link to='/login' className='text-blue-500'>Login</Link>
-                </p>
-
-
-                <SocialLogin />
-            </div>
+            {/* Update Modal */}
+            {isModalOpen && selectedClass && (
+                <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                        <h2 className="text-xl font-semibold mb-4 text-center">Update Class</h2>
+                        <form onSubmit={handleUpdateSubmit}>
+                            <div className="mb-3">
+                                <label className="block text-sm font-medium">Class Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    defaultValue={selectedClass.name}
+                                    className="input input-bordered w-full"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label className="block text-sm font-medium">Price</label>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    defaultValue={selectedClass.price}
+                                    className="input input-bordered w-full"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label className="block text-sm font-medium">Seats</label>
+                                <input
+                                    type="number"
+                                    name="seats"
+                                    defaultValue={selectedClass.seats}
+                                    className="input input-bordered w-full"
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end gap-3 mt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="btn btn-sm"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-sm bg-green-500 text-white hover:bg-green-600"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
-export default Register;
+export default MyClasses;

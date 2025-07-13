@@ -73,7 +73,7 @@ const AllClasses = () => {
     return (
         <div className='bg-gray-300 overflow-hidden'>
             <div className=" max-w-7xl min-h-screen mx-auto p-6 ">
-                <h2 className="text-3xl font-bold text-center mb-6 text-white">Explore Our Classes</h2>
+                <h2 className="text-3xl font-bold text-center mb-6 text-gray-500">Explore Our Classes</h2>
 
                 {/* Filter Controls */}
                 <div className="flex gap-4 mb-6 justify-between items-center">

@@ -73,8 +73,8 @@ const ApplyTeacher = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="max-w-xl w-full p-6 bg-white shadow-md rounded border text-pink-500 border-pink-300">
+        <div className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gray-200 px-4">
+            <div className=" max-w-xl w-full p-6 bg-white shadow-md rounded border text-gray-500 border-gray-300">
                 <h2 className="text-2xl font-bold text-center mb-4">Apply to Become a Teacher</h2>
 
                 {/* Already a teacher */}
@@ -116,19 +116,19 @@ const ApplyTeacher = () => {
                                     type="text"
                                     value={user?.displayName || ''}
                                     readOnly
-                                    className="input input-bordered w-full bg-gray-100 focus:outline-none focus:border-pink-400"
+                                    className="input input-bordered w-full bg-gray-100 focus:outline-none focus:border-gray-400"
                                 />
 
                                 <input
                                     type="email"
                                     value={user?.email || ''}
                                     readOnly
-                                    className="input input-bordered w-full bg-gray-100 focus:outline-none focus:border-pink-400"
+                                    className="input input-bordered w-full bg-gray-100 focus:outline-none focus:border-gray-400"
                                 />
 
                                 <select
                                     {...register('experience', { required: true })}
-                                    className="select select-bordered w-full focus:outline-none focus:border-pink-400"
+                                    className="select select-bordered w-full focus:outline-none focus:border-gray-400"
                                 >
                                     <option value="">Select Experience</option>
                                     <option value="beginner">Beginner</option>
@@ -140,14 +140,14 @@ const ApplyTeacher = () => {
                                 <input
                                     type="text"
                                     {...register('title', { required: true })}
-                                    className="input input-bordered w-full focus:outline-none focus:border-pink-400"
+                                    className="input input-bordered w-full focus:outline-none focus:border-gray-400"
                                     placeholder="Your title or specialization"
                                 />
                                 {errors.title && <p className="text-red-500">Title is required</p>}
 
                                 <select
                                     {...register('category', { required: true })}
-                                    className="select select-bordered w-full focus:outline-none focus:border-pink-400"
+                                    className="select select-bordered w-full focus:outline-none focus:border-gray-400"
                                 >
                                     <option value="">Select Category</option>
                                     <option value="Web Development">Web Development</option>
@@ -157,7 +157,7 @@ const ApplyTeacher = () => {
                                 </select>
                                 {errors.category && <p className="text-red-500">Category is required</p>}
 
-                                <button className="btn text-white bg-pink-500 hover:bg-pink-600 transition w-full">Submit Application</button>
+                                <button className="btn text-white bg-gray-500 hover:bg-gray-600 transition w-full">Submit Application</button>
                             </form>
                         )}
                     </>

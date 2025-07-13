@@ -3,12 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router'; // ✅ import this
 
 const MyClasses = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [selectedClass, setSelectedClass] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate(); // ✅
 
     const { data: myClasses = [], isLoading, error, refetch } = useQuery({
         queryKey: ['my-classes', user?.email],
@@ -18,6 +20,7 @@ const MyClasses = () => {
             return res.data;
         }
     });
+
 
     const handleDelete = async (id) => {
         const confirm = await Swal.fire({
@@ -61,6 +64,10 @@ const MyClasses = () => {
         }
     };
 
+    const handleSeeDetails = (id) => {
+        navigate(`/dashboard/my-class/${id}`); // ✅ navigate
+    };
+
     if (isLoading) return <p className="text-center py-6">Loading your classes...</p>;
     if (error) return <p className="text-center text-red-500 py-6">Failed to fetch your classes.</p>;
 
@@ -93,7 +100,7 @@ const MyClasses = () => {
                                         {cls.status}
                                     </span>
                                 </p>
-                                <div className="pt-2 flex gap-3">
+                                <div className="pt-2 flex flex-wrap gap-3">
                                     <button
                                         onClick={() => handleUpdate(cls)}
                                         className="btn btn-sm bg-blue-500 text-white hover:bg-blue-600"
@@ -105,6 +112,13 @@ const MyClasses = () => {
                                         className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
                                     >
                                         Delete
+                                    </button>
+                                    <button
+                                        onClick={() => handleSeeDetails(cls._id)}
+                                        className="btn btn-sm bg-green-600 text-white hover:bg-green-700"
+                                        disabled={cls.status !== 'approved'} // ✅ conditionally disabled
+                                    >
+                                        See Details
                                     </button>
                                 </div>
                             </div>

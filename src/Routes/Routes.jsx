@@ -27,6 +27,8 @@ import ClassDetails from "../pages/ClassDetails/ClassDetails";
 import PaymentsHistory from "../pages/Payment/PaymentsHistory";
 import AllPayments from "../pages/Dashboard/Admin/AllPayments";
 import Wishlist from "../pages/Dashboard/Student/Wishlist";
+import MyClassDetails from "../pages/Dashboard/Teacher/MyClassDetails";
+import StudentAssignments from "../pages/Dashboard/Student/StudentAssignments";
 
 
 
@@ -103,6 +105,10 @@ export const router = createBrowserRouter([
                 </StudentRoute>
             },
             {
+                path: 'assignments/:classId',
+                element: <StudentAssignments></StudentAssignments>
+            },
+            {
                 path: 'payments',
                 element: <StudentRoute>
                     <PaymentsHistory></PaymentsHistory>
@@ -122,6 +128,10 @@ export const router = createBrowserRouter([
             {
                 path: 'my-classes',
                 element: <MyClasses></MyClasses>
+            },
+            {
+                path: 'my-class/:id',
+                element: <MyClassDetails></MyClassDetails>
             },
             //Admin routes
             {

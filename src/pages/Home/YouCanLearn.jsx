@@ -38,17 +38,17 @@ const skills = [
 
 const YouCanLearn = () => {
     return (
-        <section className="py-8 text-center lg:max-w-11/12 lg:mx-auto">
+        <section className="py-12 text-center lg:max-w-11/12 lg:mx-auto">
             <h2 
             data-aos="fade-up"
-            className="text-3xl md:text-4xl font-bold mb-10">
+            className="text-3xl md:text-4xl font-bold mb-16">
                 YOU CAN LEARN</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8  mx-auto px-4">
                 {skills.map((skill, idx) => (
                     <div
                         key={idx}
                         className={`relative group rounded-xl overflow-hidden p-6 bg-white shadow-md hover:shadow-2xl transform transition-transform duration-300 hover:scale-105 `}
-                        data-aos="zoom-in-up" data-aos-offset="300"
+                        data-aos="fade-up"
                     >
                         {/* Arc Background */}
                         <div

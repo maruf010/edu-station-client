@@ -55,44 +55,44 @@ const UpdateProfile = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-100 via-pink-200 to-pink-100 flex justify-center items-center px-4 font-des">
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 flex justify-center items-center px-4 font-des">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white w-full max-w-md rounded-3xl p-8 shadow-lg space-y-6"
             >
-                <h2 className="text-3xl text-center font-bold text-pink-600">Update Profile</h2>
+                <h2 className="text-3xl text-center font-bold text-gray-600">Update Profile</h2>
 
                 <div>
-                    <label className="block mb-1 text-sm text-pink-600 font-medium">Name</label>
+                    <label className="block mb-1 text-sm text-gray-600 font-medium">Name</label>
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full border border-pink-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         placeholder="Enter your name"
                     />
                 </div>
 
                 <div>
-                    <label className="block mb-1 text-sm text-pink-600 font-medium">Change Photo</label>
+                    <label className="block mb-2 text-sm text-gray-600 font-medium">Change Photo</label>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
-                        className="w-full text-sm file:py-2 file:px-4 file:border-0 file:rounded-full file:bg-pink-500 file:text-white hover:file:bg-pink-600"
+                        className=" w-full text-sm file:py-2 file:px-4 file:border-0 file:rounded-full file:bg-gray-500 file:text-white hover:file:bg-gray-600"
                     />
                 </div>
 
                 {photo && (
                     <div className="flex justify-center mt-2">
-                        <img src={photo} alt="Profile Preview" className="w-20 h-20 rounded-full border-4 border-pink-300 shadow" />
+                        <img src={photo} alt="Profile Preview" className="w-20 h-20 rounded-full border-4 border-gray-300 shadow" />
                     </div>
                 )}
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-medium transition duration-200"
+                    className="cursor-pointer w-full py-2 rounded-full bg-gray-500 hover:bg-gray-600 text-white font-medium transition duration-200"
                 >
                     {loading ? "Saving..." : "Save Changes"}
                 </button>

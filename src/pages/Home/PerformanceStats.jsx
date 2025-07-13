@@ -31,7 +31,7 @@ const PerformanceStats = () => {
         <section ref={ref} className="py-16 px-6 lg:px-20">
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-12">
                 {/* Left Info */}
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-6 lg:w-1/2" data-aos="fade-right" data-aos-offset="300">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-6 lg:w-1/2" data-aos="fade-right" >
                     {statList.map((stat, idx) => (
                         <div key={idx} className="bg-[#1e293b] p-6 rounded-xl text-center shadow-md">
                             <h3 className="text-3xl font-bold text-green-400">
@@ -44,7 +44,7 @@ const PerformanceStats = () => {
 
 
                 {/* Right Stats */}
-                <div className="lg:w-1/2" data-aos="fade-left" data-aos-offset="300">
+                <div className="lg:w-1/2" data-aos="fade-left" >
                     <h2 className="text-4xl font-extrabold mb-4">
                         Outstanding And <br /> Blazing Performance.
                     </h2>

@@ -40,7 +40,7 @@ const Navbar = () => {
     }
 
     const links = (
-        <div className='flex flex-col lg:flex-row gap-3 text-[14px] lg:gap-5 pl-2 list-none'>
+        <div className='flex flex-col lg:flex-row gap-3  text-[16px] lg:gap-5 pl-2 list-none'>
             <li>
                 <NavLink to='/'
                     onClick={() => {

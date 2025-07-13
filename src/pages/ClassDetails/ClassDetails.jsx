@@ -49,12 +49,14 @@ const ClassDetails = () => {
         queryKey: ['class-details', classId],
         queryFn: async () => (await axios.get(`/classes/approved/${classId}`)).data
     });
+console.log(classData);
 
     const { data: enrollments = [], isLoading: enrollmentsLoading, refetch: refetchEnrollments } = useQuery({
         queryKey: ['enrollments', user?.email],
         queryFn: async () => (await axiosSecure.get(`/enrollments?email=${user.email}`)).data,
         enabled: !!user?.email
     });
+
 
     const isAlreadyEnrolled = useMemo(
         () => enrollments.some(e => e.classId === classId),
@@ -133,7 +135,8 @@ const ClassDetails = () => {
             studentName: user.displayName,
             studentImage: user.photoURL,
             rating,
-            feedback: feedbackText
+            feedback: feedbackText,
+            className: classData.name
         };
         feedbackMutation.mutate(newFeedback);
     };

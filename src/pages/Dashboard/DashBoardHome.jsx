@@ -85,8 +85,8 @@ const DashboardHome = () => {
         return <Loading></Loading>;
 
     return (
-        <div className="p-6 space-y-6 bg-[#a8dadc] min-h-screen">
-            <h2 className="text-3xl font-bold mb-4">Dashboard Overview</h2>
+        <div className="p-6 space-y-6 bg-gray-200 min-h-screen">
+            <h2 className="text-3xl font-bold mb-4 text-gray-500">Dashboard Overview</h2>
 
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-6">
                 {role === "admin" && (

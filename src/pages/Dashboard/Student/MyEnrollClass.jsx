@@ -5,6 +5,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 import StarRatings from 'react-star-ratings';
 import Loading from '../../../components/Shared/Loading';
+import { Link } from 'react-router';
 
 const MyEnrollClass = () => {
     const { user } = useAuth();
@@ -25,6 +26,8 @@ const MyEnrollClass = () => {
             return res.data;
         }
     });
+    console.log(enrolled);
+
 
     // Fetch Feedbacks Given by the User
     const { data: feedbacks = [] } = useQuery({
@@ -109,18 +112,29 @@ const MyEnrollClass = () => {
                                     <p><strong>Transaction ID:</strong> {enroll.transactionId}</p>
                                     <p className='mt-2'><strong>Date:</strong> {new Date(enroll.date).toLocaleString()}</p>
 
-                                    {alreadySubmitted ? (
-                                        <button className="btn btn-sm mt-3 bg-gray-400 text-white cursor-not-allowed" disabled>
-                                            Feedback Submitted
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="btn btn-sm mt-3 bg-indigo-600 text-white hover:bg-indigo-700"
-                                            onClick={() => openFeedbackModal(enroll)}
-                                        >
-                                            Give Feedback
-                                        </button>
-                                    )}
+                                    <div className='flex justify-between items-center mt-3'>
+                                        <div>
+                                            {alreadySubmitted ? (
+                                                <button className="btn btn-sm bg-gray-400 text-white cursor-not-allowed" disabled>
+                                                    Feedback Submitted
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
+                                                    onClick={() => openFeedbackModal(enroll)}
+                                                >
+                                                    Give Feedback
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <Link to={`/dashboard/assignments/${enroll.classId}`}>
+                                                <button className="btn btn-sm bg-green-600 text-white hover:bg-green-800">
+                                                    View Assignments
+                                                </button>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
                             );
                         })}
