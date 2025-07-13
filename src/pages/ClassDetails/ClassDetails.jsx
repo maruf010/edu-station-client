@@ -33,7 +33,7 @@ const ClassDetails = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(false);
-    const [visibleCount, setVisibleCount] = useState(3);
+    const [visibleCount, setVisibleCount] = useState(2);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingFeedback, setEditingFeedback] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
@@ -222,7 +222,7 @@ console.log(classData);
                 </div>
 
                 {/* Feedback Form */}
-                {isAlreadyEnrolled && !myFeedback && (
+                {/* {isAlreadyEnrolled && !myFeedback && (
                     <form onSubmit={handleSubmitFeedback} className="bg-white shadow p-5 rounded space-y-4">
                         <h3 className="text-xl font-semibold">Leave Feedback</h3>
                         <StarRatings
@@ -243,7 +243,7 @@ console.log(classData);
                         ></textarea>
                         <button type="submit" className="btn bg-blue-600 hover:bg-blue-800 text-white cursor-pointer">Submit</button>
                     </form>
-                )}
+                )} */}
 
                 {/* Feedback List */}
                 <div className="bg-white shadow p-6 rounded">
@@ -288,7 +288,7 @@ console.log(classData);
                                 </div>
                             ))}
                             {visibleCount < feedbacks.length && (
-                                <button onClick={() => setVisibleCount(prev => prev + 3)} className="cursor-pointer text-blue-600 mt-4 font-medium">Show More</button>
+                                <button onClick={() => setVisibleCount(prev => prev + 2)} className="cursor-pointer text-blue-600 mt-4 font-medium">Show More</button>
                             )}
                         </div>
                     )}

@@ -1,28 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import Slider from "react-slick";
 import { FaQuoteLeft } from "react-icons/fa";
+import StarRatings from "react-star-ratings";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-
-
-// const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 600,
-//     autoplay: true,
-//     autoplaySpeed: 2000,
-//     slidesToShow: 3,
-//     slidesToScroll: 1,
-//     responsive: [
-//         {
-//             breakpoint: 1024,
-//             settings: { slidesToShow: 2 },
-//         },
-//         {
-//             breakpoint: 640,
-//             settings: { slidesToShow: 1 },
-//         },
-//     ],
-// };
 
 const FeedbackCarousel = () => {
     const axiosSecure = useAxiosSecure();
@@ -34,8 +14,6 @@ const FeedbackCarousel = () => {
             return res.data;
         },
     });
-    console.log(feedbacks);
-    
 
     if (isLoading) {
         return <div className="text-center py-10 text-lg font-semibold">Loading feedback...</div>;
@@ -44,7 +22,7 @@ const FeedbackCarousel = () => {
     if (feedbacks.length === 0) {
         return <div className="text-center py-10 text-lg font-semibold">No feedback available yet.</div>;
     }
-    // Inside FeedbackCarousel component after fetching feedbacks
+
     const slidesToShow = feedbacks.length >= 3 ? 3 : feedbacks.length || 1;
 
     const settings = {
@@ -71,9 +49,8 @@ const FeedbackCarousel = () => {
         ],
     };
 
-
     return (
-        <section className=" py-16">
+        <section className="py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-blue-700 mb-10">
                     What Our Students Say
@@ -81,11 +58,25 @@ const FeedbackCarousel = () => {
 
                 <Slider {...settings}>
                     {feedbacks.map((fb, index) => (
-                        <div key={index} className="px-4 py-5 h-full">
-                            <div className="bg-white p-6 rounded-lg shadow-md relative h-full flex flex-col justify-between">
+                        <div key={index} className="px-4 py-5 h-60">
+                            <div className="bg-white p-6 rounded-lg relative h-full shadow-md border border-gray-200">
                                 <FaQuoteLeft className="absolute top-4 left-4 text-3xl text-blue-300 opacity-40" />
-                                <p className="text-gray-700 text-base italic mb-6 mt-4">"{fb.feedback}"</p>
-                                <div className="flex items-center gap-4 mt-auto">
+                                <div className="h-8 mb-2">
+                                    <p className="text-gray-700 italic">"{fb.feedback}"</p>
+                                </div>
+
+                                <div className="my-3 flex gap-2">
+                                    <StarRatings
+                                        rating={fb.rating}
+                                        starRatedColor="#facc15"
+                                        numberOfStars={5}
+                                        starDimension="20px"
+                                        starSpacing="2px"
+                                        name="rating"
+                                    />
+                                </div>
+
+                                <div className="flex items-center gap-4 mt-4">
                                     <img
                                         src={fb.studentImage}
                                         alt={fb.studentName}
@@ -93,7 +84,8 @@ const FeedbackCarousel = () => {
                                     />
                                     <div className="text-left">
                                         <h4 className="text-md font-bold text-blue-600">{fb.studentName}</h4>
-                                        <p className="text-sm text-gray-500">{fb.className}</p>
+                                        <p className="text-md font-medium text-gray-600">{fb.className}</p>
+                                        <h2 className="text-sm text-gray-400">{fb.assignmentTitle || ''}</h2>
                                     </div>
                                 </div>
                             </div>

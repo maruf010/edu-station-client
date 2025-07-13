@@ -211,7 +211,7 @@ const DashBoardLayout = () => {
                                 >
                                     <HiOutlineUsers /> All Users
                                 </NavLink>
-                                <NavLink
+                                {/* <NavLink
                                     to="/dashboard/make-admin"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
@@ -220,7 +220,7 @@ const DashBoardLayout = () => {
                                     }
                                 >
                                     <FaUserShield /> Make Admin
-                                </NavLink>
+                                </NavLink> */}
                             </>
                         )
                     }

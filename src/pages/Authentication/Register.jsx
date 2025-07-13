@@ -59,29 +59,29 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0072ff] to-[#00c6ff] px-4">
-            <div className="w-full max-w-5xl max-h-[calc(100vh-100px)] bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+            <div className="w-full max-w-5xl  bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
                 {/* Left Panel */}
                 <div className="relative bg-gradient-to-b from-[#0072ff] to-[#00c6ff] text-white p-10 flex flex-col justify-center">
-                    <h2 className="text-3xl font-bold mb-2">WELCOME</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">WELCOME to EduStation</h2>
                     <p className="text-sm">JOIN OUR COMMUNITY</p>
                     <p className="mt-4 text-xs text-white/80">
                         Create your account to access all features. Connect with others, share knowledge, and grow together.
                     </p>
                     <Link to='/'>
-                        <div className='mt-5 gap-3 flex items-center'>
+                        <div className='mt-3 gap-3 flex items-center'>
                             <IoArrowBackSharp />
                             <h2 className=''>Back to Homepage</h2>
                         </div>
                     </Link>
                     {/* Circles */}
-                    <div className="absolute bottom-[-30px] left-[-30px] w-28 h-28 bg-blue-800 rounded-full opacity-30"></div>
-                    <div className="absolute top-10 right-[-40px] w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
+                    <div className="absolute bottom-[10px] md:bottom-[-30px] left-[-30px] w-28 h-28 bg-blue-500 rounded-full opacity-30"></div>
+                    <div className="absolute top-10 lg:top-[-20px] right-[-40px] lg:right-[20px] w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
                     <div className="absolute bottom-20 left-20 w-20 h-20 bg-white rounded-full opacity-10"></div>
                 </div>
 
                 {/* Right Panel - Form */}
-                <div className="p-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Create Account</h2>
+                <div className="p-6">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-3 text-center">Create Account</h2>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
                         {/* Name */}
                         <div>

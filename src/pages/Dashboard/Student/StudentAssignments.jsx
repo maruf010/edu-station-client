@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
@@ -17,19 +17,15 @@ const StudentAssignments = () => {
     const [viewSubmission, setViewSubmission] = useState(null);
     const [submissionText, setSubmissionText] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState('');
-
     const [feedbackModal, setFeedbackModal] = useState(null);
     const [feedbackRating, setFeedbackRating] = useState(0);
 
-    // 🔹 Fetch class info for feedback
     const { data: classData = {}, isLoading: classLoading } = useQuery({
         queryKey: ['class-info', classId],
         queryFn: () => axiosSecure.get(`/class/${classId}`).then(res => res.data),
         enabled: !!classId,
     });
-    console.log(classData.name);
 
-    // 🔹 Fetch assignments
     const { data: assignments = [], isLoading: isLoadingAssignments } = useQuery({
         queryKey: ['assignments', classId],
         queryFn: async () => {
@@ -39,7 +35,6 @@ const StudentAssignments = () => {
         enabled: !!classId,
     });
 
-    // 🔹 Fetch submissions
     const { data: submissions = [], isLoading: isLoadingSubmissions } = useQuery({
         queryKey: ['submissions', user?.email, classId],
         queryFn: async () => {
@@ -49,7 +44,15 @@ const StudentAssignments = () => {
         enabled: !!user?.email && !!classId,
     });
 
-    // 🔹 Submit assignment
+    const { data: givenFeedbacks = [], refetch: refetchFeedbacks } = useQuery({
+        queryKey: ['given-feedbacks', user?.email, classId],
+        enabled: !!user?.email && !!classId,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/feedbacks?email=${user.email}&classId=${classId}`);
+            return res.data;
+        }
+    });
+
     const { mutate: submitAssignment, isPending: submitting } = useMutation({
         mutationFn: async (payload) => {
             const res = await axiosSecure.post('/submissions', payload);
@@ -65,7 +68,6 @@ const StudentAssignments = () => {
         onError: () => toast.error('Submission failed'),
     });
 
-    // 🔹 Mark notification as viewed
     const markAsViewed = async (id, currentHash) => {
         try {
             await axiosSecure.patch(`/submissions/viewed/${id}`, { viewedHash: currentHash });
@@ -75,13 +77,10 @@ const StudentAssignments = () => {
         }
     };
 
-    const getSubmissionHash = (submission) => {
-        return `${submission.marks || ''}-${submission.review || ''}`;
-    };
+    const getSubmissionHash = (submission) => `${submission.marks || ''}-${submission.review || ''}`;
 
     const handleViewSubmission = (submission) => {
         setViewSubmission(submission);
-
         const currentHash = getSubmissionHash(submission);
         if (
             (submission.marks !== undefined || submission.review) &&
@@ -91,9 +90,8 @@ const StudentAssignments = () => {
         }
     };
 
-    const isSubmitted = (assignmentId) => {
-        return submissions.find(sub => sub.assignmentId === assignmentId);
-    };
+    const isSubmitted = (assignmentId) =>
+        submissions.find(sub => sub.assignmentId === assignmentId);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -112,13 +110,19 @@ const StudentAssignments = () => {
         });
     };
 
-    // 🔹 Submit Feedback
+    const hasGivenFeedback = (assignmentTitle) => {
+        return givenFeedbacks.some(
+            fb => fb.assignmentTitle === assignmentTitle && fb.studentEmail === user.email
+        );
+    };
+
     const { mutate: submitFeedback } = useMutation({
         mutationFn: (payload) => axiosSecure.post('/feedbacks', payload),
         onSuccess: () => {
             toast.success('Feedback submitted!');
             setFeedbackModal(null);
             setFeedbackRating(0);
+            refetchFeedbacks(); // ✅ refetch feedback list
         },
         onError: (err) => {
             if (err?.response?.status === 400) {
@@ -135,10 +139,7 @@ const StudentAssignments = () => {
         const form = e.target;
         const feedbackText = form.feedback.value;
 
-        if (feedbackRating === 0) {
-            toast.error('Please provide a rating');
-            return;
-        }
+        if (feedbackRating === 0) return toast.error('Please provide a rating');
 
         const payload = {
             studentName: user.displayName,
@@ -154,12 +155,11 @@ const StudentAssignments = () => {
         submitFeedback(payload);
     };
 
-
-    if (isLoadingAssignments || isLoadingSubmissions) return <Loading />;
+    if (isLoadingAssignments || isLoadingSubmissions || classLoading) return <Loading />;
 
     return (
         <div className="max-w-4xl mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4 text-center">{classData?.name} All Assignments</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{classData?.name} Assignments</h2>
 
             {assignments.length === 0 ? (
                 <p className="text-center text-gray-600">No assignments found for this class.</p>
@@ -167,55 +167,42 @@ const StudentAssignments = () => {
                 <div className="space-y-4">
                     {assignments.map(assignment => {
                         const submission = isSubmitted(assignment._id);
-
-                        let showNotification = false;
-                        if (submission && (submission.marks !== undefined || submission.review)) {
-                            const currentHash = getSubmissionHash(submission);
-                            if (submission.viewedHash !== currentHash) {
-                                showNotification = true;
-                            }
-                        }
+                        const showNotification =
+                            submission &&
+                            (submission.marks !== undefined || submission.review) &&
+                            submission.viewedHash !== getSubmissionHash(submission);
 
                         return (
                             <div key={assignment._id} className="border border-gray-300 hover:border-blue-400 rounded p-4 bg-white shadow">
-                                <div className="text-xl">
-                                    <span className="text-lg font-semibold">Title: </span>
-                                    {assignment.title}
-                                </div>
-                                <div className='flex flex-wrap gap-1 item-center py-2'>
-                                    <h2 className='font-medium'>Requirements:</h2>
-                                    <p className=" text-gray-700">{assignment.description}</p>
-                                </div>
-                                <p className="mt-1 text-sm">
-                                    <strong>Deadline:</strong>{' '}
-                                    <span className='text-red-500'>{new Date(assignment.deadline).toLocaleString()}</span>
+                                <h3 className="text-xl font-semibold">{assignment.title}</h3>
+                                <p className="mt-1 text-gray-700">{assignment.description}</p>
+                                <p className="mt-2 text-sm">
+                                    <strong>Deadline:</strong>{" "}
+                                    <span className="text-red-600">{new Date(assignment.deadline).toLocaleString()}</span>
                                 </p>
 
-                                <div className='flex justify-between items-center mt-3'>
+                                <div className="mt-3 flex justify-between">
                                     {submission ? (
                                         <>
                                             <button
-                                                className={`btn btn-sm relative ${showNotification
-                                                    ? 'bg-yellow-100 text-yellow-800 border-yellow-400 animate-pulse'
-                                                    : 'bg-green-100 text-green-700 border-green-400'
-                                                    } hover:bg-green-200`}
                                                 onClick={() => handleViewSubmission(submission)}
+                                                className={`btn btn-sm relative ${showNotification ? 'bg-yellow-100 border-yellow-400 text-yellow-800 animate-pulse' : 'bg-green-100 border-green-400 text-green-700'}`}
                                             >
-                                                📄 View Submission
+                                                View Submission
                                                 {showNotification && <span className="ml-2 animate-bounce">🔔</span>}
                                             </button>
-
                                             <button
-                                                className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
                                                 onClick={() => setFeedbackModal(assignment)}
+                                                className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700"
+                                                disabled={hasGivenFeedback(assignment.title)}
                                             >
-                                                Give Feedback
+                                                {hasGivenFeedback(assignment.title) ? 'Feedback Given' : 'Give Feedback'}
                                             </button>
                                         </>
                                     ) : (
                                         <button
-                                            className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700"
                                             onClick={() => setSelectedAssignment(assignment)}
+                                            className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700"
                                         >
                                             Submit Assignment
                                         </button>
@@ -227,12 +214,12 @@ const StudentAssignments = () => {
                 </div>
             )}
 
-            {/* Submit Modal */}
+            {/* Submit Assignment Modal */}
             {selectedAssignment && (
-                <dialog className="modal modal-open">
-                    <div className="modal-box max-w-lg">
-                        <h3 className="font-bold text-xl mb-3">Submit: {selectedAssignment.title}</h3>
-                        <form onSubmit={handleSubmit} className="space-y-3">
+                <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
+                        <h3 className="text-xl font-semibold">Submit: {selectedAssignment.title}</h3>
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <textarea
                                 className="textarea textarea-bordered w-full"
                                 rows="4"
@@ -244,124 +231,96 @@ const StudentAssignments = () => {
                             <input
                                 type="url"
                                 className="input input-bordered w-full"
-                                placeholder="Attachment link"
+                                placeholder="Attachment link (optional)"
                                 value={attachmentUrl}
                                 onChange={(e) => setAttachmentUrl(e.target.value)}
                             />
-                            <div className="modal-action">
-                                <button
-                                    type="submit"
-                                    className="btn bg-green-600 text-white hover:bg-green-700"
-                                    disabled={submitting}
-                                >
-                                    {submitting ? 'Submitting...' : 'Submit'}
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-outline"
-                                    onClick={() => setSelectedAssignment(null)}
-                                >
+                            <div className="flex justify-end gap-3">
+                                <button type="button" className="btn btn-outline" onClick={() => setSelectedAssignment(null)}>
                                     Cancel
+                                </button>
+                                <button type="submit" className="btn bg-green-600 text-white">
+                                    {submitting ? 'Submitting...' : 'Submit'}
                                 </button>
                             </div>
                         </form>
                     </div>
-                </dialog>
+                </div>
             )}
 
             {/* View Submission Modal */}
             {viewSubmission && (
-                <dialog className="modal modal-open">
-                    <div className="modal-box max-w-lg">
-                        <h3 className="font-bold text-xl mb-4">📄 Your Submission</h3>
-                        <div className='border border-gray-300 p-3 rounded-lg space-y-3'>
-                            <p className="text-gray-700">
-                                <strong>Submitted At:</strong>{' '}
-                                {new Date(viewSubmission.submittedAt).toLocaleString()}
-                            </p>
-                            <p className="text-gray-800 whitespace-pre-line">
-                                {viewSubmission.submissionText}
-                            </p>
+                <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg space-y-4">
+                        <h3 className="text-xl font-semibold text-blue-700">📄 Your Submission</h3>
+                        <p><strong>Submitted At:</strong> {new Date(viewSubmission.submittedAt).toLocaleString()}</p>
+                        <div className='border border-gray-300 p-3 rounded'>
+                            <p className="whitespace-pre-line">{viewSubmission.submissionText}</p>
 
                             {viewSubmission.attachmentUrl && (
-                                <div>
-                                    <strong>Attachment:</strong>{' '}
-                                    <a
-                                        href={viewSubmission.attachmentUrl}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="text-blue-600 underline"
-                                    >
+                                <p className='mt-2'>
+                                    <strong>Attachment Link:</strong>{" "}
+                                    <a href={viewSubmission.attachmentUrl} className="text-blue-600 underline" target="_blank" rel="noreferrer">
                                         View File
                                     </a>
-                                </div>
-                            )}
-
-                            {(viewSubmission.marks !== undefined || viewSubmission.review) && (
-                                <div className="bg-gray-50 p-3 rounded border border-blue-300 space-y-1">
-                                    <p className="text-sm">
-                                        <strong>Teacher's Mark:</strong>{' '}
-                                        {viewSubmission.marks !== undefined
-                                            ? `${viewSubmission.marks} / 100`
-                                            : 'Not marked yet'}
-                                    </p>
-                                    <p className="text-sm">
-                                        <strong>Review:</strong>{' '}
-                                        {viewSubmission.review || 'No review yet'}
-                                    </p>
-                                </div>
+                                </p>
                             )}
                         </div>
 
-                        <div className="modal-action">
+                        {(viewSubmission.marks !== undefined || viewSubmission.review) && (
+                            <div className=" p-3 rounded border border-blue-300 space-y-1">
+                                <p><strong>Teacher's Mark:</strong> {viewSubmission.marks ?? 'Not marked yet'}</p>
+                                <p><strong>Review:</strong> {viewSubmission.review || 'No review yet'}</p>
+                            </div>
+                        )}
+
+                        <div className="flex justify-end">
                             <button className="btn" onClick={() => setViewSubmission(null)}>
                                 Close
                             </button>
                         </div>
                     </div>
-                </dialog>
+                </div>
             )}
 
             {/* Feedback Modal */}
             {feedbackModal && (
-                <dialog className="modal modal-open">
-                    <div className="modal-box max-w-md">
-                        <h3 className="text-xl font-bold mb-4">Give Feedback: {feedbackModal.title}</h3>
-                        <form onSubmit={handleFeedbackSubmit} className="space-y-3">
-                            <label className="block font-medium">Rating:</label>
-                            <StarRatings
-                                rating={feedbackRating}
-                                starRatedColor="#facc15"
-                                starHoverColor="#fbbf24"
-                                changeRating={(rate) => setFeedbackRating(rate)}
-                                numberOfStars={5}
-                                name="rating"
-                                starDimension="28px"
-                                starSpacing="4px"
-                            />
+                <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
+                        <h3 className="text-xl font-bold">Give Feedback: {feedbackModal.title}</h3>
+                        <form onSubmit={handleFeedbackSubmit} className="space-y-4">
+                            <div className='flex items-center gap-2'>
+                                <label className="font-medium">Rating:</label>
+                                <StarRatings
+                                    rating={feedbackRating}
+                                    starRatedColor="#facc15"
+                                    starHoverColor="#fbbf24"
+                                    changeRating={setFeedbackRating}
+                                    numberOfStars={5}
+                                    starDimension="28px"
+                                    starSpacing="4px"
+                                />
+                            </div>
                             <textarea
                                 name="feedback"
-                                className="textarea textarea-bordered w-full"
+                                className="textarea focus:border-blue-300 focus:outline-none textarea-bordered w-full"
                                 placeholder="Write your feedback..."
-                                rows={4}
+                                rows={3}
+                                maxLength={40}
                                 required
                             ></textarea>
 
-                            <div className="modal-action">
-                                <button type="submit" className="btn bg-green-600 text-white">
-                                    Submit
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-outline"
-                                    onClick={() => setFeedbackModal(null)}
-                                >
+                            <div className="flex justify-end gap-3">
+                                <button type="button" className="btn bg-red-600 hover:bg-red-700 text-white" onClick={() => setFeedbackModal(null)}>
                                     Cancel
+                                </button>
+                                <button type="submit" className="btn bg-green-600 hover:bg-green-700 text-white">
+                                    Submit
                                 </button>
                             </div>
                         </form>
                     </div>
-                </dialog>
+                </div>
             )}
         </div>
     );

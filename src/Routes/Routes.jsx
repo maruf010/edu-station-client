@@ -29,6 +29,7 @@ import AllPayments from "../pages/Dashboard/Admin/AllPayments";
 import Wishlist from "../pages/Dashboard/Student/Wishlist";
 import MyClassDetails from "../pages/Dashboard/Teacher/MyClassDetails";
 import StudentAssignments from "../pages/Dashboard/Student/StudentAssignments";
+import TeacherRoute from "./TeacherRoute";
 
 
 
@@ -47,7 +48,9 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/teach',
-                Component: ApplyTeacher
+                element:<PrivateRoute>
+                    <ApplyTeacher></ApplyTeacher>
+                </PrivateRoute>
             },
             {
                 path: '/forbidden',
@@ -97,6 +100,7 @@ export const router = createBrowserRouter([
                 path: 'updateProfile',
                 Component: UpdateProfile
             },
+
             //student routes
             {
                 path: 'my-enroll-class',
@@ -106,7 +110,9 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'assignments/:classId',
-                element: <StudentAssignments></StudentAssignments>
+                element: <StudentRoute>
+                    <StudentAssignments></StudentAssignments>
+                </StudentRoute>
             },
             {
                 path: 'payments',
@@ -120,41 +126,57 @@ export const router = createBrowserRouter([
                     <Wishlist></Wishlist>
                 </StudentRoute>
             },
+
             //teacher routes
             {
                 path: 'add-class',
-                element: <AddClass></AddClass>
+                element: <TeacherRoute>
+                    <AddClass></AddClass>
+                </TeacherRoute>
             },
             {
                 path: 'my-classes',
-                element: <MyClasses></MyClasses>
+                element: <TeacherRoute>
+                    <MyClasses></MyClasses>
+                </TeacherRoute>
             },
             {
                 path: 'my-class/:id',
-                element: <MyClassDetails></MyClassDetails>
+                element: <TeacherRoute>
+                    <MyClassDetails></MyClassDetails>
+                </TeacherRoute>
             },
+
             //Admin routes
             {
                 path: 'teacher-requests',
-                element: <TeacherRequests></TeacherRequests>
-            },
-            {
-                path: 'active-teachers',
-                element: <ActiveTeacher></ActiveTeacher>
-            },
-            {
-                path: 'make-admin',
                 element: <AdminRoute>
-                    <MakeAdmin></MakeAdmin>
+                    <TeacherRequests></TeacherRequests>
                 </AdminRoute>
             },
             {
+                path: 'active-teachers',
+                element: <AdminRoute>
+                    <ActiveTeacher></ActiveTeacher>
+                </AdminRoute>
+            },
+            // {
+            //     path: 'make-admin',
+            //     element: <AdminRoute>
+            //         <MakeAdmin></MakeAdmin>
+            //     </AdminRoute>
+            // },
+            {
                 path: 'pending-classes',
-                element: <PendingClasses></PendingClasses>
+                element: <AdminRoute>
+                    <PendingClasses></PendingClasses>
+                </AdminRoute>
             },
             {
                 path: 'all-users',
-                element: <AllUsers></AllUsers>
+                element: <AdminRoute>
+                    <AllUsers></AllUsers>
+                </AdminRoute>
             },
             {
                 path: 'allPayments',
