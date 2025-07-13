@@ -108,9 +108,9 @@ const MyEnrollClass = () => {
                                     <h3 className="text-xl font-semibold mb-1">{enroll.className}</h3>
                                     <p><strong>Teacher:</strong> {enroll.teacherName}</p>
                                     <p><strong>Email:</strong> {enroll.teacherEmail}</p>
-                                    <p><strong>Price:</strong> ${enroll.price}</p>
-                                    <p><strong>Transaction ID:</strong> {enroll.transactionId}</p>
-                                    <p className='mt-2'><strong>Date:</strong> {new Date(enroll.date).toLocaleString()}</p>
+                                    {/* <p><strong>Price:</strong> ${enroll.price}</p> */}
+                                    {/* <p><strong>Transaction ID:</strong> {enroll.transactionId}</p> */}
+                                    {/* <p className='mt-2'><strong>Date:</strong> {new Date(enroll.date).toLocaleString()}</p> */}
 
                                     <div className='flex justify-between items-center mt-3'>
                                         <div>
@@ -130,7 +130,7 @@ const MyEnrollClass = () => {
                                         <div>
                                             <Link to={`/dashboard/assignments/${enroll.classId}`}>
                                                 <button className="btn btn-sm bg-green-600 text-white hover:bg-green-800">
-                                                    View Assignments
+                                                    Continue
                                                 </button>
                                             </Link>
                                         </div>

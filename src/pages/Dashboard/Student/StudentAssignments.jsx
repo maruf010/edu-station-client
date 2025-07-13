@@ -26,7 +26,6 @@ const StudentAssignments = () => {
         },
         enabled: !!classId,
     });
-    console.log(assignments);
 
     // 🔹 Fetch submissions
     const { data: submissions = [], isLoading: isLoadingSubmissions } = useQuery({
@@ -38,7 +37,7 @@ const StudentAssignments = () => {
         enabled: !!user?.email && !!classId,
     });
 
-    // 🔹 Submit assignment mutation
+    // 🔹 Submit assignment
     const { mutate: submitAssignment, isPending: submitting } = useMutation({
         mutationFn: async (payload) => {
             const res = await axiosSecure.post('/submissions', payload);
@@ -53,6 +52,32 @@ const StudentAssignments = () => {
         },
         onError: () => toast.error('Submission failed'),
     });
+
+    // 🔹 Mark as viewed when student sees teacher mark/review
+    const markAsViewed = async (id, currentHash) => {
+        try {
+            await axiosSecure.patch(`/submissions/viewed/${id}`, { viewedHash: currentHash });
+            queryClient.invalidateQueries(['submissions', user?.email, classId]);
+        } catch (err) {
+            console.error('Failed to mark as viewed');
+        }
+    };
+
+    const getSubmissionHash = (submission) => {
+        return `${submission.marks || ''}-${submission.review || ''}`;
+    };
+
+    const handleViewSubmission = (submission) => {
+        setViewSubmission(submission);
+
+        const currentHash = getSubmissionHash(submission);
+        if (
+            (submission.marks !== undefined || submission.review) &&
+            submission.viewedHash !== currentHash
+        ) {
+            markAsViewed(submission._id, currentHash);
+        }
+    };
 
     const isSubmitted = (assignmentId) => {
         return submissions.find(sub => sub.assignmentId === assignmentId);
@@ -70,7 +95,8 @@ const StudentAssignments = () => {
             studentImage: user.photoURL,
             submissionText,
             attachmentUrl,
-            submittedAt: new Date()
+            submittedAt: new Date(),
+            viewedHash: '', // nothing to compare yet
         });
     };
 
@@ -87,21 +113,36 @@ const StudentAssignments = () => {
                     {assignments.map(assignment => {
                         const submission = isSubmitted(assignment._id);
 
+                        let showNotification = false;
+                        if (submission && (submission.marks !== undefined || submission.review)) {
+                            const currentHash = getSubmissionHash(submission);
+                            if (submission.viewedHash !== currentHash) {
+                                showNotification = true;
+                            }
+                        }
+
                         return (
-                            <div key={assignment._id} className="border rounded p-4 bg-white shadow">
-                                <h3 className="text-lg font-semibold">{assignment.title}</h3>
+                            <div key={assignment._id} className="border border-gray-200 rounded p-4 bg-white shadow">
+                                <h3 className="text-lg font-semibold">Title: {assignment.title}</h3>
                                 <p className="mt-1 text-gray-700">{assignment.description}</p>
                                 <p className="mt-1 text-sm">
-                                    <strong>Deadline:</strong> {new Date(assignment.deadline).toLocaleString()}
+                                    <strong>Deadline:</strong>{' '}
+                                    {new Date(assignment.deadline).toLocaleString()}
                                 </p>
 
                                 <div className='text-end'>
                                     {submission ? (
                                         <button
-                                            className="btn btn-sm mt-2 bg-green-100 text-green-700 border-green-400 hover:bg-green-200"
-                                            onClick={() => setViewSubmission(submission)}
+                                            className={`btn btn-sm mt-2 relative ${showNotification
+                                                ? 'bg-yellow-100 text-yellow-800 border-yellow-400 animate-pulse'
+                                                : 'bg-green-100 text-green-700 border-green-400'
+                                                } hover:bg-green-200`}
+                                            onClick={() => handleViewSubmission(submission)}
                                         >
                                             📄 View Submission
+                                            {showNotification && (
+                                                <span className="ml-2 animate-bounce">🔔</span>
+                                            )}
                                         </button>
                                     ) : (
                                         <button
@@ -120,7 +161,7 @@ const StudentAssignments = () => {
 
             {/* Submit Modal */}
             {selectedAssignment && (
-                <dialog id="submitModal" className="modal modal-open">
+                <dialog className="modal modal-open">
                     <div className="modal-box max-w-lg">
                         <h3 className="font-bold text-xl mb-3">Submit: {selectedAssignment.title}</h3>
                         <form onSubmit={handleSubmit} className="space-y-3">
@@ -162,17 +203,20 @@ const StudentAssignments = () => {
 
             {/* View Submission Modal */}
             {viewSubmission && (
-                <dialog id="viewModal" className="modal modal-open">
+                <dialog className="modal modal-open">
                     <div className="modal-box max-w-lg">
                         <h3 className="font-bold text-xl mb-4">📄 Your Submission</h3>
-                        <div className='border border-gray-300 p-3 rounded-lg'>
-                            <p className="text-gray-700 whitespace-pre-line mb-3">
-                                <strong>Submitted At:</strong> {new Date(viewSubmission.submittedAt).toLocaleString()}
+                        <div className='border border-gray-300 p-3 rounded-lg space-y-3'>
+                            <p className="text-gray-700">
+                                <strong>Submitted At:</strong>{' '}
+                                {new Date(viewSubmission.submittedAt).toLocaleString()}
                             </p>
-                            <p className="text-gray-800 whitespace-pre-line">{viewSubmission.submissionText}</p>
+                            <p className="text-gray-800 whitespace-pre-line">
+                                {viewSubmission.submissionText}
+                            </p>
 
                             {viewSubmission.attachmentUrl && (
-                                <div className="mt-4">
+                                <div>
                                     <strong>Attachment:</strong>{' '}
                                     <a
                                         href={viewSubmission.attachmentUrl}
@@ -184,13 +228,25 @@ const StudentAssignments = () => {
                                     </a>
                                 </div>
                             )}
+
+                            {(viewSubmission.marks !== undefined || viewSubmission.review) && (
+                                <div className="bg-gray-50 p-3 rounded border border-blue-300 space-y-1">
+                                    <p className="text-sm">
+                                        <strong>Teacher's Mark:</strong>{' '}
+                                        {viewSubmission.marks !== undefined
+                                            ? `${viewSubmission.marks} / 100`
+                                            : 'Not marked yet'}
+                                    </p>
+                                    <p className="text-sm">
+                                        <strong>Review:</strong>{' '}
+                                        {viewSubmission.review || 'No review yet'}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         <div className="modal-action">
-                            <button
-                                className="btn "
-                                onClick={() => setViewSubmission(null)}
-                            >
+                            <button className="btn" onClick={() => setViewSubmission(null)}>
                                 Close
                             </button>
                         </div>

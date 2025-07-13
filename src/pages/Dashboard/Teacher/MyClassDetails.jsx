@@ -13,6 +13,7 @@ const MyClassDetails = () => {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [viewSubmissionModal, setViewSubmissionModal] = useState(null); // assignmentId
+    const [searchTerm, setSearchTerm] = useState('');
     const { register, handleSubmit, reset } = useForm();
 
     // Summary
@@ -124,62 +125,94 @@ const MyClassDetails = () => {
                 )}
             </div>
 
-            {/* Submission Modal */}
+            {/* view Submission Modal */}
             {viewSubmissionModal && (
                 <dialog className="modal modal-open">
                     <div className="modal-box max-w-2xl">
                         <h3 className="text-xl font-bold mb-4">Submitted Assignments</h3>
+
+                        {/* 🔍 Search Input */}
+                        <input
+                            type="text"
+                            placeholder="Search by name or email"
+                            className="input input-bordered w-full mb-3 focus:outline-none"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+                        />
+
                         {subLoading ? (
                             <Loading />
-                        ) : submissions.length === 0 ? (
-                            <p className="text-center text-gray-500">No submissions yet.</p>
                         ) : (
-                            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                                {submissions.map(sub => (
-                                    <div key={sub._id} className="border border-gray-400 rounded p-4 bg-gray-50 shadow">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <img src={sub.studentImage} alt="student" className="w-10 h-10 rounded-full" />
-                                            <div className=''>
-                                                <p className="font-medium">{sub.studentName}</p>
-                                                <p className="text-gray-500">{sub.studentEmail}</p>
-                                            </div>
-                                        </div>
+                            <>
+                                {submissions.length === 0 ? (
+                                    <p className="text-center text-gray-500">No submissions yet.</p>
+                                ) : (
+                                    <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                                        {submissions
+                                            .filter(sub =>
+                                                sub.studentName.toLowerCase().includes(searchTerm) ||
+                                                sub.studentEmail.toLowerCase().includes(searchTerm)
+                                            )
+                                            .map(sub => (
+                                                <div key={sub._id} className="border border-gray-400 rounded p-4 bg-gray-50 shadow">
+                                                    <div className="flex items-center gap-3 mb-2">
+                                                        <img src={sub.studentImage} alt="student" className="w-10 h-10 rounded-full" />
+                                                        <div>
+                                                            <p className="font-medium">{sub.studentName}</p>
+                                                            <p className="text-gray-500">{sub.studentEmail}</p>
+                                                        </div>
+                                                    </div>
 
-                                        <div className='border border-gray-300 rounded p-2'>
-                                            <p className="mb-2 text-gray-700 whitespace-pre-wrap">
-                                                {sub.submissionText}
-                                            </p>
-                                            <div>
-                                                <a>Link : </a>
-                                                {sub.attachmentUrl && (
-                                                    <a href={sub.attachmentUrl}
-                                                        target="_blank" rel="noreferrer"
-                                                        className="text-blue-400 underline ml-1">
-                                                        View Attachment
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
+                                                    <div className='border border-gray-300 rounded p-2'>
+                                                        <p className="mb-2 text-gray-700 whitespace-pre-wrap">
+                                                            {sub.submissionText}
+                                                        </p>
+                                                        {sub.attachmentUrl && (
+                                                            <div>
+                                                                <a>Link :</a>
+                                                                <a href={sub.attachmentUrl} target="_blank" rel="noreferrer" className="text-blue-400 underline ml-1">
+                                                                    View Attachment
+                                                                </a>
+                                                            </div>
+                                                        )}
+                                                    </div>
 
-                                        <form onSubmit={(e) => handleReviewSubmit(e, sub._id)} className="mt-3 space-y-2">
-                                            <input type="number" name="marks" required defaultValue={sub.marks || ''} placeholder="Take Marks"
-                                                className="input input-bordered w-full" />
-                                            <textarea name="review" required defaultValue={sub.review || ''} placeholder="Write feedback..."
-                                                className="textarea textarea-bordered w-full" />
-                                            <button type="submit" className="btn btn-sm bg-blue-600 text-white">
-                                                Save Review
-                                            </button>
-                                        </form>
+                                                    <form onSubmit={(e) => handleReviewSubmit(e, sub._id)} className="mt-3 space-y-2">
+                                                        <input
+                                                            type="number"
+                                                            name="marks"
+                                                            required
+                                                            defaultValue={sub.marks || ''}
+                                                            placeholder="Take Marks"
+                                                            className="input input-bordered w-full"
+                                                        />
+                                                        <textarea
+                                                            name="review"
+                                                            required
+                                                            defaultValue={sub.review || ''}
+                                                            placeholder="Write feedback..."
+                                                            className="textarea textarea-bordered w-full"
+                                                        />
+                                                        <button type="submit" className="btn btn-sm bg-blue-600 text-white">
+                                                            Save Review
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            ))}
                                     </div>
-                                ))}
-                            </div>
+                                )}
+                            </>
                         )}
+
                         <div className="modal-action">
-                            <button className="btn" onClick={() => setViewSubmissionModal(null)}>Close</button>
+                            <button className="btn" onClick={() => { setViewSubmissionModal(null); setSearchTerm(''); }}>
+                                Close
+                            </button>
                         </div>
                     </div>
                 </dialog>
             )}
+
 
             {/* Create Assignment Modal */}
             {modalOpen && (
