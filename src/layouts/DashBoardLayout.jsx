@@ -3,7 +3,7 @@ import { FaHome, FaUserEdit, FaUser, FaChalkboardTeacher, FaBookOpen, FaSignOutA
 import { IoMdPersonAdd } from "react-icons/io";
 import { HiOutlineUsers } from "react-icons/hi";
 import { GiNotebook } from "react-icons/gi";
-import { MdOutlinePendingActions, MdPayments } from "react-icons/md";
+import { MdFavoriteBorder, MdOutlinePendingActions, MdPayments } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import logo from "../../public/eduNav.png"
 import useAuth from "../hooks/useAuth";
@@ -112,7 +112,7 @@ const DashBoardLayout = () => {
                                         `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }>
-                                    <FaCreditCard /> Wishlist
+                                    <MdFavoriteBorder size={20}/> Wishlist
                                 </NavLink>
                                 <NavLink to="/dashboard/payments"
                                     onClick={handleMobileNav}
@@ -252,7 +252,7 @@ const DashBoardLayout = () => {
                             handleLogout();
                             handleMobileNav();
                         }}
-                        className="flex items-center gap-2 p-2 rounded text-gray-500 hover:bg-gray-200 transition-colors duration-200"
+                        className="flex items-center gap-2 p-2 rounded text-gray-400 hover:bg-gray-200 transition-colors duration-200"
                     >
                         <FaSignOutAlt /> Logout
                     </button>

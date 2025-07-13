@@ -56,7 +56,7 @@ const AddClass = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow mt-6">
+        <div className="max-w-3xl lg:mx-auto p-6 bg-white rounded-lg shadow mt-10 mx-3 ">
             <h2 className="text-2xl font-bold mb-4 text-center">Add New Class</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
@@ -66,7 +66,7 @@ const AddClass = () => {
                     <input
                         type="text"
                         {...register('name', { required: true })}
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full focus:outline-none focus:border-blue-300"
                         placeholder="e.g. Advanced React"
                     />
                     {errors.name && <p className="text-red-500 text-sm">Class name is required</p>}
@@ -79,7 +79,7 @@ const AddClass = () => {
                         type="file"
                         accept="image/*"
                         {...register('image', { required: true })}
-                        className="file-input file-input-bordered w-full"
+                        className="file-input file-input-bordered w-full focus:outline-none focus:border-blue-300"
                     />
                     {errors.image && <p className="text-red-500 text-sm">Image is required</p>}
                 </div>
@@ -90,7 +90,7 @@ const AddClass = () => {
                     <input
                         type="number"
                         {...register('seats', { required: true, min: 1 })}
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full focus:outline-none focus:border-blue-300"
                         placeholder="Number of seats"
                     />
                     {errors.seats && <p className="text-red-500 text-sm">Seats must be at least 1</p>}
@@ -103,7 +103,7 @@ const AddClass = () => {
                         type="number"
                         step="0.01"
                         {...register('price', { required: true })}
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full focus:outline-none focus:border-blue-300"
                         placeholder="e.g. 49.99"
                     />
                     {errors.price && <p className="text-red-500 text-sm">Price is required</p>}
@@ -114,12 +114,12 @@ const AddClass = () => {
                     <label className="label">Description</label>
                     <textarea
                         {...register('description')}
-                        className="textarea textarea-bordered w-full"
+                        className="textarea textarea-bordered w-full focus:outline-none focus:border-blue-300"
                         placeholder="Write a short description"
                     ></textarea>
                 </div>
 
-                <button type="submit" disabled={uploading} className="btn btn-block bg-pink-500 text-white">
+                <button type="submit" disabled={uploading} className="btn btn-block bg-gray-500 hover:bg-gray-600 text-white">
                     {uploading ? 'Uploading...' : 'Add Class'}
                 </button>
             </form>

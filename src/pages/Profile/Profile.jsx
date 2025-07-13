@@ -2,13 +2,17 @@ import React from 'react';
 import { Link } from 'react-router';
 import { FaRegEdit } from "react-icons/fa";
 import useAuth from '../../hooks/useAuth';
+import useUserRole from '../../hooks/useUserRole';
+
 
 const Profile = () => {
     const { user } = useAuth();
+    const { role } = useUserRole();
+    console.log(role);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-10 px-4 md:px-6 font-des">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-600 text-center mb-10">User Profile</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-600 text-center mb-10">Profile</h2>
 
             <div className=" mx-auto bg-white rounded-3xl shadow-lg p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
 
@@ -19,6 +23,7 @@ const Profile = () => {
                         src={user?.photoURL}
                         alt="Profile"
                     />
+                    <h2 className='capitalize text-center bg-blue-900 p-2 rounded-2xl text-white font-medium mt-2'>{role}</h2>
                 </div>
 
                 {/* Info & Actions */}
