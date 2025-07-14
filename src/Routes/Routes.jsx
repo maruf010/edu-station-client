@@ -30,6 +30,7 @@ import Wishlist from "../pages/Dashboard/Student/Wishlist";
 import MyClassDetails from "../pages/Dashboard/Teacher/MyClassDetails";
 import StudentAssignments from "../pages/Dashboard/Student/StudentAssignments";
 import TeacherRoute from "./TeacherRoute";
+import AllClassesByAdmin from "../pages/Dashboard/Admin/AllClassesByAdmin";
 
 
 
@@ -166,10 +167,16 @@ export const router = createBrowserRouter([
             //         <MakeAdmin></MakeAdmin>
             //     </AdminRoute>
             // },
+            // {
+            //     path: 'pending-classes',
+            //     element: <AdminRoute>
+            //         <PendingClasses></PendingClasses>
+            //     </AdminRoute>
+            // },
             {
-                path: 'pending-classes',
+                path: 'all-classes',
                 element: <AdminRoute>
-                    <PendingClasses></PendingClasses>
+                    <AllClassesByAdmin></AllClassesByAdmin>
                 </AdminRoute>
             },
             {

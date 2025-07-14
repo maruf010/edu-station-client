@@ -8,7 +8,7 @@ const TeacherRequests = () => {
     const axiosSecure = useAxiosSecure();
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 1;
+    const itemsPerPage = 2;
     const [filteredRequests, setFilteredRequests] = useState([]);
 
     const { data: requests = [], isLoading, refetch } = useQuery({

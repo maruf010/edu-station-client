@@ -19,7 +19,7 @@ const MyEnrollClass = () => {
             return res.data;
         }
     });
-
+    console.log(enrolled);
     // Pagination logic
     const indexOfLast = currentPage * classesPerPage;
     const currentClasses = enrolled.slice(indexOfLast - classesPerPage, indexOfLast);

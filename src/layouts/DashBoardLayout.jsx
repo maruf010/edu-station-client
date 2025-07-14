@@ -112,7 +112,7 @@ const DashBoardLayout = () => {
                                         `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
                                         }`
                                     }>
-                                    <MdFavoriteBorder size={20}/> Wishlist
+                                    <MdFavoriteBorder size={20} /> Wishlist
                                 </NavLink>
                                 <NavLink to="/dashboard/payments"
                                     onClick={handleMobileNav}
@@ -172,16 +172,6 @@ const DashBoardLayout = () => {
                                     <FaChalkboardTeacher /> Teacher Requests
                                 </NavLink>
                                 <NavLink
-                                    to="/dashboard/pending-classes"
-                                    onClick={handleMobileNav}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
-                                        }`
-                                    }
-                                >
-                                    <MdOutlinePendingActions /> Pending Classes
-                                </NavLink>
-                                <NavLink
                                     to="/dashboard/active-teachers"
                                     onClick={handleMobileNav}
                                     className={({ isActive }) =>
@@ -191,6 +181,27 @@ const DashBoardLayout = () => {
                                 >
                                     <FaUserTie /> Active Teachers
                                 </NavLink>
+                                <NavLink
+                                    to="/dashboard/all-classes"
+                                    onClick={handleMobileNav}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
+                                        }`
+                                    }
+                                >
+                                    <MdOutlinePendingActions /> All Classes
+                                </NavLink>
+                                {/* <NavLink
+                                    to="/dashboard/pending-classes"
+                                    onClick={handleMobileNav}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-2 p-2 rounded transition-colors duration-200 ${isActive ? 'bg-gray-300 text-gray-500' : 'text-gray-400 hover:bg-gray-200'
+                                        }`
+                                    }
+                                >
+                                    <MdOutlinePendingActions /> Pending Classes
+                                </NavLink> */}
+
                                 <NavLink
                                     to="/dashboard/allPayments"
                                     onClick={handleMobileNav}

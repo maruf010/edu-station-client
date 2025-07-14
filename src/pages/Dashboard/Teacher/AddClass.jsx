@@ -116,7 +116,7 @@ const AddClass = () => {
                         {...register('description')}
                         className="textarea textarea-bordered w-full focus:outline-none focus:border-blue-300"
                         placeholder="Write a short description"
-                        maxLength={60}
+                        maxLength={70}
                     ></textarea>
                 </div>
 

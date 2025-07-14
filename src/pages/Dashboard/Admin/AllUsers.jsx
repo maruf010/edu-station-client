@@ -5,6 +5,9 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Loading from '../../../components/Shared/Loading';
 import toast from 'react-hot-toast';
 import useAuth from '../../../hooks/useAuth';
+import autoTable from 'jspdf-autotable';
+import jsPDF from 'jspdf';
+
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
@@ -12,7 +15,7 @@ const AllUsers = () => {
     const [search, setSearch] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const usersPerPage = 5;
+    const usersPerPage = 8;
 
     const { data: users = [], isLoading, error, refetch } = useQuery({
         queryKey: ['users'],
@@ -21,7 +24,7 @@ const AllUsers = () => {
             return res.data;
         }
     });
-
+    console.log(users);
     useEffect(() => {
         const filtered = users.filter(user =>
             user.displayName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -122,26 +125,55 @@ const AllUsers = () => {
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        doc.text("All Users Report", 14, 15);
+
+        const tableData = filteredUsers.map((user, idx) => [
+            idx + 1,
+            user.displayName || 'N/A',
+            user.email,
+            user.role || 'user'
+        ]);
+
+        autoTable(doc, {
+            startY: 20,
+            head: [['#', 'Name', 'Email', 'Role']],
+            body: tableData,
+        });
+
+        doc.save("all-users-report.pdf");
+    };
+
+
     if (isLoading) return <Loading />;
     if (error) return <p className="text-center text-red-500 mt-10">Error loading users.</p>;
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
-            <h2 className="text-2xl font-bold mb-6 text-center">All Users</h2>
+            <div className='flex justify-between  items-center'>
+                <div className="">
+                    <input
+                        type="text"
+                        placeholder="Search by name or email"
+                        className="input input-bordered w-full md:max-w-xs focus:outline-none"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
+                <h2 className="text-2xl font-bold mb-6 text-center">All Users</h2>
+                <button
+                    onClick={downloadPDF}
+                    className="btn btn-sm bg-green-600 hover:bg-green-700 text-white mb-4"
+                >
+                    📥 Download PDF
+                </button>
 
-            <div className="flex justify-center md:justify-end mb-4">
-                <input
-                    type="text"
-                    placeholder="Search by name or email"
-                    className="input input-bordered w-[50%] md:max-w-xs"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
             </div>
 
             <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200 text-sm md:text-base">
-                    <thead className="bg-gray-100">
+                <table className="min-w-full  divide-y divide-gray-200 text-sm md:text-base">
+                    <thead className="bg-blue-400">
                         <tr>
                             <th className="px-4 py-3">#</th>
                             <th className="px-4 py-3">Name</th>
@@ -150,14 +182,14 @@ const AllUsers = () => {
                             <th className="px-4 py-3">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-300">
                         {currentUsers.map((user, idx) => (
-                            <tr key={user._id} className="hover:bg-gray-50">
+                            <tr key={user._id} className="hover:bg-gray-100 transition">
                                 <td className="px-4 py-2">{indexOfFirstUser + idx + 1}</td>
                                 <td className="px-4 py-2">{user.displayName || 'N/A'}</td>
                                 <td className="px-4 py-2">{user.email}</td>
                                 <td className="px-4 py-2 capitalize">{user.role || 'user'}</td>
-                                <td className="px-4 py-2 flex flex-wrap gap-2">
+                                <td className="px-4 py-2 flex flex-wrap gap-2 justify-center items-center">
                                     {/* Make/Remove Admin Buttons */}
                                     {user.role === 'admin' ? (
                                         user.email === currentUser?.email ? (
@@ -197,7 +229,7 @@ const AllUsers = () => {
                                             onClick={() => handleDelete(user)}
                                             className="btn btn-sm bg-red-500 hover:bg-red-600 text-white"
                                         >
-                                            Remove
+                                            Delete user
                                         </button>
                                     )}
                                 </td>
