@@ -38,6 +38,7 @@ export const router = createBrowserRouter([
     {
         path: "/",
         Component: Root,
+        errorElement: <Forbidden></Forbidden>,
         children: [
             {
                 index: true,
@@ -49,7 +50,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/teach',
-                element:<PrivateRoute>
+                element: <PrivateRoute>
                     <ApplyTeacher></ApplyTeacher>
                 </PrivateRoute>
             },
@@ -68,6 +69,7 @@ export const router = createBrowserRouter([
     {
         path: '/',
         Component: AuthLayout,
+        errorElement: <Forbidden></Forbidden>,
         children: [
             {
                 path: '/login',
@@ -88,6 +90,7 @@ export const router = createBrowserRouter([
         element: <PrivateRoute>
             <DashBoardLayout></DashBoardLayout>
         </PrivateRoute>,
+        errorElement: <Forbidden></Forbidden>,
         children: [
             {
                 index: true,

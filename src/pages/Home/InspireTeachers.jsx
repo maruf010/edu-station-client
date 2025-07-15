@@ -17,7 +17,7 @@ const InspireTeachers = () => {
                     <p className="text-gray-700 mb-6 text-lg">
                         Share your expertise with learners worldwide. Whether you're a coding expert, design guru, or marketing wizard, EduStation gives you the tools to teach and inspire.
                     </p>
-                    <Link to="/teach" className="flex">
+                    <Link to="/teach" className="flex" data-aos="fade-up">
                         <div className="relative inline-flex items-center px-12 py-3 overflow-hidden text-lg font-medium text-cyan-500 border-2 border-cyan-500 rounded-full hover:text-white group hover:bg-gray-50">
                             <span className="absolute left-0 block w-full h-0 transition-all bg-cyan-500 opacity-100 group-hover:h-full top-1/2 group-hover:top-0 duration-400 ease"></span>
                             <span className="absolute right-0 flex items-center justify-start w-10 h-10 duration-300 transform translate-x-full group-hover:translate-x-0 ease">

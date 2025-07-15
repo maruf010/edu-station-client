@@ -24,7 +24,7 @@ const Banner = () => {
                         showStatus={false}     // ✅ hides index like "1/3"
                         emulateTouch
                         stopOnHover
-                        showIndicators={true} // ✅ shows the dots
+                        showIndicators={false} // ✅ shows the dots
                     >
                         <div>
                             <Lottie animationData={animation1} loop style={{ height: '400px' }} />
@@ -39,13 +39,13 @@ const Banner = () => {
                 </div>
                 {/* Text Section */}
                 <div className="md:w-1/2 text-center md:text-left">
-                    <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+                    <h1 className="text-4xl lg:text-5xl font-bold mb-6" data-aos="fade-right">
                         Welcome to Our Learning Platform
                     </h1>
-                    <p className="text-lg mb-8 text-gray-700">
+                    <p className="text-lg mb-8 text-gray-700" data-aos="fade-left">
                         Empowering your learning journey with innovative tools and resources.
                     </p>
-                    <div data-aos="fade-up" data-aos-duration="1000" className="flex items-center justify-center md:justify-start space-x-4">
+                    <div className="flex items-center justify-center md:justify-start space-x-4">
                         <Link to="/allClasses">
                             <Button label="Get Started" />
                         </Link>

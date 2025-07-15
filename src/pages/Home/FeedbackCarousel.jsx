@@ -26,7 +26,7 @@ const FeedbackCarousel = () => {
     const slidesToShow = feedbacks.length >= 3 ? 3 : feedbacks.length || 1;
 
     const settings = {
-        dots: true,
+        dots: false,
         arrows: false,
         infinite: feedbacks.length > slidesToShow,
         speed: 600,

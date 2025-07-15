@@ -130,7 +130,7 @@ const Navbar = () => {
 
 
     return (
-        <div className="sticky top-0 z-50 navbar bg-gradient-to-r from-slate-800 to-slate-600  px-2 md:px-7 lg:py-3 lg:px-20 p-0  backdrop-blur-sm">
+        <div className="sticky top-0 z-50 navbar bg-gradient-to-r from-slate-800 to-slate-600  px-2 md:px-7 lg:py-3 lg:px-20 py-2  backdrop-blur-sm">
             <div className="navbar-start">
                 {/* <div className="dropdown">
                     <div tabIndex={0} role="button" className="mr-2 lg:hidden cursor-pointer">
@@ -192,13 +192,13 @@ const Navbar = () => {
                                 <div className="mt-2 space-y-2 px-4" onClick={handleItemClick}>
                                     <Link
                                         to="/login"
-                                        className="flex items-center gap-2 text-gray-600 hover:text-green-500 transition-colors"
+                                        className="flex items-center gap-2 text-[18px] lg:text-[17px] text-gray-300 hover:text-white transition-colors"
                                     >
                                         <FiLogIn /> Login
                                     </Link>
                                     <Link
                                         to="/register"
-                                        className="flex items-center gap-2 text-gray-600 hover:text-green-500 transition-colors"
+                                        className="flex items-center gap-2 text-[18px] lg:text-[17px] text-gray-300 hover:text-white transition-colors"
                                     >
                                         <FiUserPlus /> Register
                                     </Link>
@@ -208,7 +208,7 @@ const Navbar = () => {
                     )}
                 </div>
                 <Link to='/'>
-                    <div className='flex-1 ml-1 lg:ml-0 flex items-center'>
+                    <div className='flex-1 ml-2 lg:ml-0 flex items-center'>
                         <img src={logo} alt="Coming soon" className="w-20 md:w-24  " />
                         {/* <span className='text-blue-500 font-medium ml-1 text-lg lg:text-2xl font-des' onClick={() => {
                             ; (prev) => !prev
