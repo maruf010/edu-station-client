@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent } from "@mui/material";
 import {
     ResponsiveContainer,
     RadialBarChart,
