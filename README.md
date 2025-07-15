@@ -4,7 +4,7 @@ Welcome to the **EduStation** client repository — the frontend application of 
 
 ## 🚀 Live Preview
 
-> EduStation Live Site ([or add your deployed link here](https://edu-station-3be49.web.app/))
+> EduStation Live Site ([Click here](https://edu-station-3be49.web.app/))
 
 ## 🛠️ Technologies Used
 
