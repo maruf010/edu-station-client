@@ -94,6 +94,7 @@ const AllClassesByAdmin = () => {
             setSelectedClass(cls);
             setIsProgressOpen(true);
         } catch (error) {
+            console.log(error);
             Swal.fire('Error', 'Failed to load progress', 'error');
         }
     };
