@@ -152,10 +152,11 @@ const ApplyTeacher = () => {
                                     <option value="">Select Category</option>
                                     <option value="Web Development">Web Development</option>
                                     <option value="UI/UX Design">UI/UX Design</option>
-                                    <option value="Data Science">Data Science</option>
-                                    <option value="Machine Learning">Machine Learning</option>
                                     <option value="Digital Marketing">Digital Marketing</option>
                                     <option value="Academic Skills">Academic Skills</option>
+                                    <option value="Machine Learning">Machine Learning</option>
+                                    <option value="Graphics and MS Office">Graphics and MS Office</option>
+                                    <option value="Data Science">Data Science</option>
                                 </select>
                                 {errors.category && <p className="text-red-500">Category is required</p>}
 

@@ -51,14 +51,18 @@ const FeedbackCarousel = () => {
 
     return (
         <section className="py-16">
+            <h2
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                className="uppercase text-center text-2xl md:text-3xl font-bold text-blue-700 mb-10">
+                What Our <span className="text-pink-500">Students Say</span>
+            </h2>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-blue-700 mb-10">
-                    What Our Students Say
-                </h2>
 
                 <Slider {...settings}>
                     {feedbacks.map((fb, index) => (
-                        <div key={index} className="px-4 py-5 h-60">
+                        <div key={index} className="px-4 py-5 h-64" data-aos="fade-up"
+                            data-aos-duration="1000">
                             <div className="bg-white p-6 rounded-lg relative h-full shadow-md border border-gray-200">
                                 <FaQuoteLeft className="absolute top-4 left-4 text-3xl text-blue-300 opacity-40" />
                                 <div className="h-8 mb-2">

@@ -5,9 +5,10 @@ import Lottie from 'lottie-react';
 
 const InspireTeachers = () => {
     return (
-        <section className="py-20">
+        <section className="pt-6 lg:pt-14 ">
+            <h2 data-aos="fade-up"
+                data-aos-duration="1000" className='text-2xl md:text-3xl font-bold text-blue-600 uppercase text-center'>Become an <span className='text-pink-500'>Instructor</span></h2>
             <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse md:flex-row items-center gap-10">
-
                 {/* Text Content */}
                 <div className="flex-1 text-center md:text-left" data-aos="fade-right" data-aos-offset="100">
                     <h2 className="text-4xl font-bold text-blue-700 mb-4">
@@ -24,7 +25,7 @@ const InspireTeachers = () => {
                             </span>
                             <span className="relative">
                                 <span className='flex items-center justify-center'>
-                                    <FaChalkboardTeacher className="mr-2" size={25}/>
+                                    <FaChalkboardTeacher className="mr-2" size={25} />
                                     <h2>Apply to Teach</h2></span>
                             </span>
                         </div>
@@ -33,7 +34,7 @@ const InspireTeachers = () => {
 
                 {/* Image */}
                 <div className="flex-1"
-                data-aos="fade-left" data-aos-offset="100">
+                    data-aos="fade-left" data-aos-offset="100">
                     <Lottie animationData={teacherLottie} loop style={{ height: '400px' }} />
                 </div>
 

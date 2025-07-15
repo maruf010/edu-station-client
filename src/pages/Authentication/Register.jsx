@@ -86,8 +86,8 @@ const Register = () => {
                         {/* Name */}
                         <div>
                             <label className="block text-gray-700">Name</label>
-                            <input type="text" {...register('name', { required: true })} className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" placeholder="Your Name" />
-                            {errors.name && <p className="text-sm text-red-500 mt-1">Name is required</p>}
+                            <input type="text" {...register('name', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400" placeholder="Your Name" />
+                            {errors.name && <p className="text-sm text-red-500 mt-1 ">Name is required</p>}
                         </div>
 
                         {/* Photo Upload */}
@@ -99,13 +99,13 @@ const Register = () => {
                         {/* Email */}
                         <div>
                             <label className="block text-gray-700">Email</label>
-                            <input type="email" {...register('email', { required: true })} className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400" placeholder="Your Email" />
+                            <input type="email" {...register('email', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400" placeholder="Your Email" />
                             {errors.email && <p className="text-sm text-red-500 mt-1">Email is required</p>}
                         </div>
 
                         {/* Password */}
                         <div>
-                            <label className="block text-gray-700">Password</label>
+                            <label className="block text-gray-700 ">Password</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
@@ -114,7 +114,7 @@ const Register = () => {
                                         minLength: 6,
                                         pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/
                                     })}
-                                    className="w-full mt-1 px-4 py-2 pr-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+                                    className="w-full mt-1 px-4 py-2 pr-10 border border-gray-300 rounded-md focus:ring-1 focus:outline-none focus:ring-blue-400"
                                     placeholder="Your Password"
                                 />
                                 <motion.span

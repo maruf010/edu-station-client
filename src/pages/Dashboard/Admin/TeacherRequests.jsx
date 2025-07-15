@@ -142,7 +142,7 @@ const TeacherRequests = () => {
                                         </td>
                                         <td>{req.name}</td>
                                         <td>{req.email}</td>
-                                        <td>{req.experience}</td>
+                                        <td className='capitalize'>{req.experience}</td>
                                         <td>{req.title}</td>
                                         <td>{req.category}</td>
                                         <td>

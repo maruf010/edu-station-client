@@ -7,10 +7,11 @@ import Loading from '../../components/Shared/Loading';
 
 const sliderSettings = {
     dots: true,
+    arrows: false,
     infinite: true,
-    speed: 800,
+    speed: 1000,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2500,
     slidesToShow: 3,
     slidesToScroll: 1,
     responsive: [
@@ -37,15 +38,18 @@ const PopularClasses = () => {
     // Top 3 by enrolled
     const popularClasses = [...approvedClasses]
         .sort((a, b) => (b.enrolled || 0) - (a.enrolled || 0))
-        .slice(0, 3);
+        .slice(0, 4);
 
     const showSlider = popularClasses.length > 2;
 
     return (
-        <section className="py-16 ">
+        <section className="py-8 ">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-                    Popular Classes
+                <h2
+                    data-aos="fade-up"
+                    data-aos-duration="1000"
+                    className="text-blue-500 uppercase text-3xl font-bold mb-8 lg:mb-14 text-center">
+                    Popular <span className='text-pink-500'>Classes</span>
                 </h2>
 
                 {showSlider ? (
@@ -57,7 +61,7 @@ const PopularClasses = () => {
                         ))}
                     </Slider>
                 ) : (
-                    <div className={`grid grid-cols-1 sm:grid-cols-${popularClasses.length} gap-6`}>
+                    <div className={` grid grid-cols-1 sm:grid-cols-${popularClasses.length} gap-6`}>
                         {popularClasses.map((cls) => (
                             <ClassCard key={cls._id} cls={cls} />
                         ))}
@@ -69,7 +73,10 @@ const PopularClasses = () => {
 };
 
 const ClassCard = ({ cls }) => (
-    <div className="bg-white rounded shadow hover:shadow-lg transition duration-300">
+    <div
+        data-aos="fade-up"
+        data-aos-duration="1000"
+        className="bg-white rounded shadow hover:shadow-lg transition duration-300">
         <img src={cls.image} alt={cls.name} className="w-full h-48 object-cover rounded-t" />
         <div className="p-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-1">{cls.name}</h3>

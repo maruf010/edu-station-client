@@ -45,7 +45,7 @@ const Banner = () => {
                     <p className="text-lg mb-8 text-gray-700">
                         Empowering your learning journey with innovative tools and resources.
                     </p>
-                    <div className="flex items-center justify-center md:justify-start space-x-4">
+                    <div data-aos="fade-up" data-aos-duration="1000" className="flex items-center justify-center md:justify-start space-x-4">
                         <Link to="/allClasses">
                             <Button label="Get Started" />
                         </Link>

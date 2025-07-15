@@ -28,7 +28,7 @@ const PerformanceStats = () => {
     ];
 
     return (
-        <section ref={ref} className="py-16 px-6 lg:px-20">
+        <section ref={ref} className="py-12 px-6 lg:px-16">
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-12">
                 {/* Left Info */}
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-6 lg:w-1/2" data-aos="fade-right" >

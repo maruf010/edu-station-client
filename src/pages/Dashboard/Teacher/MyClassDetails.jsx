@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Loading from '../../../components/Shared/Loading';
+import { FaBell } from "react-icons/fa";
+
 
 const MyClassDetails = () => {
     const { id: classId } = useParams();
@@ -14,6 +16,8 @@ const MyClassDetails = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [viewSubmissionModal, setViewSubmissionModal] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [prevSubmissionCounts, setPrevSubmissionCounts] = useState({});
+    const [readSubmissionIds, setReadSubmissionIds] = useState([]);
     const { register, handleSubmit, reset } = useForm();
 
     // ✅ Get class info (to use class name)
@@ -22,7 +26,7 @@ const MyClassDetails = () => {
         queryFn: () => axiosSecure.get(`/class/${classId}`).then(res => res.data),
         enabled: !!classId,
     });
-    console.log(classData);
+    // console.log(classData);
     const { data: summary = {}, isLoading: sumLoading } = useQuery({
         queryKey: ['class-summary', classId],
         queryFn: () => axiosSecure.get(`/classes/${classId}/summary`).then(res => res.data),
@@ -40,6 +44,7 @@ const MyClassDetails = () => {
         queryFn: () => axiosSecure.get(`/submissions/by-assignment/${viewSubmissionModal}`).then(res => res.data),
         enabled: !!viewSubmissionModal,
     });
+    console.log(submissions);
 
     const markReviewMutation = useMutation({
         mutationFn: ({ id, marks, review }) =>
@@ -50,6 +55,7 @@ const MyClassDetails = () => {
         },
         onError: () => Swal.fire('Error', 'Failed to save marks', 'error'),
     });
+
 
     const handleReviewSubmit = (e, id) => {
         e.preventDefault();
@@ -79,13 +85,34 @@ const MyClassDetails = () => {
         });
     };
 
+
+    useEffect(() => {
+        setPrevSubmissionCounts(prevCounts => {
+            const updatedCounts = { ...prevCounts };
+            assignments.forEach(asg => {
+                if (!(asg._id in updatedCounts)) {
+                    updatedCounts[asg._id] = asg.totalSubmissions || 0;
+                }
+            });
+            return updatedCounts;
+        });
+    }, [assignments]);
+
+    const handleViewSubmission = (id) => {
+        setViewSubmissionModal(id);
+        setReadSubmissionIds(prev => [...new Set([...prev, id])]); // unique করে রাখা
+    };
+
+
+
+
     if (sumLoading || asgLoading || classLoading) return <Loading />;
 
     return (
         <div className="max-w-4xl mx-auto p-3 py-8 space-y-6">
-            <h2 className="text-3xl font-bold text-center">{classData.name} Class Details</h2>
+            <h2 className="text-3xl font-bold text-center bg-blue-900 text-white p-2 uppercase">{classData.name} Class Details</h2>
 
-            {/* Progress */}
+            {/* Progress count*/}
             <div className="grid grid-cols-3 gap-3">
                 <div className="bg-white shadow rounded p-6 text-center">
                     <p className="text-sm text-gray-500">Total Enrollments</p>
@@ -111,23 +138,55 @@ const MyClassDetails = () => {
                 {assignments.length === 0 ? (
                     <p className="text-center text-gray-500">No assignments yet.</p>
                 ) : (
-                    <ul className="space-y-3">
-                        {assignments.map((item) => (
-                            <li key={item._id} className="border p-4 rounded hover:bg-gray-50">
-                                <p className="font-medium">{item.title}</p>
-                                <p className="text-sm text-gray-600">{item.description}</p>
-                                <p className="text-xs mt-1">
-                                    Deadline: {new Date(item.deadline).toLocaleDateString()}
-                                </p>
-                                <button
-                                    className="btn btn-sm mt-2"
-                                    onClick={() => setViewSubmissionModal(item._id)}
-                                >
-                                    View Submissions
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+
+                    <div className='h-[50vh] overflow-y-auto space-y-3'>
+                        <ul className="space-y-3">
+                            {assignments.map((item) => {
+
+                                const currentSubmissionCount = item.totalSubmissions || 0;
+                                const previousCount = prevSubmissionCounts[item._id] || 0;
+                                const newCount = currentSubmissionCount - previousCount;
+                                const isUnread = !readSubmissionIds.includes(item._id) && newCount > 0;
+
+                                return (
+                                    <li key={item._id} className="border border-gray-300 p-4 rounded hover:bg-gray-50">
+                                        <p className="font-medium">{item.title}</p>
+                                        <p className="text-sm text-gray-600">{item.description}</p>
+                                        <p className="text-xs mt-1">
+                                            Deadline: {new Date(item.deadline).toLocaleDateString()}
+                                        </p>
+
+                                        <div className='flex items-center justify-between'>
+                                            <button
+                                                className={`btn btn-sm mt-2 relative overflow-hidden flex items-center gap-2 ${isUnread ? 'animate-pulse ring-2 ring-yellow-300 ring-offset-2' : ''
+                                                    } bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:scale-105 transition-transform duration-300`}
+                                                onClick={() => handleViewSubmission(item._id)}
+                                            >
+                                                {/* 🔔 Bell icon শুধুমাত্র unread থাকলে */}
+                                                {isUnread && (
+                                                    <FaBell className="text-yellow-300 animate-bounce" />
+                                                )}
+
+                                                View Submissions
+
+                                                {/* 🔴 Unread count badge */}
+                                                {isUnread && (
+                                                    <span className="ml-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                                        +{newCount}
+                                                    </span>
+                                                )}
+                                            </button>
+
+                                            <div className="ml-1 bg-green-100 text-black text-xs font-semibold p-2 border border-gray-300 rounded">
+                                                Total Submission : {currentSubmissionCount ? currentSubmissionCount : 0}
+                                            </div>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+
+                        </ul>
+                    </div>
                 )}
             </div>
 
@@ -139,7 +198,7 @@ const MyClassDetails = () => {
                         <input
                             type="text"
                             placeholder="Search by name or email"
-                            className="input input-bordered w-full mb-3"
+                            className="input input-bordered w-full mb-3 focus:outline-none focus:border-blue-300"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
                         />
@@ -155,12 +214,12 @@ const MyClassDetails = () => {
                                         sub.studentEmail.toLowerCase().includes(searchTerm)
                                     )
                                     .map(sub => (
-                                        <div key={sub._id} className="border rounded p-4 bg-gray-50 shadow">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <img src={sub.studentImage} alt="student" className="w-10 h-10 rounded-full" />
+                                        <div key={sub._id} className="border-2 border-gray-300 rounded p-2 bg-gray-50 shadow">
+                                            <div className="flex items-center gap-3 mb-2 bg-[#000080] p-2 rounded">
+                                                <img src={sub.studentImage} alt="student" className=" w-10 h-10 rounded-full" />
                                                 <div>
-                                                    <p className="font-medium">{sub.studentName}</p>
-                                                    <p className="text-gray-500">{sub.studentEmail}</p>
+                                                    <p className="font-medium text-gray-300">{sub.studentName}</p>
+                                                    <p className="text-gray-400">{sub.studentEmail}</p>
                                                 </div>
                                             </div>
                                             <div className='border border-gray-300 rounded p-2'>
@@ -179,16 +238,18 @@ const MyClassDetails = () => {
                                                     required
                                                     defaultValue={sub.marks || ''}
                                                     placeholder="Take Marks"
-                                                    className="input input-bordered w-full"
+                                                    className="input input-bordered w-full focus:outline-none focus:border-blue-300"
                                                 />
                                                 <textarea
                                                     name="review"
                                                     required
                                                     defaultValue={sub.review || ''}
                                                     placeholder="Write feedback..."
-                                                    className="textarea textarea-bordered w-full"
+                                                    className="textarea textarea-bordered w-full focus:outline-none focus:border-blue-300"
                                                 />
-                                                <button type="submit" className="btn btn-sm bg-blue-600 text-white">Save Review</button>
+                                                <div className='flex justify-end'>
+                                                    <button type="submit" className="btn btn-sm  bg-green-600 text-white">Save Review</button>
+                                                </div>
                                             </form>
                                         </div>
                                     ))}
@@ -227,3 +288,4 @@ const MyClassDetails = () => {
 };
 
 export default MyClassDetails;
+

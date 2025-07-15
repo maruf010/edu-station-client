@@ -16,7 +16,7 @@ const AllClasses = () => {
     const [search, setSearch] = useState('');
     const [priceRange, setPriceRange] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
-    const classesPerPage = 3;
+    const classesPerPage = 6;
 
     // Scroll to top on page change
     useEffect(() => {
@@ -73,19 +73,10 @@ const AllClasses = () => {
     return (
         <div className='bg-gray-300 overflow-hidden'>
             <div className=" max-w-7xl min-h-screen mx-auto p-6 ">
-                <h2 className="text-3xl font-bold text-center mb-6 text-gray-500">Explore Our Classes</h2>
+                <h2 className="text-2xl font-bold text-center mb-6 text-gray-500">Explore Our Classes</h2>
 
                 {/* Filter Controls */}
                 <div className="flex gap-4 mb-6 justify-between items-center">
-                    {/* Search */}
-                    <input
-                        type="text"
-                        placeholder="Search class by Course Name..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="input input-bordered w-full max-w-xs focus:outline-none focus:border-pink-400"
-                    />
-
                     {/* Price Filter */}
                     <div>
                         <select
@@ -98,6 +89,14 @@ const AllClasses = () => {
                             <option value="high">High ($100+)</option>
                         </select>
                     </div>
+                    {/* Search */}
+                    <input
+                        type="text"
+                        placeholder="🔍 Search class by Course Name..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="input input-bordered w-full max-w-xs focus:outline-none focus:border-pink-400"
+                    />
                 </div>
 
                 {/* Classes */}
@@ -105,7 +104,10 @@ const AllClasses = () => {
 
                     {currentClasses.map(cls => (
 
-                        <div key={cls._id} className="card bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition">
+                        <div key={cls._id}
+                            data-aos="fade-up"
+                            data-aos-duration="1000"
+                            className="card bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition">
 
                             <figure>
                                 <img src={cls.image} alt={cls.name} className="h-52 w-full object-cover" />

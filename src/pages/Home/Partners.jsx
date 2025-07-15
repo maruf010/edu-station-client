@@ -20,24 +20,27 @@ const partners = [
 
 const Partners = () => {
     return (
-        <section className="py-10 lg:py-20 ">
-            <div className="max-w-6xl mx-auto px-4 text-center">
-                <h2 className="text-2xl md:text-3xl font-bold text-blue-600 mb-10">
-                    Trusted by <span className="text-pink-500">Global Learning Partners</span> 
+        <section className="py-12 lg:py-24 ">
+            <div className="max-w-7xl mx-auto px-4 text-center">
+                <h2
+                    data-aos="fade-up"
+                    data-aos-duration="1000"
+                    className="text-2xl md:text-3xl font-bold text-blue-600 mb-8 lg:mb-12 uppercase">
+                    Trusted by <span className="text-pink-500" >Global Learning Partners</span>
                 </h2>
 
                 <Marquee
-                    gradient={false}
-                    speed={50}
+                    gradient={true}
+                    speed={80}
                     pauseOnHover={true}
-                    className="flex gap-12"
+                    className="flex gap-5 lg:gap-12"
                 >
                     {partners.map((partner, i) => (
-                        <div key={i} className="mx-10 flex flex-col items-center">
+                        <div key={i} className="mx-10 flex flex-col items-center p-5">
                             <img
                                 src={partner.logo}
                                 alt={partner.name}
-                                className="mb-2 h-16 w-auto object-contain"
+                                className=" h-16 w-auto object-contain"
                             />
                             <p className="text-sm text-gray-600">{partner.name}</p>
                         </div>

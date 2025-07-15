@@ -123,7 +123,7 @@ const ActiveTeacher = () => {
                 <input
                     type="text"
                     placeholder="🔍 Search by name or email"
-                    className="input input-bordered w-full max-w-xs focus:outline-none"
+                    className="input input-bordered w-full lg:max-w-xs focus:border-blue-400 focus:outline-none"
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
@@ -134,7 +134,7 @@ const ActiveTeacher = () => {
 
             <div className="overflow-x-auto shadow  rounded-lg">
                 <table className="min-w-full text-left text-sm">
-                    <thead className="bg-gray-100 border-b border-gray-400">
+                    <thead className="bg-blue-500 text-white border-b border-gray-400">
                         <tr>
                             <th className="px-4 py-3">#</th>
                             <th className="px-4 py-3">Name</th>

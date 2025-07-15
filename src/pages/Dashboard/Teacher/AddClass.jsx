@@ -4,6 +4,7 @@ import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import Loading from '../../../components/Shared/Loading';
 
 const AddClass = () => {
     const { user } = useAuth();
@@ -121,7 +122,7 @@ const AddClass = () => {
                 </div>
 
                 <button type="submit" disabled={uploading} className="btn btn-block bg-gray-500 hover:bg-gray-600 text-white">
-                    {uploading ? 'Uploading...' : 'Add Class'}
+                    {uploading ? <Loading></Loading> : 'Add Class'}
                 </button>
             </form>
         </div>
