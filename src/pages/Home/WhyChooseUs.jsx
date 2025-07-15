@@ -29,7 +29,8 @@ const WhyChooseUs = () => {
     return (
         <section className="py-16 text-gray-800">
             <div className="max-w-6xl mx-auto px-4 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-12 text-blue-700">
+                <h2 className="text-3xl md:text-4xl font-bold mb-12 text-blue-700" data-aos="fade-up"
+                    data-aos-duration="1000">
                     Why Choose <span className="text-pink-500">EduStation?</span>
                 </h2>
 

@@ -86,47 +86,45 @@ const DashboardHome = () => {
     return (
         <div className="p-6 space-y-6 min-h-screen bg-gray-200">
             <h2 className="text-3xl font-bold mb-4 text-gray-500">Dashboard Overview</h2>
+            <div className="bg-gradient-to-r from-slate-500 to-slate-800 p-4 rounded-lg shadow mt-10">
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-6">
+                    {role === "admin" && (
+                        <>
+                            <StatCard title="Users" value={summary?.users} color="bg-blue-100" />
+                            <StatCard title="Classes" value={summary?.classes} color="bg-green-100" />
+                            <StatCard title="Enrollments" value={summary?.enrollments} color="bg-[#dad7cd] " />
+                            <StatCard title="Teachers" value={summary?.teachers} color="bg-purple-100" />
+                        </>
+                    )}
 
-            <div className="grid grid-cols-2 xl:grid-cols-4 gap-6">
-                {role === "admin" && (
-                    <>
-                        <StatCard title="Users" value={summary?.users} color="bg-blue-100" />
-                        <StatCard title="Classes" value={summary?.classes} color="bg-green-100" />
-                        <StatCard title="Enrollments" value={summary?.enrollments} color="bg-[#dad7cd] " />
-                        <StatCard title="Teachers" value={summary?.teachers} color="bg-purple-100" />
-                    </>
-                )}
+                    {role === "teacher" && (
+                        <>
+                            <StatCard title="My Classes" value={summary?.myClasses} color="bg-blue-100" />
+                            <StatCard title="My Students" value={summary?.myStudents} color="bg-green-100" />
+                            <StatCard
+                                title="My Earnings"
+                                value={`$${summary?.myEarnings?.toFixed(2)}`}
+                                color="bg-yellow-100"
+                            />
+                        </>
+                    )}
 
-                {role === "teacher" && (
-                    <>
-                        <StatCard title="My Classes" value={summary?.myClasses} color="bg-blue-100" />
-                        <StatCard title="My Students" value={summary?.myStudents} color="bg-green-100" />
-                        <StatCard
-                            title="My Earnings"
-                            value={`$${summary?.myEarnings?.toFixed(2)}`}
-                            color="bg-yellow-100"
-                        />
-                    </>
-                )}
-
-                {role === "student" && (
-                    <>
-                        <StatCard
-                            title="My Enrollments"
-                            value={summary?.myEnrollments}
-                            color="bg-blue-100"
-                        />
-                        <StatCard
-                            title="Amount Spent"
-                            value={`$${summary?.mySpent?.toFixed(2)}`}
-                            color="bg-green-100"
-                        />
-                    </>
-                )}
-            </div>
-
-            <div className="bg-linear-65 from-[#669bbc] to-[#03045e] p-4 rounded-lg shadow mt-10">
-                <h3 className="text-xl font-semibold mb-4">Analytics Overview</h3>
+                    {role === "student" && (
+                        <>
+                            <StatCard
+                                title="My Enrollments"
+                                value={summary?.myEnrollments}
+                                color="bg-blue-100"
+                            />
+                            <StatCard
+                                title="Amount Spent"
+                                value={`$${summary?.mySpent?.toFixed(2)}`}
+                                color="bg-green-100"
+                            />
+                        </>
+                    )}
+                </div>
+                <h3 className="text-xl font-semibold my-4 text-gray-200">Analytics Overview</h3>
                 <SimpleRadialBarChart role={role} data={summary} />
             </div>
         </div>

@@ -27,6 +27,7 @@ const FeedbackCarousel = () => {
 
     const settings = {
         dots: true,
+        arrows: false,
         infinite: feedbacks.length > slidesToShow,
         speed: 600,
         autoplay: true,

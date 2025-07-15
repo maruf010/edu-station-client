@@ -26,9 +26,9 @@ const PaymentsHistory = () => {
         <div className="max-w-6xl mx-auto p-6">
             <h2 className="text-3xl font-semibold text-center mb-6">My Payment History</h2>
 
-            <div className="overflow-x-auto shadow border rounded-lg">
+            <div className="overflow-x-auto shadow border border-gray-400 rounded-lg">
                 <table className="min-w-full text-sm text-left">
-                    <thead className="bg-gray-100 border-b">
+                    <thead className="bg-gray-100 border-b border-gray-400">
                         <tr>
                             <th className="px-4 py-3">#</th>
                             <th className="px-4 py-3">Date</th>

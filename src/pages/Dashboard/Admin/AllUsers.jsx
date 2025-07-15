@@ -151,7 +151,8 @@ const AllUsers = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className='flex justify-between  items-center'>
+            <h2 className="text-2xl font-bold text-center">All Users</h2>
+            <div className='flex justify-between  items-center my-2'>
                 <div className="">
                     <input
                         type="text"
@@ -161,10 +162,10 @@ const AllUsers = () => {
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
-                <h2 className="text-2xl font-bold mb-6 text-center">All Users</h2>
+
                 <button
                     onClick={downloadPDF}
-                    className="btn btn-sm bg-green-600 hover:bg-green-700 text-white mb-4"
+                    className="btn btn-sm bg-green-600 hover:bg-green-700 text-white"
                 >
                     📥 Download PDF
                 </button>

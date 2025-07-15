@@ -13,9 +13,9 @@ const partners = [
     { name: "Coursera", logo: courseraLogo },
     { name: "Google", logo: googleLogo },
     { name: "edureka", logo: eduReka },
+    { name: "bdJobs", logo: bdJobs },
     { name: "programming Hero", logo: programmingHero },
     { name: "Robi 10 minutes", logo: minutes },
-    { name: "bdJobs", logo: bdJobs },
 ];
 
 const Partners = () => {
@@ -30,13 +30,13 @@ const Partners = () => {
                 </h2>
 
                 <Marquee
-                    gradient={true}
+                    gradient={false}
                     speed={80}
                     pauseOnHover={true}
                     className="flex gap-5 lg:gap-12"
                 >
                     {partners.map((partner, i) => (
-                        <div key={i} className="mx-10 flex flex-col items-center p-5">
+                        <div key={i} className="mx-10 flex flex-col items-center p-5 hover:shadow-lg transform transition-transform duration-300 hover:scale-105">
                             <img
                                 src={partner.logo}
                                 alt={partner.name}

@@ -45,9 +45,8 @@ const MyEnrollClass = () => {
 
                                 <div className='text-end mt-3'>
                                     <Link to={`/dashboard/assignments/${enroll.classId}`}>
-                                        <button className="btn btn-sm bg-green-600 text-white hover:bg-green-800">
-                                            Continue
-                                        </button>
+                                        <button className="btn bg-green-600 text-white hover:bg-green-700">
+                                            Continue                                        </button>
                                     </Link>
                                 </div>
                             </div>

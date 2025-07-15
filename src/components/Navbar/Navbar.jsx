@@ -40,7 +40,7 @@ const Navbar = () => {
     }
 
     const links = (
-        <div className='flex flex-col lg:flex-row gap-3  text-[16px] lg:gap-5 pl-2 list-none'>
+        <div className='flex flex-col lg:flex-row gap-3  text-[18px] lg:text-[17px] lg:gap-5 pl-2 list-none'>
             <li>
                 <NavLink to='/'
                     onClick={() => {
@@ -48,25 +48,25 @@ const Navbar = () => {
                         window.scrollTo({ top: 0, behavior: 'smooth' })
                     }}
                     className={({ isActive }) =>
-                        `group relative flex items-center gap-1 px-2 py-1
+                        `group relative flex items-center  gap-1 px-2 py-1
                             ${isActive
-                            ? 'text-blue-500'
-                            : 'text-gray-500 hover:text-blue-500 transition-colors duration-200'}`}>
+                            ? 'text-[#FE7743]'
+                            : 'text-gray-300 hover:text-white transition-colors duration-200'}`}>
                     <FaHome />
                     Home
-                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-400 transition-all duration-400 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gray-200 transition-all duration-400 group-hover:w-full"></span>
                 </NavLink>
             </li>
             <li>
                 <NavLink to='/allClasses' className={({ isActive }) =>
                     `group relative flex items-center gap-1 px-2 py-1
                             ${isActive
-                        ? 'text-blue-500'
-                        : 'text-gray-500 hover:text-blue-500 transition-colors duration-200'}`
+                        ? 'text-[#FE7743]'
+                        : 'text-gray-300 hover:text-white transition-colors duration-200'}`
                 }>
                     <FaBookOpen />
                     All Classes
-                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-400 transition-all duration-400 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gray-200 transition-all duration-400 group-hover:w-full"></span>
                 </NavLink>
             </li>
             {
@@ -77,13 +77,13 @@ const Navbar = () => {
                         className={({ isActive }) =>
                             `group relative flex items-center gap-1 px-2 py-1
                             ${isActive
-                                ? 'text-blue-500'
-                                : 'text-gray-500 hover:text-blue-500 transition-colors duration-200'}`
+                                ? 'text-[#FE7743]'
+                                : 'text-gray-300 hover:text-white transition-colors duration-200'}`
                         }
                     >
                         <FaChalkboardTeacher />
                         Teach on EduStation
-                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-400 transition-all duration-400 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gray-200 transition-all duration-500 group-hover:w-full"></span>
                     </NavLink>
                 </li>
 
@@ -130,7 +130,7 @@ const Navbar = () => {
 
 
     return (
-        <div className="sticky top-0 z-50 navbar shadow px-5 md:px-7 lg:py-3 lg:px-20 p-0  bg-white/30 backdrop-blur-sm">
+        <div className="sticky top-0 z-50 navbar bg-gradient-to-r from-slate-800 to-slate-600  px-2 md:px-7 lg:py-3 lg:px-20 p-0  backdrop-blur-sm">
             <div className="navbar-start">
                 {/* <div className="dropdown">
                     <div tabIndex={0} role="button" className="mr-2 lg:hidden cursor-pointer">
@@ -171,17 +171,17 @@ const Navbar = () => {
                     {/* Hamburger Icon */}
                     <button
                         onClick={() => setOpen(!open)}
-                        className=" focus:outline-none text-gray-600"
+                        className=" focus:outline-none p-0 text-gray-400"
                         aria-label="Toggle menu"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h10m-10 6h16" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M4 6h16M4 12h10m-10 6h16" />
                         </svg>
                     </button>
 
                     {/* Dropdown Menu */}
                     {open && (
-                        <div className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg z-50 py-2">
+                        <div className="absolute left-0 mt-2 w-56 bg-gradient-to-r from-slate-500 to-slate-700 rounded-lg shadow-lg z-50 py-2">
                             {/* Dynamic Links */}
                             <div onClick={handleItemClick}>
                                 {links}
@@ -208,7 +208,7 @@ const Navbar = () => {
                     )}
                 </div>
                 <Link to='/'>
-                    <div className='flex-1 flex items-center'>
+                    <div className='flex-1 ml-1 lg:ml-0 flex items-center'>
                         <img src={logo} alt="Coming soon" className="w-20 md:w-24  " />
                         {/* <span className='text-blue-500 font-medium ml-1 text-lg lg:text-2xl font-des' onClick={() => {
                             ; (prev) => !prev
@@ -252,12 +252,12 @@ const Navbar = () => {
                     </label>
                 </div> */}
                 {/* user rounded animated*/}
-                <span className="relative flex">
+                <span className="relative flex mr-2">
                     <span
                         className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-gray-400 opacity-100 ml-1 mt-1">
                     </span>
                     {/* user profile */}
-                    <div className='dropdown dropdown-end duration-600 relative'>
+                    <div className='dropdown dropdown-end duration-600 relative '>
 
                         <div
                             tabIndex={0}

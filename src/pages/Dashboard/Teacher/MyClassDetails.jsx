@@ -109,7 +109,7 @@ const MyClassDetails = () => {
     if (sumLoading || asgLoading || classLoading) return <Loading />;
 
     return (
-        <div className="max-w-4xl mx-auto p-3 py-8 space-y-6">
+        <div className="max-w-4xl mx-auto p-3 py-6 space-y-4">
             <h2 className="text-3xl font-bold text-center bg-blue-900 text-white p-2 uppercase">{classData.name} Class Details</h2>
 
             {/* Progress count*/}
@@ -152,13 +152,13 @@ const MyClassDetails = () => {
                                     <li key={item._id} className="border border-gray-300 p-4 rounded hover:bg-gray-50">
                                         <p className="font-medium">{item.title}</p>
                                         <p className="text-sm text-gray-600">{item.description}</p>
-                                        <p className="text-xs mt-1">
+                                        <p className="text-xs mt-1 font-medium">
                                             Deadline: {new Date(item.deadline).toLocaleDateString()}
                                         </p>
 
-                                        <div className='flex items-center justify-between'>
+                                        <div className='flex items-center justify-between mt-3'>
                                             <button
-                                                className={`btn btn-sm mt-2 relative overflow-hidden flex items-center gap-2 ${isUnread ? 'animate-pulse ring-2 ring-yellow-300 ring-offset-2' : ''
+                                                className={`btn btn-sm relative overflow-hidden flex items-center gap-2 ${isUnread ? 'animate-pulse ring-2 ring-yellow-300 ring-offset-2' : ''
                                                     } bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:scale-105 transition-transform duration-300`}
                                                 onClick={() => handleViewSubmission(item._id)}
                                             >
@@ -270,9 +270,9 @@ const MyClassDetails = () => {
                     <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg mx-3">
                         <h3 className="text-xl font-semibold mb-4">Create Assignment</h3>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                            <input type="text" {...register('title', { required: true })} placeholder="Title" className="input input-bordered w-full" />
-                            <input type="date" {...register('deadline', { required: true })} className="input input-bordered w-full" />
-                            <textarea {...register('description', { required: true })} rows={3} placeholder="Description" className="textarea textarea-bordered w-full" />
+                            <input type="text" {...register('title', { required: true })} placeholder="Title" className="input input-bordered w-full focus:outline-none focus:border-green-400" />
+                            <input type="date" {...register('deadline', { required: true })} className="input input-bordered w-full focus:outline-none focus:border-green-400" />
+                            <textarea {...register('description', { required: true })} rows={3} placeholder="Description" className="textarea textarea-bordered w-full focus:outline-none focus:border-green-400" />
                             <div className="flex justify-end gap-2">
                                 <button type="button" onClick={() => { setModalOpen(false); reset(); }} className="btn btn-sm">Cancel</button>
                                 <button type="submit" className="btn btn-sm bg-green-600 text-white">

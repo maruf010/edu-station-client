@@ -110,11 +110,11 @@ const CheckoutForm = ({
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4 p-4">
-            <CardElement className="border p-4 rounded" />
+            <CardElement className="border border-cyan-400 p-4 rounded" />
             {error && <p className="text-red-500">{error}</p>}
             <button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="btn mt-1 bg-cyan-500 hover:bg-cyan-600 text-white w-full"
                 disabled={!stripe || !elements || processing}
             >
                 {processing ? 'Processing...' : `Pay $${classData.price}`}

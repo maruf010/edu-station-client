@@ -217,11 +217,11 @@ const StudentAssignments = () => {
             {/* Submit Assignment Modal */}
             {selectedAssignment && (
                 <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
+                    <div className="bg-white mx-2 p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
                         <h3 className="text-xl font-semibold">Submit: {selectedAssignment.title}</h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <textarea
-                                className="textarea textarea-bordered w-full"
+                                className="textarea textarea-bordered w-full focus:outline-none focus:border-blue-300"
                                 rows="4"
                                 placeholder="Write your answer..."
                                 value={submissionText}
@@ -230,7 +230,7 @@ const StudentAssignments = () => {
                             />
                             <input
                                 type="url"
-                                className="input input-bordered w-full"
+                                className="input input-bordered w-full focus:outline-none focus:border-blue-300"
                                 placeholder="Attachment link (optional)"
                                 value={attachmentUrl}
                                 onChange={(e) => setAttachmentUrl(e.target.value)}
@@ -251,8 +251,8 @@ const StudentAssignments = () => {
             {/* View Submission Modal */}
             {viewSubmission && (
                 <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-lg space-y-4">
-                        <h3 className="text-xl font-semibold text-blue-700">📄 Your Submission</h3>
+                    <div className="bg-white mx-2 p-6 rounded-xl shadow-lg w-full max-w-lg space-y-4">
+                        <h3 className="text-xl font-semibold text-green-600">📄 Your Submission</h3>
                         <p><strong>Submitted At:</strong> {new Date(viewSubmission.submittedAt).toLocaleString()}</p>
                         <div className='border border-gray-300 p-3 rounded'>
                             <p className="whitespace-pre-line">{viewSubmission.submissionText}</p>
@@ -268,7 +268,7 @@ const StudentAssignments = () => {
                         </div>
 
                         {(viewSubmission.marks !== undefined || viewSubmission.review) && (
-                            <div className=" p-3 rounded border border-blue-300 space-y-1">
+                            <div className=" p-3 rounded border border-green-300 space-y-1">
                                 <p><strong>Teacher's Mark:</strong> {viewSubmission.marks ?? 'Not marked yet'}</p>
                                 <p><strong>Review:</strong> {viewSubmission.review || 'No review yet'}</p>
                             </div>
@@ -286,7 +286,7 @@ const StudentAssignments = () => {
             {/* Feedback Modal */}
             {feedbackModal && (
                 <div className="fixed inset-0  bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
+                    <div className="bg-white mx-2 p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
                         <h3 className="text-xl font-bold">Give Feedback: {feedbackModal.title}</h3>
                         <form onSubmit={handleFeedbackSubmit} className="space-y-4">
                             <div className='flex items-center gap-2'>

@@ -180,7 +180,7 @@ const MyClasses = () => {
             {/* Update Modal */}
             {isModalOpen && selectedClass && (
                 <div className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+                    <div className="bg-white mx-2 p-6 rounded-lg shadow-lg w-full max-w-md relative">
                         <h2 className="text-xl font-semibold mb-4 text-center">Update Class</h2>
 
                         <form onSubmit={handleSubmit(onUpdateSubmit)} className="space-y-4">
@@ -190,7 +190,7 @@ const MyClasses = () => {
                                     type="text"
                                     {...register('name', { required: true })}
                                     defaultValue={selectedClass.name}
-                                    className="input input-bordered w-full"
+                                    className="input input-bordered w-full focus:outline-none focus:border-green-400"
                                 />
                                 {errors.name && <p className="text-red-500 text-sm">Name is required</p>}
                             </div>
@@ -200,7 +200,7 @@ const MyClasses = () => {
                                     type="file"
                                     accept="image/*"
                                     {...register('image')}
-                                    className="file-input file-input-bordered w-full"
+                                    className="file-input file-input-bordered w-full focus:outline-none focus:border-green-400"
                                 />
                             </div>
                             <div>
@@ -209,7 +209,7 @@ const MyClasses = () => {
                                     type="text"
                                     {...register('description', { required: true })}
                                     defaultValue={selectedClass.description}
-                                    className="input input-bordered w-full"
+                                    className="input input-bordered w-full focus:outline-none focus:border-green-400"
                                 />
                                 {errors.description && <p className="text-red-500 text-sm">Description is required</p>}
                             </div>
@@ -220,7 +220,7 @@ const MyClasses = () => {
                                     step="0.01"
                                     {...register('price', { required: true })}
                                     defaultValue={selectedClass.price}
-                                    className="input input-bordered w-full"
+                                    className="input input-bordered w-full focus:outline-none focus:border-green-400"
                                 />
                                 {errors.price && <p className="text-red-500 text-sm">Price is required</p>}
                             </div>
@@ -230,7 +230,7 @@ const MyClasses = () => {
                                     type="number"
                                     {...register('seats', { required: true })}
                                     defaultValue={selectedClass.seats}
-                                    className="input input-bordered w-full"
+                                    className="input input-bordered w-full focus:outline-none focus:border-green-400"
                                 />
                                 {errors.seats && <p className="text-red-500 text-sm">Seats are required</p>}
                             </div>

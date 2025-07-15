@@ -57,7 +57,7 @@ const AddClass = () => {
     };
 
     return (
-        <div className="max-w-3xl lg:mx-auto p-6 bg-white rounded-lg shadow mt-10 mx-3 ">
+        <div className="max-w-3xl lg:mx-auto p-6 rounded-lg shadow mt-10 mx-3 ">
             <h2 className="text-2xl font-bold mb-4 text-center">Add New Class</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
@@ -114,14 +114,14 @@ const AddClass = () => {
                 <div>
                     <label className="label">Description</label>
                     <textarea
-                        {...register('description')}
+                        {...register('description', { required: true })}
                         className="textarea textarea-bordered w-full focus:outline-none focus:border-blue-300"
                         placeholder="Write a short description"
                         maxLength={70}
                     ></textarea>
                 </div>
 
-                <button type="submit" disabled={uploading} className="btn btn-block bg-gray-500 hover:bg-gray-600 text-white">
+                <button type="submit" disabled={uploading} className="btn btn-block bg-blue-900 hover:bg-blue-950 text-white">
                     {uploading ? <Loading></Loading> : 'Add Class'}
                 </button>
             </form>

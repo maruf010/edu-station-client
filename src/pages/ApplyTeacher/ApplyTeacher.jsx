@@ -6,6 +6,8 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import useUserRole from '../../hooks/useUserRole';
 import Loading from '../../components/Shared/Loading';
+import { Link } from 'react-router';
+import { MdDashboardCustomize } from 'react-icons/md';
 
 const ApplyTeacher = () => {
     const { user } = useAuth();
@@ -79,9 +81,24 @@ const ApplyTeacher = () => {
 
                 {/* Already a teacher */}
                 {!roleLoading && role === 'teacher' && (
-                    <p className="text-green-600 font-semibold text-center mb-4">
-                        ✅ You are already a Teacher!
-                    </p>
+                    <div>
+                        <p className="text-green-600 text-xl font-semibold text-center mb-5">
+                            ✅ You are now a Teacher!
+                        </p>
+                        <Link to="/dashboard" className="flex justify-center">
+                            <div className="relative inline-flex items-center px-8 py-2 overflow-hidden text-lg font-medium text-green-600 border-2 border-green-600 rounded-full hover:text-white group hover:bg-gray-50">
+                                <span className="absolute left-0 block w-full h-0 transition-all bg-green-600 opacity-100 group-hover:h-full top-1/2 group-hover:top-0 duration-400 ease"></span>
+                                <span className="absolute right-0 flex items-center justify-start w-10 h-10 duration-300 transform translate-x-full group-hover:translate-x-0 ease">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </span>
+                                <span className="relative">
+                                    <span className='flex items-center justify-center'>
+                                        <MdDashboardCustomize className="mr-2" size={25} />
+                                        <h2>Go to Dashboard</h2></span>
+                                </span>
+                            </div>
+                        </Link>
+                    </div>
                 )}
 
                 {/* Show application form and status only if not yet a teacher */}
@@ -166,7 +183,7 @@ const ApplyTeacher = () => {
                     </>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

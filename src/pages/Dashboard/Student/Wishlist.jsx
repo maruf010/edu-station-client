@@ -60,25 +60,27 @@ const Wishlist = () => {
             <h2 className="text-2xl font-bold mb-4">My Wishlist</h2>
 
             {wishlist.length === 0 ? (
-                <p>No items in wishlist.</p>
+                <p className='text-gray-500 font-medium'>No items in wishlist!</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {wishlist.map(item => {
                         const enrolled = isEnrolled(item.classId);
                         return (
-                            <div key={item._id} className="border p-4 rounded shadow">
+                            <div key={item._id} className="shadow-md p-4 rounded">
                                 <img src={item.image} alt={item.className} className="h-40 object-cover w-full" />
-                                <h3 className="text-xl font-semibold">Course: {item.className}</h3>
-                                <p>Instructor: {item.teacherName}</p>
-                                <p>Email: {item.teacherEmail}</p>
-                                <p>Added At: {item.addedAt}</p>
-                                <p>Price: ${item.price}</p>
+                                <h3 className="text-xl font-semibold my-2">Course: {item.className}</h3>
+                                <div className='space-y-1'>
+                                    <p>Instructor: {item.teacherName}</p>
+                                    <p>Email: {item.teacherEmail}</p>
+                                    <p>Added At: {item.addedAt}</p>
+                                    <p>Price: ${item.price}</p>
+                                </div>
 
                                 <div className="flex gap-2 mt-4">
                                     <button
                                         onClick={() => handlePayClick(item)}
                                         disabled={enrolled}
-                                        className={`btn ${enrolled ? 'bg-gray-400' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                                        className={`btn ${enrolled ? 'bg-gray-400' : 'bg-green-500 text-white hover:bg-green-600'}`}
                                     >
                                         {enrolled ? 'Already Enrolled' : 'Pay Now'}
                                     </button>

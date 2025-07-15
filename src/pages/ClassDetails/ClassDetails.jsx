@@ -164,7 +164,7 @@ console.log(classData);
         <div className='bg-gray-200'>
             <div className="max-w-5xl mx-auto p-4 space-y-5 ">
                 {/* Class Info */}
-                <div className="lg:flex bg-white gap-5 shadow-lg rounded p-8 overflow-hidden">
+                <div className="lg:flex bg-white gap-5 shadow-lg rounded p-5 md:p-8 overflow-hidden">
                     <img src={classData.image} className="lg:w-1/2 object-cover h-80 lg:h-96 w-full" />
                     <div className="lg:w-1/2  space-y-3">
                         <h2 className="text-2xl font-bold mt-3">{classData.name}</h2>
@@ -221,7 +221,7 @@ console.log(classData);
                     </div>
                 </div>
 
-                {/* Feedback Form */}
+                {/* Feedback create box or Form */}
                 {/* {isAlreadyEnrolled && !myFeedback && (
                     <form onSubmit={handleSubmitFeedback} className="bg-white shadow p-5 rounded space-y-4">
                         <h3 className="text-xl font-semibold">Leave Feedback</h3>
@@ -255,13 +255,13 @@ console.log(classData);
                     ) : (
                         <div className="space-y-4">
                             {feedbacks.slice(0, visibleCount).map(fb => (
-                                <div key={fb._id} className="border border-gray-400 p-4 rounded-lg flex justify-between">
+                                <div key={fb._id} className="border border-gray-300 p-4 rounded-lg flex justify-between">
                                     <div>
                                         <div className="flex items-center gap-3 mb-2">
-                                            <img src={fb.studentImage} className="w-10 h-10 rounded-full" />
+                                            <img src={fb.studentImage} className="w-10 h-10 border border-gray-300 p-0.5 rounded-full" />
                                             <div>
-                                                <p className="font-medium">{fb.studentName}</p>
-                                                <p className="text-xs text-gray-500">{new Date(fb.createdAt).toLocaleDateString()}</p>
+                                                <p className="font-bold text-gray-600">{fb.studentName}</p>
+                                                <p className="text-xs text-gray-400">{new Date(fb.createdAt).toLocaleDateString()}</p>
                                             </div>
                                         </div>
                                         <StarRatings
@@ -297,8 +297,8 @@ console.log(classData);
                 {/* Payment Modal */}
                 {showModal && (
                     <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white border p-6 rounded-lg w-full max-w-lg relative">
-                            <button className="absolute top-2 right-2 text-xl" onClick={() => setShowModal(false)}>✕</button>
+                        <div className="bg-white border-2 border-cyan-600 mx-2 p-6 rounded-lg w-full max-w-lg relative">
+                            <button className="absolute top-3 right-4 text-xl text-red-500 cursor-pointer" onClick={() => setShowModal(false)}>✕</button>
                             <h3 className="text-lg font-semibold mb-4">Complete Payment</h3>
                             <Elements stripe={stripePromise}>
                                 <CheckoutForm
@@ -318,7 +318,7 @@ console.log(classData);
                 {/* Edit Feedback Modal */}
                 {showEditModal && (
                     <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white mx-5 p-6 border border-gray-400 rounded-lg w-full max-w-lg relative">
+                        <div className="bg-white mx-2 p-6 border border-gray-300 rounded-lg w-full max-w-lg relative">
                             <button className="absolute top-2 right-2 text-xl" onClick={() => setShowEditModal(false)}>✕</button>
                             <h3 className="text-lg font-semibold mb-4">Edit Feedback</h3>
                             <form onSubmit={handleUpdateFeedback} className="space-y-4">
@@ -334,7 +334,7 @@ console.log(classData);
                                 <textarea
                                     value={feedbackText}
                                     onChange={(e) => setFeedbackText(e.target.value)}
-                                    className="w-full border p-2 rounded"
+                                    className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-400"
                                     rows="4"
                                 ></textarea>
                                 <button type="submit" className="btn bg-blue-600 text-white cursor-pointer">Update</button>
@@ -346,7 +346,7 @@ console.log(classData);
                 {/* Delete Confirmation Modal */}
                 {deleteTarget && (
                     <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white border mx-5 border-gray-400 p-6 rounded-lg w-full max-w-md relative text-center">
+                        <div className="bg-white border mx-2 border-gray-400 p-6 rounded-lg w-full max-w-md relative text-center">
                             <h3 className="text-xl font-semibold mb-4">Are you sure you want to delete this feedback?</h3>
                             <p className="mb-6 text-gray-600">This action cannot be undone.</p>
                             <div className="flex justify-center gap-4">

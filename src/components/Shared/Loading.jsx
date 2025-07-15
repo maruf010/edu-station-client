@@ -1,13 +1,13 @@
 import React from 'react';
-import { PulseLoader } from 'react-spinners';
+import { CircleLoader, PulseLoader } from 'react-spinners';
 
 const Loading = () => {
     return (
         <div className='flex justify-center items-center h-screen'>
             <div>
-                <PulseLoader
+                <CircleLoader
                     margin={2}
-                    size={30}
+                    size={50}
                     color="#FFA500"
                 />
             </div>

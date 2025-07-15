@@ -88,7 +88,7 @@ const TeacherRequests = () => {
     };
 
     return (
-        <div className="p-3 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 min-h-screen">
+        <div className="p-3 min-h-screen">
             <div className="max-w-7xl mx-auto bg-white shadow-xl rounded-lg p-3 min-h-[calc(100vh-24px)]">
                 <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">📋 Teacher Requests</h2>
 

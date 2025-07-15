@@ -71,7 +71,7 @@ const AllClasses = () => {
     if (error) return <p className="text-red-500 text-center py-6">Failed to load classes.</p>;
 
     return (
-        <div className='bg-gray-300 overflow-hidden'>
+        <div className='bg-gray-200 overflow-hidden'>
             <div className=" max-w-7xl min-h-screen mx-auto p-6 ">
                 <h2 className="text-2xl font-bold text-center mb-6 text-gray-500">Explore Our Classes</h2>
 

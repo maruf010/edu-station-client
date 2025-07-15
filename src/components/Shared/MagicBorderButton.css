@@ -1,0 +1,57 @@
+.magic-border-btn {
+    position: relative;
+    padding: 0.5rem 1.5rem;
+    background: linear-gradient(to right, #1f2937, #1d4ed8, #111827);
+    border-radius: 9999px;
+    color: white;
+    font-weight: 600;
+    overflow: hidden;
+    z-index: 0;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.magic-border-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px 4px rgba(14, 165, 233, 0.5);
+    /* 💡 Glow effect */
+}
+
+.magic-border-btn::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(from 180deg,
+            #ff0080,
+            #7928ca,
+            #2afadf,
+            #00c9ff,
+            #a18cd1,
+            #fbc2eb,
+            #ff0080);
+    /* 🌈 Rainbow effect */
+    animation: spinReverse 6s linear infinite;
+    /* 🔁 slower + reverse */
+    border-radius: inherit;
+    z-index: -2;
+}
+
+.magic-border-btn::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: rgb(17, 17, 100);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+@keyframes spinReverse {
+    0% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}

@@ -4,6 +4,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Loading from '../../../components/Shared/Loading';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import toast from 'react-hot-toast';
 
 const AllPayments = () => {
     const axiosSecure = useAxiosSecure();
@@ -123,7 +124,7 @@ const AllPayments = () => {
     const downloadByUser = () => {
         const userEmail = searchEmail || 'user';
         const userPayments = payments.filter(p => p.userEmail.toLowerCase().includes(userEmail.toLowerCase()));
-        if (userPayments.length === 0) return alert("No payments found for this email");
+        if (userPayments.length === 0) return toast.error("No payments found for this email");
         downloadPDF(userPayments, `Payments_by_${userEmail}`);
     };
 
@@ -176,14 +177,14 @@ const AllPayments = () => {
                 <table className="min-w-full text-left text-sm">
                     <thead className="bg-gray-100 border-b border-gray-400">
                         <tr>
-                            <th className="px-4 py-3 font-medium text-gray-700">#</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">User</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">Date</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">Class</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">Teacher</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">Price</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">Txn ID</th>
-                            <th className="px-4 py-3 font-medium text-gray-700">Status</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">#</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">User</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">Date</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">Class</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">Teacher</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">Price</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">Txn ID</th>
+                            <th className="px-4 py-3 font-bold text-gray-700">Status</th>
                         </tr>
                     </thead>
                     <tbody>

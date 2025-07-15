@@ -19,12 +19,13 @@
     "@tanstack/react-query": "^5.81.5",
     "aos": "^2.3.4",
     "axios": "^1.10.0",
+    "clsx": "^2.1.1",
     "firebase": "^11.10.0",
-    "framer-motion": "^12.23.3",
+    "framer-motion": "^12.23.5",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
     "lottie-react": "^2.4.1",
-    "motion": "^12.23.0",
+    "motion": "^12.23.5",
     "react": "^19.1.0",
     "react-calendar": "^6.0.0",
     "react-countup": "^6.5.3",
@@ -42,13 +43,16 @@
     "react-slick": "^0.30.3",
     "react-spinners": "^0.17.0",
     "react-star-ratings": "^2.3.0",
+    "react-tsparticles": "^2.12.2",
     "recharts": "^3.1.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.19",
     "sweetalert2": "^11.22.2",
     "swiper": "^11.2.10",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
-    "three": "^0.178.0"
+    "three": "^0.178.0",
+    "tsparticles": "^3.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
@@ -60,6 +64,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
+    "typescript": "^5.8.3",
     "vite": "^7.0.0"
   }
 }

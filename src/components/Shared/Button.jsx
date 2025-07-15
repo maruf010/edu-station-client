@@ -4,13 +4,13 @@ import styled from 'styled-components';
 const StyledWrapper = styled.div`
   button {
     padding: 12px 20px;
-    border: unset;
     border-radius: 15px;
     color: #212121;
+    border: none;
     z-index: 1;
     background: #e8e8e8;
     position: relative;
-    font-weight: 1000;
+    font-weight: 700;
     font-size: 17px;
     -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
     box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
@@ -27,7 +27,7 @@ const StyledWrapper = styled.div`
     height: 100%;
     width: 0;
     border-radius: 15px;
-    background-color: #212121;
+    background-color: #FE7743;
     z-index: -1;
     transition: all 250ms;
   }

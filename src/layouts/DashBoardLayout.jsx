@@ -70,7 +70,7 @@ const DashBoardLayout = () => {
             {/* Sidebar */}
             <aside
                 ref={sidebarRef}
-                className={`bg-[#17255a] min-h-screen shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+                className={`bg-gradient-to-r from-slate-900 to-slate-700 min-h-screen shadow-md w-64 p-6 space-y-4 fixed lg:static z-20 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
 
                 <Link to='/' className=" ">
                     <div className="flex items-center">
@@ -274,7 +274,7 @@ const DashBoardLayout = () => {
             {/* Main Content */}
             <div className="flex-1  w-full">
                 {/* Topbar for mobile */}
-                <div className="bg-white p-4 shadow flex items-center justify-between lg:hidden">
+                <div className="bg-white sticky top-0 p-4 shadow flex items-center justify-between lg:hidden">
                     <button onClick={() => setIsOpen(!isOpen)} className="text-xl font-bold">☰</button>
                     <Link to='/'>
                         <img src={logo} alt="Logo" className="h-8" />

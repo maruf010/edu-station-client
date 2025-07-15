@@ -20,9 +20,11 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <div className='font-one'>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </div>
       <Toaster position="top-center" reverseOrder={false} />
     </QueryClientProvider>
   </StrictMode>,

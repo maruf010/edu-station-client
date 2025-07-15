@@ -109,7 +109,7 @@ const AllClassesByAdmin = () => {
                 <input
                     type="text"
                     placeholder="🔍 Search by title or teacher"
-                    className="w-full input input-bordered w-full md:max-w-xs focus:outline-none focus:border-blue-300"
+                    className="w-full input input-bordered md:max-w-xs focus:outline-none focus:border-blue-300"
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
