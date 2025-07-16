@@ -4,7 +4,10 @@ Welcome to the **EduStation** client repository — the frontend application of 
 
 ## 🚀 Live Preview
 
-> EduStation Live Site ([Click here](https://edu-station-3be49.web.app/))
+> EduStation Live Site ([ClickHere](https://edu-station-3be49.web.app/))
+
+* Admin:bijoy@gmail.com
+* Pass:Bijoy0@
 
 ## 🛠️ Technologies Used
 
