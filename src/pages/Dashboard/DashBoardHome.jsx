@@ -18,6 +18,7 @@ import useUserRole from "../../hooks/useUserRole";
 import Loading from "../../components/Shared/Loading";
 import { useEffect } from "react";
 
+
 const DashboardHome = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
@@ -67,7 +68,7 @@ const DashboardHome = () => {
 
     return (
         <div className="p-6 min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-gray-200">
-            <h2 className="text-3xl font-bold mb-6">📊 Dashboard Overview</h2>
+            <h2 className="text-3xl font-bold mb-6 bg-blue-500 py-2 rounded">📊 Dashboard Overview</h2>
 
             {/* Top Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -8,6 +8,7 @@ import InspireTeachers from './InspireTeachers';
 import FeedbackCarousel from './FeedbackCarousel';
 import PopularClasses from './PopularClasses';
 import BeamsPage from '../../components/BackgroundEffect/BeamsPage';
+import Contact from './Contact';
 
 
 const Home = () => {
@@ -28,6 +29,7 @@ const Home = () => {
                 <InspireTeachers></InspireTeachers>
                 <FeedbackCarousel></FeedbackCarousel>
                 <PerformanceStats></PerformanceStats>
+                <Contact></Contact>
                 <WhyChooseUs></WhyChooseUs>
             </div>
         </div>
