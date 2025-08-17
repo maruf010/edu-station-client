@@ -66,7 +66,7 @@ const DashBoardLayout = () => {
 
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
+        <div className="flex min-h-screen ">
             {/* Sidebar */}
             <aside
                 ref={sidebarRef}
@@ -274,7 +274,7 @@ const DashBoardLayout = () => {
             {/* Main Content */}
             <div className="flex-1  w-full">
                 {/* Topbar for mobile */}
-                <div className="bg-white sticky top-0 p-4 shadow flex items-center justify-between lg:hidden">
+                <div className=" sticky top-0 p-4 shadow flex items-center justify-between lg:hidden">
                     <button onClick={() => setIsOpen(!isOpen)} className="text-xl font-bold">☰</button>
                     <Link to='/'>
                         <img src={logo} alt="Logo" className="h-8" />

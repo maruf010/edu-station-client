@@ -19,7 +19,7 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="relative bg-[#F1EFEC] overflow-hidden">
+        <div className="relative  overflow-hidden">
             <BeamsPage></BeamsPage>
             <div className=" z-10 overflow-hidden">
                 <Banner></Banner>

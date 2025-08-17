@@ -89,7 +89,7 @@ const TeacherRequests = () => {
 
     return (
         <div className="p-3 min-h-screen">
-            <div className="max-w-7xl mx-auto bg-white shadow-xl rounded-lg p-3 min-h-[calc(100vh-24px)]">
+            <div className="max-w-7xl mx-auto shadow-xl rounded-lg p-3 min-h-[calc(100vh-24px)]">
                 <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">📋 Teacher Requests</h2>
 
                 {/* Search Bar */}
@@ -130,7 +130,7 @@ const TeacherRequests = () => {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-gray-700">
+                            <tbody className="text-gray-500">
                                 {currentItems.map((req) => (
                                     <tr key={req._id} className="hover:bg-blue-50">
                                         <td className="py-3 px-2">

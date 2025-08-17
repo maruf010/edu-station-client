@@ -15,7 +15,7 @@ const AllUsers = () => {
     const [search, setSearch] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const usersPerPage = 8;
+    const usersPerPage = 10;
 
     const { data: users = [], isLoading, error, refetch } = useQuery({
         queryKey: ['users'],
@@ -124,6 +124,8 @@ const AllUsers = () => {
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    console.log(currentUsers);
+
 
     const downloadPDF = () => {
         const doc = new jsPDF();
@@ -172,7 +174,7 @@ const AllUsers = () => {
 
             </div>
 
-            <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+            <div className="overflow-x-auto text-gray-500 shadow-md rounded-lg">
                 <table className="min-w-full  divide-y divide-gray-200 text-sm md:text-base">
                     <thead className="bg-blue-400">
                         <tr>
@@ -187,6 +189,9 @@ const AllUsers = () => {
                         {currentUsers.map((user, idx) => (
                             <tr key={user._id} className="hover:bg-gray-100 transition">
                                 <td className="px-4 py-2">{indexOfFirstUser + idx + 1}</td>
+                                <td className="px-4 py-2">
+                                    <img className='h-10 w-10 rounded-full' src={user.photoURL || 'N/A'} alt="N/A" />
+                                </td>
                                 <td className="px-4 py-2">{user.displayName || 'N/A'}</td>
                                 <td className="px-4 py-2">{user.email}</td>
                                 <td className="px-4 py-2 capitalize">{user.role || 'user'}</td>

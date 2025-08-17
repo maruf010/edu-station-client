@@ -1,10 +1,9 @@
-// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
 export default {
-    content: [
-        "./src/**/*.{js,jsx,ts,tsx}", // ✅ SCAN YOUR FILES
-    ],
+    darkMode: "class", // ✅ অবশ্যই class দিতে হবে
+    content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
         extend: {},
     },
     plugins: [],
-};
+}

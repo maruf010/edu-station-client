@@ -9,6 +9,7 @@ import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 import Loading from '../Shared/Loading';
 
 
+
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
     const navigate = useNavigate()
@@ -16,18 +17,18 @@ const Navbar = () => {
     const dropdownRef = useRef(null);
 
 
-    // //theme
-    // const [theme, setTheme] = useState(() => {
-    //     return localStorage.getItem('theme') || 'light';
-    // });
-    // useEffect(() => {
-    //     document.documentElement.setAttribute('data-theme', theme);
-    //     localStorage.setItem('theme', theme);
-    // }, [theme]);
-    // // Toggle between light and dark
-    // const toggleTheme = () => {
-    //     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-    // };
+    //theme
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem('theme') || 'light';
+    });
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+    // Toggle between light and dark
+    const toggleTheme = () => {
+        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    };
 
 
     // Close dropdown on outside click
@@ -229,7 +230,7 @@ const Navbar = () => {
             {/* md size */}
             <div className='flex items-center navbar-end lg:hidden'>
                 {/* theme changer */}
-                {/* <div className='mr-4'>
+                <div className='mr-4'>
                     <label className="swap swap-rotate " >
                         <button type="checkbox m-0"
                             onClick={toggleTheme}
@@ -253,7 +254,7 @@ const Navbar = () => {
                             </svg>
                         }
                     </label>
-                </div> */}
+                </div>
                 {/* user rounded animated*/}
                 <span className="relative flex mr-2">
                     <span
@@ -315,7 +316,7 @@ const Navbar = () => {
             {/* lg size */}
             <div className=' items-center hidden lg:flex'>
                 {/* theme changer */}
-                {/* <div className='mr-4'>
+                <div className='mr-4'>
                     <label className="swap swap-rotate " >
                         <button type="checkbox m-0"
                             onClick={toggleTheme}
@@ -339,7 +340,7 @@ const Navbar = () => {
                             </svg>
                         }
                     </label>
-                </div> */}
+                </div>
 
                 {/* user rounded animated*/}
                 <span className="relative flex">

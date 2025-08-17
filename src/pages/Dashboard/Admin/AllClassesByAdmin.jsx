@@ -119,7 +119,7 @@ const AllClassesByAdmin = () => {
                 />
             </div>
 
-            <div className="overflow-x-auto bg-white shadow-md rounded-lg border-2 border-gray-300">
+            <div className="overflow-x-auto  shadow-md rounded-lg  ">
                 <table className="table table-zebra w-full">
                     <thead className="bg-blue-500 text-white">
                         <tr>

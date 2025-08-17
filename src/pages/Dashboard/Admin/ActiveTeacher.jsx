@@ -134,7 +134,7 @@ const ActiveTeacher = () => {
 
             <div className="overflow-x-auto shadow  rounded-lg">
                 <table className="min-w-full text-left text-sm">
-                    <thead className="bg-blue-500 text-white border-b border-gray-400">
+                    <thead className="bg-blue-500 text-gray-600 border-b border-gray-400">
                         <tr>
                             <th className="px-4 py-3">#</th>
                             <th className="px-4 py-3">Name</th>
@@ -145,9 +145,9 @@ const ActiveTeacher = () => {
                             <th className="px-4 py-3">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='text-gray-500'>
                         {paginatedTeachers.map((teacher, idx) => (
-                            <tr key={teacher._id} className="border-b border-gray-300 hover:bg-gray-50">
+                            <tr key={teacher._id} className="border-b border-gray-300 ">
                                 <td className="px-4 py-3">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
                                 <td className="px-4 py-3">{teacher.name || 'N/A'}</td>
                                 <td className="px-4 py-3">{teacher.email}</td>

@@ -189,7 +189,7 @@ const AllPayments = () => {
                     </thead>
                     <tbody>
                         {paginatedPayments.map((p, index) => (
-                            <tr key={p._id} className="border-b border-gray-400 hover:bg-gray-100">
+                            <tr key={p._id} className="border-b text-gray-500 border-gray-400 hover:bg-gray-100">
                                 <td className="px-4 py-3">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                 <td className="px-4 py-3">{p.userEmail}</td>
                                 <td className="px-4 py-3">{new Date(p.date).toLocaleDateString()}</td>
