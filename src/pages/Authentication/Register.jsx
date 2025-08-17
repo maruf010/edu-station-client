@@ -10,8 +10,6 @@ import useAxios from '../../hooks/useAxios';
 import { motion } from 'framer-motion';
 import { IoArrowBackSharp } from "react-icons/io5";
 
-
-
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useAuth();
@@ -25,13 +23,14 @@ const Register = () => {
     const onSubmit = data => {
         createUser(data.email, data.password)
             .then(async (result) => {
-                console.log(result);
                 toast.success("Registration successful!");
                 const userInfo = {
                     email: data.email,
                     role: 'student',
                     displayName: data.displayName || data.name,
                     photoURL: data.photoURL || profilePic,
+                    phone: data.phone,
+                    address: data.address,
                     created_at: new Date().toISOString(),
                     last_log_in: new Date().toISOString()
                 };
@@ -59,7 +58,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-400 to-orange-300 px-4">
-            <div className="w-full max-w-5xl  bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+            <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
                 {/* Left Panel */}
                 <div className="relative bg-gradient-to-b from-orange-400 to-orange-300 text-white p-10 flex flex-col justify-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-2">WELCOME to EduStation</h2>
@@ -96,6 +95,21 @@ const Register = () => {
                             <input type="file" onChange={handleImage} className="w-full mt-1 text-sm border border-gray-300 rounded-md p-2" />
                         </div>
 
+                        {/* Phone */}
+                        <div>
+                            <label className="block text-gray-700">Phone</label>
+                            <input type="tel" {...register('phone', { required: true, pattern: /^[0-9]{10,15}$/ })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-orange-400" placeholder="Your Phone Number" />
+                            {errors.phone?.type === 'required' && <p className="text-sm text-red-500 mt-1">Phone is required</p>}
+                            {errors.phone?.type === 'pattern' && <p className="text-sm text-red-500 mt-1">Enter valid phone number</p>}
+                        </div>
+
+                        {/* Address */}
+                        <div>
+                            <label className="block text-gray-700">Address</label>
+                            <input type="text" {...register('address', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-orange-400" placeholder="Your Address" />
+                            {errors.address && <p className="text-sm text-red-500 mt-1">Address is required</p>}
+                        </div>
+
                         {/* Email */}
                         <div>
                             <label className="block text-gray-700">Email</label>
@@ -125,7 +139,6 @@ const Register = () => {
                                 >
                                     {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                                 </motion.span>
-
                             </div>
                             {errors.password?.type === 'required' && <p className="text-sm text-red-500 mt-1">Password is required</p>}
                             {errors.password?.type === 'minLength' && <p className="text-sm text-red-500 mt-1">Password must be 6+ characters</p>}

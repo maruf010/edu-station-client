@@ -65,7 +65,7 @@ const Contact = () => {
                                 <FaUser className="text-blue-800" /> <span>Our Support Team</span>
                             </p>
                             <p className="flex items-center gap-3">
-                                <FaEnvelope className="text-blue-800" /> <span>support@example.com</span>
+                                <FaEnvelope className="text-blue-800" /> <span>support@edustation.com</span>
                             </p>
                             <p className="flex items-center gap-3">
                                 <FaPhone className="text-blue-800" /> <span>+880 1234 567890</span>

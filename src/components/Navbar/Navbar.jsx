@@ -7,8 +7,6 @@ import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
 import Button from '../Shared/Button';
 import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 import Loading from '../Shared/Loading';
-import NotificationBar from '../NotificationBar';
-import NotificationBell from '../NotificationBar';
 
 
 const Navbar = () => {
@@ -314,13 +312,6 @@ const Navbar = () => {
                     </div>
                 </span>
             </div>
-            {
-                user && (
-                    <div>
-                        <NotificationBar></NotificationBar>
-                    </div>
-                )
-            }
             {/* lg size */}
             <div className=' items-center hidden lg:flex'>
                 {/* theme changer */}
