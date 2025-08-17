@@ -58,10 +58,10 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0072ff] to-[#00c6ff] px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-400 to-orange-300 px-4">
             <div className="w-full max-w-5xl  bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
                 {/* Left Panel */}
-                <div className="relative bg-gradient-to-b from-[#0072ff] to-[#00c6ff] text-white p-10 flex flex-col justify-center">
+                <div className="relative bg-gradient-to-b from-orange-400 to-orange-300 text-white p-10 flex flex-col justify-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-2">WELCOME to EduStation</h2>
                     <p className="text-sm">JOIN OUR COMMUNITY</p>
                     <p className="mt-4 text-xs text-white/80">
@@ -74,8 +74,8 @@ const Register = () => {
                         </div>
                     </Link>
                     {/* Circles */}
-                    <div className="absolute bottom-[10px] md:bottom-[-30px] left-[-30px] w-28 h-28 bg-blue-500 rounded-full opacity-30"></div>
-                    <div className="absolute top-10 lg:top-[-20px] right-[-40px] lg:right-[20px] w-32 h-32 bg-blue-600 rounded-full opacity-20"></div>
+                    <div className="absolute bottom-[10px] md:bottom-[-30px] left-[-30px] w-28 h-28 bg-orange-500 rounded-full opacity-30"></div>
+                    <div className="absolute top-10 lg:top-[-20px] right-[-40px] lg:right-[20px] w-32 h-32 bg-orange-600 rounded-full opacity-20"></div>
                     <div className="absolute bottom-20 left-20 w-20 h-20 bg-white rounded-full opacity-10"></div>
                 </div>
 
@@ -86,7 +86,7 @@ const Register = () => {
                         {/* Name */}
                         <div>
                             <label className="block text-gray-700">Name</label>
-                            <input type="text" {...register('name', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400" placeholder="Your Name" />
+                            <input type="text" {...register('name', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-orange-400" placeholder="Your Name" />
                             {errors.name && <p className="text-sm text-red-500 mt-1 ">Name is required</p>}
                         </div>
 
@@ -99,7 +99,7 @@ const Register = () => {
                         {/* Email */}
                         <div>
                             <label className="block text-gray-700">Email</label>
-                            <input type="email" {...register('email', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400" placeholder="Your Email" />
+                            <input type="email" {...register('email', { required: true })} className="focus:outline-none w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-orange-400" placeholder="Your Email" />
                             {errors.email && <p className="text-sm text-red-500 mt-1">Email is required</p>}
                         </div>
 
@@ -114,7 +114,7 @@ const Register = () => {
                                         minLength: 6,
                                         pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/
                                     })}
-                                    className="w-full mt-1 px-4 py-2 pr-10 border border-gray-300 rounded-md focus:ring-1 focus:outline-none focus:ring-blue-400"
+                                    className="w-full mt-1 px-4 py-2 pr-10 border border-gray-300 rounded-md focus:ring-1 focus:outline-none focus:ring-orange-400"
                                     placeholder="Your Password"
                                 />
                                 <motion.span
@@ -134,14 +134,14 @@ const Register = () => {
                             )}
                         </div>
 
-                        <button className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+                        <button className="w-full py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition duration-300">
                             Register
                         </button>
                     </form>
 
                     <p className="mt-4 text-center text-gray-600 text-sm">
                         Already have an account?{' '}
-                        <Link to="/login" className="text-blue-500 hover:underline font-medium">Login</Link>
+                        <Link to="/login" className="text-orange-400 hover:underline font-medium">Login</Link>
                     </p>
 
                     <div className="my-2 text-center text-gray-500">or</div>

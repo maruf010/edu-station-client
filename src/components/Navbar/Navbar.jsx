@@ -7,6 +7,8 @@ import { FaBookOpen, FaChalkboardTeacher, FaHome } from 'react-icons/fa';
 import Button from '../Shared/Button';
 import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 import Loading from '../Shared/Loading';
+import NotificationBar from '../NotificationBar';
+import NotificationBell from '../NotificationBar';
 
 
 const Navbar = () => {
@@ -14,6 +16,20 @@ const Navbar = () => {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
+
+
+    // //theme
+    // const [theme, setTheme] = useState(() => {
+    //     return localStorage.getItem('theme') || 'light';
+    // });
+    // useEffect(() => {
+    //     document.documentElement.setAttribute('data-theme', theme);
+    //     localStorage.setItem('theme', theme);
+    // }, [theme]);
+    // // Toggle between light and dark
+    // const toggleTheme = () => {
+    //     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    // };
 
 
     // Close dropdown on outside click
@@ -114,18 +130,7 @@ const Navbar = () => {
     }
 
 
-    //theme
-    // const [theme, setTheme] = useState(() => {
-    //     return localStorage.getItem('theme') || 'light';
-    // });
-    // useEffect(() => {
-    //     document.documentElement.setAttribute('data-theme', theme);
-    //     localStorage.setItem('theme', theme);
-    // }, [theme]);
-    // Toggle between light and dark
-    // const toggleTheme = () => {
-    //     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-    // };
+
 
 
 
@@ -309,6 +314,13 @@ const Navbar = () => {
                     </div>
                 </span>
             </div>
+            {
+                user && (
+                    <div>
+                        <NotificationBar></NotificationBar>
+                    </div>
+                )
+            }
             {/* lg size */}
             <div className=' items-center hidden lg:flex'>
                 {/* theme changer */}
@@ -337,6 +349,7 @@ const Navbar = () => {
                         }
                     </label>
                 </div> */}
+
                 {/* user rounded animated*/}
                 <span className="relative flex">
                     {
