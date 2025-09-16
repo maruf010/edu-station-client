@@ -63,7 +63,7 @@ const Navbar = () => {
                         window.scrollTo({ top: 0, behavior: 'smooth' })
                     }}
                     className={({ isActive }) =>
-                        `group relative flex items-center  gap-1 px-2 py-1
+                        `group relative flex items-center  gap-1.5 px-2 py-1
                             ${isActive
                             ? 'text-[#FE7743]'
                             : 'text-gray-300 hover:text-white transition-colors duration-200'}`}>
@@ -134,7 +134,7 @@ const Navbar = () => {
 
 
     return (
-        <div className="sticky top-0 z-50 navbar bg-gradient-to-r from-slate-800 to-slate-600  px-2 md:px-7 lg:py-3 lg:px-20 py-2  backdrop-blur-sm">
+        <div className="sticky top-0 z-50 navbar bg-gradient-to-r from-slate-800 to-slate-600  px-2 md:px-7 lg:py-2.5 lg:px-20 py-2  backdrop-blur-sm">
             <div className="navbar-start">
                 {/* <div className="dropdown">
                     <div tabIndex={0} role="button" className="mr-2 lg:hidden cursor-pointer">

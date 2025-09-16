@@ -57,7 +57,7 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-400 to-orange-300 px-4">
+        <div className="min-h-screen py-5 lg:py-10 flex items-center justify-center bg-gradient-to-b from-orange-400 to-orange-300 px-4">
             <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
                 {/* Left Panel */}
                 <div className="relative bg-gradient-to-b from-orange-400 to-orange-300 text-white p-10 flex flex-col justify-center">
