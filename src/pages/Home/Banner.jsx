@@ -39,8 +39,8 @@ const Banner = () => {
                 </div>
                 {/* Text Section */}
                 <div className="md:w-1/2 text-center md:text-left">
-                    <h1 className="text-4xl lg:text-5xl font-bold mb-6" data-aos="fade-right">
-                        Welcome to Our Learning Platform
+                    <h1 className="text-4xl lg:text-[52px] font-bold mb-6" data-aos="fade-right">
+                        Welcome to Our <span className='text-orange-500'>Learning</span> Platform
                     </h1>
                     <p className="text-lg mb-8 text-gray-700" data-aos="fade-left">
                         Empowering your learning journey with innovative tools and resources.

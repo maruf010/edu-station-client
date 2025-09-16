@@ -5,6 +5,10 @@
 @plugin "daisyui";
 
 
+html {
+    scroll-behavior: smooth;
+}
+
 
 .bg-secondBack {
     background-color: #0f172a;
